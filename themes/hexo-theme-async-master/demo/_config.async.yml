@@ -1,0 +1,139 @@
+# logo
+favicon:
+  visibilitychange: true
+
+top_bars:
+  - title: menu.home
+    url: /
+  - title: menu.archives
+    url: /archives/
+  - title: menu.links
+    url: /links/
+  - title: menu.about
+    url: /about/
+  - title: 自定义
+    url: /customize_page/
+  - title: 相册
+    url: /gallery/
+
+sidebar:
+  typedTextPrefix: I`m
+  typedText: [ 'Web Developer' ]
+  info: 
+    - key: 文档地址
+      val: <a href="https://hexo-theme-async.imalun.com/" target="_blank" rel="nofollow">查看</a>  
+    - key: 备用地址
+      val: <a href="https://async-docs.imalun.com/" target="_blank" rel="nofollow">查看</a>   
+    - key: 提交示例站点
+      val: <a href="https://hexo-theme-async.imalun.com/demo/" target="_blank" rel="nofollow">查看</a>   
+
+  social:
+    - icon: fab fa-github
+      url: https://github.com/MaLuns/Hexo-theme-async
+      name: Github
+    - icon: fab fa-npm
+      url: https://www.npmjs.com/package/hexo-theme-async
+      name: Npm
+
+footer:
+  powered:
+    enable: true
+  beian:
+    enable: false
+    icp: 
+  copyrightYear: 2022
+  live_time:
+    enable: true
+    prefix: footer.tips
+    start_time: 2022/04/10 17:00:00
+  custom_text:
+
+search:
+  enable: true
+  type: local
+  preload: true
+  trigger: auto
+
+baidu_push: true
+
+reward:
+  enable: true
+  methods:
+    - name: 微信
+      path: https://mp-8b005489-7724-4f8c-afdd-30192ff4f7ae.cdn.bspapp.com/cloudstorage/61a57135-2e65-4d51-8be1-03b8bd1c595e.jpg
+    - name: 支付宝
+      path: https://mp-8b005489-7724-4f8c-afdd-30192ff4f7ae.cdn.bspapp.com/cloudstorage/a21e9954-22f2-43fe-b3b0-3dba1fdde3ed.jpg
+    - name: QQ
+      path: https://mp-8b005489-7724-4f8c-afdd-30192ff4f7ae.cdn.bspapp.com/cloudstorage/69fb1903-d0dc-4169-9a02-1e76ec8e7761.jpg
+
+creative_commons:
+  license: by-nc-sa
+  language: deed.zh
+  post: true
+  clipboard: true
+
+swup: true
+
+toc:
+  enable: true
+  list_number: false
+  max_depth: 3
+  min_depth: 1
+
+rightside:
+  readmode: true
+  aside: true
+
+post_pagination: 
+  enable: true 
+  type: small
+
+cdn:
+  js:
+    head:
+    base: [demo.js]
+
+assets:
+  third_party_provider: https://npm.elemecdn.com
+
+highlight:
+  title: mac
+  height_limit: 200
+
+theme: 
+  switch: false
+
+cover:
+  default: 
+    - /img/block.jpg
+    - https://th.wallhaven.cc/orig/wq/wqvkl7.jpg
+    - https://th.wallhaven.cc/orig/rd/rdq3v1.jpg
+    - https://th.wallhaven.cc/orig/rd/rd183j.jpg
+    - https://th.wallhaven.cc/orig/q2/q287wd.jpg
+    - https://th.wallhaven.cc/orig/g7/g79ov3.jpg
+    - https://th.wallhaven.cc/orig/q2/q2mkzr.jpg
+    - https://th.wallhaven.cc/orig/v9/v9j3yp.jpg
+    - https://th.wallhaven.cc/orig/y8/y8yvzx.jpg
+    - https://th.wallhaven.cc/orig/1k/1kdw2w.jpg
+    - https://th.wallhaven.cc/orig/57/57jqk1.jpg
+    - https://th.wallhaven.cc/orig/57/5762p1.jpg
+    - https://th.wallhaven.cc/orig/j3/j3zo1y.jpg
+    - https://th.wallhaven.cc/orig/m9/m9gkky.jpg
+    - https://th.wallhaven.cc/orig/e7/e7kv9k.jpg
+    - https://th.wallhaven.cc/orig/ym/ym9ldk.jpg
+    - https://th.wallhaven.cc/orig/pk/pk5259.jpg
+    - https://th.wallhaven.cc/orig/8o/8opxpk.jpg
+    - https://th.wallhaven.cc/orig/k7/k7yog7.jpg
+    - https://th.wallhaven.cc/orig/v9/v93zv3.jpg
+    - https://th.wallhaven.cc/orig/wq/wqj65q.jpg
+    - https://th.wallhaven.cc/orig/p9/p9kg1m.jpg
+    - https://th.wallhaven.cc/orig/8o/8o9vw1.jpg
+    - https://th.wallhaven.cc/orig/x8/x8yy3o.jpg
+  type: random
+
+layout:
+  footer: async/footer
+  page_loading: async/page-loading
+  post_card: async/post-card
+  fixed_btn: async/fixed-btn
+  header_search: async/empty
