@@ -1,3 +1,14 @@
+# 用户信息
+user:
+  name: Adream
+  first_name:
+  last_name:
+  email: 2085127827chen@gmail.com
+  domain: https://www.adream.icu
+  # avatar: https://www.imalun.com/images/avatar.jpg?v=1
+  describe: 醒，亦在人间；梦，亦在人间。
+  ruleText: <br/>暂不接受个人博客以外的友链申请，确保您的网站内容积极向上，部署HTTPS。
+
 # logo
 favicon:
   visibilitychange: true
@@ -16,14 +27,14 @@ top_bars:
 
 sidebar:
   typedTextPrefix: I`m
-  typedText: [ 'Web Developer' ]
-  info: 
+  typedText: ["Web Developer"]
+  info:
     - key: 文档地址
-      val: <a href="https://hexo-theme-async.imalun.com/" target="_blank" rel="nofollow">查看</a>  
+      val: <a href="https://hexo-theme-async.imalun.com/" target="_blank" rel="nofollow">查看</a>
     - key: 备用地址
-      val: <a href="https://async-docs.imalun.com/" target="_blank" rel="nofollow">查看</a>   
+      val: <a href="https://async-docs.imalun.com/" target="_blank" rel="nofollow">查看</a>
     - key: 提交示例站点
-      val: <a href="https://hexo-theme-async.imalun.com/demo/" target="_blank" rel="nofollow">查看</a>   
+      val: <a href="https://hexo-theme-async.imalun.com/demo/" target="_blank" rel="nofollow">查看</a>
 
   social:
     - icon: fab fa-github
@@ -38,7 +49,7 @@ footer:
     enable: true
   beian:
     enable: false
-    icp: 
+    icp:
   copyrightYear: 2022
   live_time:
     enable: true
@@ -82,8 +93,8 @@ rightside:
   readmode: true
   aside: true
 
-post_pagination: 
-  enable: true 
+post_pagination:
+  enable: true
   type: small
 
 cdn:
@@ -98,11 +109,11 @@ highlight:
   title: mac
   height_limit: 200
 
-theme: 
+theme:
   switch: false
 
 cover:
-  default: 
+  default:
     - /img/block.jpg
     - https://th.wallhaven.cc/orig/wq/wqvkl7.jpg
     - https://th.wallhaven.cc/orig/rd/rdq3v1.jpg
