@@ -15,14 +15,26 @@ comments: false
     <div class="col-lg-12">
         <h5 class="trm-title-with-divider">作者 <span data-number="01"></span></h5>
         <div class="trm-card trm-active-el">
-            大家好，我是 <strong>Adream</strong>，很高兴您能在浩瀚如烟的互联网世界里发现这个博客，更感谢您能够饶有兴致地浏览这个页面。建立这个 Blog 是出于兴趣爱好，我将在此分会分享一些学习笔记，可能还会分享少许图片、视频以及其他有趣东西的链接。
+            大家好，我是 <strong>Adream</strong>，很高兴您能在浩瀚如烟的互联网世界里发现这个博客，更感谢您能够饶有兴致地浏览这个页面。建立这个 Blog 是为了记录本人的学习心得以及日常生活，我将在此分享一些学习笔记，可能还会分享少许图片、视频以及其他有趣东西的链接。
         </div>
     </div>
 </div>
 
 <div class="row trm-scroll-animation" >
     <div class="col-lg-12">
-        <h5 class="trm-title-with-divider">工作经验 <span data-number="01"></span></h5>
+        <h5 class="trm-title-with-divider">工作经验 <span data-number="02"></span></h5>
+        <div class="trm-card trm-active-el">
+            <strong>ICT实验室技术负责人：</strong>很高兴您能在浩瀚如烟的互联网世界里发现这个博客，更感谢您能够饶有兴致地浏览这个页面。建立这个 Blog 是出于兴趣爱好，我将在此分会分享一些学习笔记，可能还会分享少许图片、视频以及其他有趣东西的链接。
+        </div>
+        <div class="trm-card trm-active-el">
+            <strong>MindSpore实习：</strong>很高兴您能在浩瀚如烟的互联网世界里发现这个博客，更感谢您能够饶有兴致地浏览这个页面。建立这个 Blog 是出于兴趣爱好，我将在此分会分享一些学习笔记，可能还会分享少许图片、视频以及其他有趣东西的链接。
+        </div>
+    </div>
+</div>
+
+<div class="row trm-scroll-animation" >
+    <div class="col-lg-12">
+        <h5 class="trm-title-with-divider">项目经验 <span data-number="03"></span></h5>
         <div class="trm-card trm-active-el">
             大家好，我是 <strong>Adream</strong>，很高兴您能在浩瀚如烟的互联网世界里发现这个博客，更感谢您能够饶有兴致地浏览这个页面。建立这个 Blog 是出于兴趣爱好，我将在此分会分享一些学习笔记，可能还会分享少许图片、视频以及其他有趣东西的链接。
         </div>
@@ -31,16 +43,7 @@ comments: false
 
 <div class="row trm-scroll-animation" >
     <div class="col-lg-12">
-        <h5 class="trm-title-with-divider">项目经验 <span data-number="01"></span></h5>
-        <div class="trm-card trm-active-el">
-            大家好，我是 <strong>Adream</strong>，很高兴您能在浩瀚如烟的互联网世界里发现这个博客，更感谢您能够饶有兴致地浏览这个页面。建立这个 Blog 是出于兴趣爱好，我将在此分会分享一些学习笔记，可能还会分享少许图片、视频以及其他有趣东西的链接。
-        </div>
-    </div>
-</div>
-
-<div class="row trm-scroll-animation" >
-    <div class="col-lg-12">
-        <h5 class="trm-title-with-divider">教育经历 <span data-number="01"></span></h5>
+        <h5 class="trm-title-with-divider">教育经历 <span data-number="04"></span></h5>
         <div class="trm-card trm-active-el">
             大家好，我是 <strong>Adream</strong>，很高兴您能在浩瀚如烟的互联网世界里发现这个博客，更感谢您能够饶有兴致地浏览这个页面。建立这个 Blog 是出于兴趣爱好，我将在此分会分享一些学习笔记，可能还会分享少许图片、视频以及其他有趣东西的链接。
         </div>
@@ -49,7 +52,7 @@ comments: false
 
 <div class="row trm-scroll-animation">
     <div class="col-lg-12">
-        <h5 class="trm-title-with-divider">个人荣誉 <span data-number="02"></span></h5>
+        <h5 class="trm-title-with-divider">个人荣誉 <span data-number="05"></span></h5>
         <div class="trm-card trm-active-el">
             <ul class="trm-list">
                 <li>程序：<a href="https://hexo.io" style="font-weight:700" target="_blank" rel="nofollow">Hexo</a></li>
@@ -62,7 +65,7 @@ comments: false
 
 <div class="row trm-scroll-animation">
     <div class="col-lg-12">
-        <h5 class="trm-title-with-divider">程序 <span data-number="02"></span></h5>
+        <h5 class="trm-title-with-divider">技术能力 <span data-number="06"></span></h5>
         <div class="trm-card trm-active-el">
             <ul class="trm-list">
                 <li>程序：<a href="https://hexo.io" style="font-weight:700" target="_blank" rel="nofollow">Hexo</a></li>
@@ -75,7 +78,20 @@ comments: false
 
 <div class="row trm-scroll-animation">
     <div class="col-lg-12">
-        <h5 class="trm-title-with-divider">隐私权及评论 <span data-number="03"></span></h5>
+        <h5 class="trm-title-with-divider">程序 <span data-number="07"></span></h5>
+        <div class="trm-card trm-active-el">
+            <ul class="trm-list">
+                <li>程序：<a href="https://hexo.io" style="font-weight:700" target="_blank" rel="nofollow">Hexo</a></li>
+                <li>主题：<a href="https://github.com/MaLuns/hexo-theme-async" style="font-weight:700" target="_blank" rel="nofollow">Hexo-theme-async</a></li>
+                <li>托管：<a href="https://vercel.com" style="font-weight:700" target="_blank" rel="nofollow">Vercel</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row trm-scroll-animation">
+    <div class="col-lg-12">
+        <h5 class="trm-title-with-divider">隐私权及评论 <span data-number="08"></span></h5>
         <div class="trm-card trm-active-el">
             本网站不会追踪访客行为，且不要求访客提供任何敏感信息（比如真实姓名、身份证号码、手机号等），因而也不存在任何隐私泄漏问题。访客参与评论，必须遵守法律法规和基本道德规范，文明礼貌。严禁发布任何有关淫秽、反动、暴力、博彩、恐吓、低俗的内容或违法信息，在尊重言论自由的同时请保持和平与理性。请勿对他人采取不友好的评论或其它过激行为。
             <br><br>
