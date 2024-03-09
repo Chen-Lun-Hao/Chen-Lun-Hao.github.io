@@ -105,7 +105,7 @@ theme: async
 deploy:
   type: git
   repostory: https://github.com/chen-lun-hao/chen-lun-hao.github.io.git
-  branch: master
+  branch: main
 
 search:
   path: search.xml
