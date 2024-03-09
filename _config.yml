@@ -3,17 +3,18 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: Hexo-theme-async
 subtitle: ''
-description: ''
+description: 这是一个 Hexo 主题
 keywords:
-author: John Doe
-language: en
+author: 白云苍狗
+language: zh-Hans
 timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: https://hexo-theme-async.imalun.com
+root: /demosite/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -22,7 +23,7 @@ pretty_urls:
 
 # Directory
 source_dir: source
-public_dir: public
+public_dir: ../docs/.vitepress/dist/demosite
 tag_dir: tags
 archive_dir: archives
 category_dir: categories
@@ -45,7 +46,7 @@ relative_link: false
 future: true
 highlight:
   enable: true
-  line_number: true
+  line_number: false
   auto_detect: false
   tab_replace: ''
   wrap: true
@@ -98,11 +99,14 @@ ignore:
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: async
-#landscape
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: git
-  repository: https://github.com/chen-lun-hao/chen-lun-hao.github.io.git
-  branch: master
+  type: ''
+
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
