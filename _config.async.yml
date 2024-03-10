@@ -94,35 +94,42 @@ footer:
 
 se: true
 
+rss: auto.xml
+
+#字数统计
+wordcount:
+  enable: true
+  count: true
+  time: true
+
 search:
   enable: true
   type: local
   preload: true
   trigger: auto
 
-baidu_push: true
-
 reward:
-  enable: true
-  methods:
-    - name: 微信
-      path: https://mp-8b005489-7724-4f8c-afdd-30192ff4f7ae.cdn.bspapp.com/cloudstorage/61a57135-2e65-4d51-8be1-03b8bd1c595e.jpg
-    - name: 支付宝
-      path: https://mp-8b005489-7724-4f8c-afdd-30192ff4f7ae.cdn.bspapp.com/cloudstorage/a21e9954-22f2-43fe-b3b0-3dba1fdde3ed.jpg
-    - name: QQ
-      path: https://mp-8b005489-7724-4f8c-afdd-30192ff4f7ae.cdn.bspapp.com/cloudstorage/69fb1903-d0dc-4169-9a02-1e76ec8e7761.jpg
+  enable: false
+  # methods:
+  #   - name: 微信
+  #     path: https://mp-8b005489-7724-4f8c-afdd-30192ff4f7ae.cdn.bspapp.com/cloudstorage/61a57135-2e65-4d51-8be1-03b8bd1c595e.jpg
+  #   - name: 支付宝
+  #     path: https://mp-8b005489-7724-4f8c-afdd-30192ff4f7ae.cdn.bspapp.com/cloudstorage/a21e9954-22f2-43fe-b3b0-3dba1fdde3ed.jpg
+  #   - name: QQ
+  #     path: https://mp-8b005489-7724-4f8c-afdd-30192ff4f7ae.cdn.bspapp.com/cloudstorage/69fb1903-d0dc-4169-9a02-1e76ec8e7761.jpg
 
 creative_commons:
   license: by-nc-sa
   language: deed.zh
   post: true
-  clipboard: true
+  clipboard: false
 
 swup: true
 
 toc:
   enable: true
   list_number: false
+  post_title: false
   max_depth: 3
   min_depth: 1
 
@@ -133,11 +140,6 @@ rightside:
 post_pagination:
   enable: true
   type: small
-
-cdn:
-  js:
-    head:
-    base: [demo.js]
 
 assets:
   third_party_provider: https://npm.elemecdn.com
@@ -189,6 +191,7 @@ highlight:
 
 theme:
   switch: false
+  default: auto
 
 cover:
   default:
