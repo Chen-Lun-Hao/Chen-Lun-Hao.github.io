@@ -36,24 +36,48 @@ top_bars:
   # - title: 自定义
   #   url: /customize_page/
 
+# 横幅配置
+banner:
+  default:
+    type: video
+    bgurl: //cdn.moji.com/websrc/video/autumn20190924.mp4
+  index:
+    type: video
+    bgurl: //cdn.moji.com/websrc/video/autumn20190924.mp4
+    bannerTitle: 树深时见鹿，<br>溪午不闻钟。
+    bannerText: Hi my new friend!
+  archive:
+    type: video
+    bgurl: //cdn.moji.com/websrc/video/autumn20190924.mp4
+  links:
+    type: video
+    bgurl: //cdn.moji.com/websrc/video/autumn20190924.mp4
+  about:
+    type: video
+    bgurl: //cdn.moji.com/websrc/video/autumn20190924.mp4
+
+#侧边栏
 sidebar:
   typedTextPrefix: I`m
-  typedText: ["Web Developer"]
+  typedText: ["AI Developer"]
   info:
-    - key: 文档地址
-      val: <a href="https://hexo-theme-async.imalun.com/" target="_blank" rel="nofollow">查看</a>
-    - key: 备用地址
-      val: <a href="https://async-docs.imalun.com/" target="_blank" rel="nofollow">查看</a>
-    - key: 提交示例站点
-      val: <a href="https://hexo-theme-async.imalun.com/demo/" target="_blank" rel="nofollow">查看</a>
+    - key: sidebar.residence
+      val: 广州
+    - key: sidebar.city
+      val: 广州
+    - key: sidebar.age
+      val: 21
 
   social:
-    - icon: fab fa-github
-      url: https://github.com/MaLuns/Hexo-theme-async
+    - icon: icon-github
+      url: https://github.com/chne-lun-hao
       name: Github
-    - icon: fab fa-npm
-      url: https://www.npmjs.com/package/hexo-theme-async
-      name: Npm
+    - icon: icon-gitee
+      url: https://gitee.com/lunhao2023
+      name: Gitee
+    - icon: icon-rss
+      url: atom.xml
+      name: RSS
 
 footer:
   powered:
@@ -115,6 +139,12 @@ cdn:
 
 assets:
   third_party_provider: https://npm.elemecdn.com
+  plugin:
+    twikoo: https://npm.elemecdn.com/twikoo@1.6.11/dist/twikoo.all.min.js
+  icons:
+    type: symbol
+    css:
+    js: //at.alicdn.com/t/c/font_3637590_i4hyyea14ur.js
 
 highlight:
   title: mac
