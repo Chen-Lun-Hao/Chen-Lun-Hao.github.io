@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://www.adream.icu/about/index.html</loc>
+    
+    <lastmod>2024-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/2023/01/05/code_snippet/</loc>
+    
+    <lastmod>2024-03-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/2022/09/21/hello-world/</loc>
+    
+    <lastmod>2024-03-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/2022/09/22/katex/</loc>
+    
+    <lastmod>2024-03-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/2022/09/21/markdown/</loc>
+    
+    <lastmod>2024-03-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/2022/12/30/tag_plugins/</loc>
+    
+    <lastmod>2024-03-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/customize_page/index.html</loc>
+    
+    <lastmod>2024-03-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/gallery/timi.html</loc>
+    
+    <lastmod>2024-03-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/gallery/index.html</loc>
+    
+    <lastmod>2024-03-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/gallery/wallpaper.html</loc>
+    
+    <lastmod>2024-03-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/links/index.html</loc>
+    
+    <lastmod>2024-03-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/downloads/code/config.json</loc>
+    
+    <lastmod>2024-03-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+
+  <url>
+    <loc>https://www.adream.icu/</loc>
+    <lastmod>2024-03-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  
+
+  
+  <url>
+    <loc>https://www.adream.icu/categories/%E6%B5%8B%E8%AF%95%E5%88%86%E7%B1%BB/</loc>
+    <lastmod>2024-03-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/categories/Plugins/</loc>
+    <lastmod>2024-03-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+</urlset>
