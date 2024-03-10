@@ -11,19 +11,30 @@ user:
 
 # logo
 favicon:
+  # logo: https://counter.imalun.com/www.imalun.com?theme=rule34
+  logo: favicon.svg
+  icon16: favicon.png
+  icon32: favicon.png
+  appleTouchIcon: apple-touch-icon.png
+  webmanifest: /site.webmanifest
   visibilitychange: true
 
+#头部：首页、归档、作品、日常、友链、关于
 top_bars:
   - title: menu.home
     url: /
   - title: menu.archives
     url: /archives/
+  - title: menu.projects
+    url: /projects/
+  # - title: menu.daily
+  #   url: /daily/
   - title: menu.links
     url: /links/
   - title: menu.about
     url: /about/
-  - title: 自定义
-    url: /customize_page/
+  # - title: 自定义
+  #   url: /customize_page/
 
 sidebar:
   typedTextPrefix: I`m

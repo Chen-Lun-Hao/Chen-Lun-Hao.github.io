@@ -1,0 +1,15 @@
+zh-Hans:
+  menu:
+    # home: Home
+    # archives: Archives
+    # links: Links
+    # about: About
+    # projects: Projects
+    # forever: Forever Go
+    home: 首页
+    archives: 归档
+    links: 友链
+    about: 关于
+    projects: 项目
+    forever: 永久
+    daily: 日常

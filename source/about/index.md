@@ -24,10 +24,12 @@ comments: false
     <div class="col-lg-12">
         <h5 class="trm-title-with-divider">工作经验 <span data-number="02"></span></h5>
         <div class="trm-card trm-active-el">
-            <strong>ICT实验室技术负责人：</strong>很高兴您能在浩瀚如烟的互联网世界里发现这个博客，更感谢您能够饶有兴致地浏览这个页面。建立这个 Blog 是出于兴趣爱好，我将在此分会分享一些学习笔记，可能还会分享少许图片、视频以及其他有趣东西的链接。
+            <strong>ICT实验室</strong><br/>
+            很高兴您能在浩瀚如烟的互联网世界里发现这个博客，更感谢您能够饶有兴致地浏览这个页面。建立这个 Blog 是出于兴趣爱好，我将在此分会分享一些学习笔记，可能还会分享少许图片、视频以及其他有趣东西的链接。
         </div>
         <div class="trm-card trm-active-el">
-            <strong>MindSpore实习：</strong>很高兴您能在浩瀚如烟的互联网世界里发现这个博客，更感谢您能够饶有兴致地浏览这个页面。建立这个 Blog 是出于兴趣爱好，我将在此分会分享一些学习笔记，可能还会分享少许图片、视频以及其他有趣东西的链接。
+            <strong>MindSpore实习</strong><br/>
+            很高兴您能在浩瀚如烟的互联网世界里发现这个博客，更感谢您能够饶有兴致地浏览这个页面。建立这个 Blog 是出于兴趣爱好，我将在此分会分享一些学习笔记，可能还会分享少许图片、视频以及其他有趣东西的链接。
         </div>
     </div>
 </div>
