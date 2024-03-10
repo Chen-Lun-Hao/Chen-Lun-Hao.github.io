@@ -10,6 +10,7 @@ https://www.adream.icu/gallery/index.html
 https://www.adream.icu/gallery/wallpaper.html
 https://www.adream.icu/links/index.html
 https://www.adream.icu/downloads/code/config.json
+https://www.adream.icu/404.html
 https://www.adream.icu/
 https://www.adream.icu/categories/%E6%B5%8B%E8%AF%95%E5%88%86%E7%B1%BB/
 https://www.adream.icu/categories/Plugins/
