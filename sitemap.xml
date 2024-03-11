@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.adream.icu/2021/06/12/Decision%20Tree%20-%20Classification/</loc>
+    
+    <lastmod>2024-03-11</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.adream.icu/about/index.html</loc>
     
     <lastmod>2024-03-10</lastmod>
@@ -65,33 +74,6 @@
   </url>
   
   <url>
-    <loc>https://www.adream.icu/gallery/timi.html</loc>
-    
-    <lastmod>2024-03-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.adream.icu/gallery/index.html</loc>
-    
-    <lastmod>2024-03-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.adream.icu/gallery/wallpaper.html</loc>
-    
-    <lastmod>2024-03-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.adream.icu/links/index.html</loc>
     
     <lastmod>2024-03-09</lastmod>
@@ -121,24 +103,38 @@
 
   <url>
     <loc>https://www.adream.icu/</loc>
-    <lastmod>2024-03-10</lastmod>
+    <lastmod>2024-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
+  <url>
+    <loc>https://www.adream.icu/tags/%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2024-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
     <loc>https://www.adream.icu/categories/%E6%B5%8B%E8%AF%95%E5%88%86%E7%B1%BB/</loc>
-    <lastmod>2024-03-10</lastmod>
+    <lastmod>2024-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://www.adream.icu/categories/Plugins/</loc>
-    <lastmod>2024-03-10</lastmod>
+    <lastmod>2024-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.adream.icu/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2024-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

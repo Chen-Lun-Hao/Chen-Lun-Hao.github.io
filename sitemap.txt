@@ -1,3 +1,4 @@
+https://www.adream.icu/2021/06/12/Decision%20Tree%20-%20Classification/
 https://www.adream.icu/about/index.html
 https://www.adream.icu/2023/01/05/code_snippet/
 https://www.adream.icu/2022/09/21/hello-world/
@@ -5,12 +6,11 @@ https://www.adream.icu/2022/09/22/katex/
 https://www.adream.icu/2022/09/21/markdown/
 https://www.adream.icu/2022/12/30/tag_plugins/
 https://www.adream.icu/customize_page/index.html
-https://www.adream.icu/gallery/timi.html
-https://www.adream.icu/gallery/index.html
-https://www.adream.icu/gallery/wallpaper.html
 https://www.adream.icu/links/index.html
 https://www.adream.icu/downloads/code/config.json
 https://www.adream.icu/404.html
 https://www.adream.icu/
+https://www.adream.icu/tags/%E7%AE%97%E6%B3%95/
 https://www.adream.icu/categories/%E6%B5%8B%E8%AF%95%E5%88%86%E7%B1%BB/
 https://www.adream.icu/categories/Plugins/
+https://www.adream.icu/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/
