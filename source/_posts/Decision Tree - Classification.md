@@ -2,9 +2,9 @@
 title: 决策树分类算法原理
 comments: true
 date: 2021-06-12 23:20:59
-tags: [算法]
+tags: [算法, 机器学习]
 description:
-categories: 机器学习
+categories: 学习记录类
 keywords: 决策树,分类
 ---
 
