@@ -1,258 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>决策树分类算法原理</title>
-    <url>/2021/06/12/Decision%20Tree%20-%20Classification/</url>
-    <content><![CDATA[<span id="more"></span>
+    <title>Code Snippet</title>
+    <url>/2023/01/05/code_snippet/</url>
+    <content><![CDATA[
 
-<h2 id="1、决策树概述"><a href="#1、决策树概述" class="headerlink" title="1、决策树概述"></a>1、决策树概述</h2><p>决策树是属于有监督机器学习的一种，起源非常早，符合直觉并且非常直观，模仿人类做决策的过程，早期人工智能模型中有很多应用，现在更多的是使用基于决策树的一些集成学习的算法。这一章我们把决策树算法理解透彻了，非常有利于后面去学习集成学习。</p>
-<h3 id="1-1、示例一"><a href="#1-1、示例一" class="headerlink" title="1.1、示例一"></a>1.1、示例一</h3><p>我们有如下数据：</p>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>拥有房产（是&#x2F;否）</th>
-<th>婚姻[单身，已婚，离婚]</th>
-<th>年收入（单位：千元）</th>
-<th>无法偿还债务（是&#x2F;否）</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>是</td>
-<td>单身</td>
-<td>125</td>
-<td>否</td>
-</tr>
-<tr>
-<td>2</td>
-<td>否</td>
-<td>已婚</td>
-<td>100</td>
-<td>否</td>
-</tr>
-<tr>
-<td>3</td>
-<td>否</td>
-<td>单身</td>
-<td>70</td>
-<td>否</td>
-</tr>
-<tr>
-<td>4</td>
-<td>是</td>
-<td>已婚</td>
-<td>120</td>
-<td>否</td>
-</tr>
-<tr>
-<td>5</td>
-<td>否</td>
-<td>离婚</td>
-<td>95</td>
-<td>是</td>
-</tr>
-<tr>
-<td>6</td>
-<td>否</td>
-<td>已婚</td>
-<td>60</td>
-<td>否</td>
-</tr>
-<tr>
-<td>7</td>
-<td>是</td>
-<td>离婚</td>
-<td>220</td>
-<td>否</td>
-</tr>
-<tr>
-<td>8</td>
-<td>否</td>
-<td>单身</td>
-<td>85</td>
-<td>是</td>
-</tr>
-<tr>
-<td>9</td>
-<td>否</td>
-<td>已婚</td>
-<td>75</td>
-<td>否</td>
-</tr>
-<tr>
-<td>10</td>
-<td>否</td>
-<td>单身</td>
-<td>90</td>
-<td>是</td>
-</tr>
-</tbody></table>
-<p>上表根据历史数据，记录已有的用户是否可以偿还债务，以及相关的信息。通过该数据，构建的决策树如下：</p>
-<p>![](&#x2F;img&#x2F;post&#x2F;Dscision Tree - Classifcation&#x2F;1-决策树.png)</p>
-<p>比如新来一个用户：无房产，单身，年收入 55K，那么根据上面的决策树，可以预测他无法偿还债务（蓝色虚线路径）。从上面的决策树，还可以知道是否拥有房产可以很大的决定用户是否可以偿还债务，对借贷业务具有指导意义。</p>
-<h3 id="1-2、示例二"><a href="#1-2、示例二" class="headerlink" title="1.2、示例二"></a>1.2、示例二</h3><p>女孩母亲要给她介绍对象，年龄是多少，母亲说 24。长得帅吗？挺帅的。收入高吗？中等收入。是公务员吗？母亲说，是的。女孩：好，我去见见。</p>
-<p>根据<strong>实力</strong>构建决策树：</p>
-<p><code>&lt;img src=&quot;/img/post/Dscision Tree - Classifcation/2-相亲.png&quot; style=&quot;zoom:67%;&quot; /&gt;</code></p>
-<p>问题：图片是二叉树吗？</p>
-<p>决策树是标准的二叉树，每个节点只有两个分支~</p>
-<ul>
-<li>上面那棵树中，属性：绿色的节点（年龄、长相、收入、是否是公务员）<ul>
-<li>属性叫做，data，数据，一般使用 X 表示</li>
-<li>跟属性对应，目标值（橘色节点），一般使用 y 表示</li>
-</ul>
-</li>
-<li>构建这棵树时，先后顺序，每个人，标准不同，树结构不同</li>
-<li>计算机，构建树，标准一致的，构建出来的树，一致</li>
-</ul>
-<h3 id="1-3、决策树算法特点"><a href="#1-3、决策树算法特点" class="headerlink" title="1.3、决策树算法特点"></a>1.3、决策树算法特点</h3><ul>
-<li>可以处理非线性的问题</li>
-<li>可解释性强，没有方程系数 $\theta$</li>
-<li>模型简单，模型预测效率高 if else</li>
-</ul>
-<h2 id="2、DecisionTreeClassifier-使用"><a href="#2、DecisionTreeClassifier-使用" class="headerlink" title="2、DecisionTreeClassifier 使用"></a>2、DecisionTreeClassifier 使用</h2><h3 id="2-1、算例介绍"><a href="#2-1、算例介绍" class="headerlink" title="2.1、算例介绍"></a>2.1、算例介绍</h3><p>![](&#x2F;img&#x2F;post&#x2F;Dscision Tree - Classifcation&#x2F;3-账号真伪.png)</p>
-<p>其中 s、m 和 l 分别表示小、中和大。</p>
-<p>账号是否真实跟属性：<strong>日志密度、好友密度、是否使用真实头像</strong>有关系~</p>
-<h3 id="2-2、构建决策树并可视化"><a href="#2-2、构建决策树并可视化" class="headerlink" title="2.2、构建决策树并可视化"></a>2.2、构建决策树并可视化</h3><p>数据创建</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">y = np.array(<span class="built_in">list</span>(<span class="string">&#x27;NYYYYYNYYN&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(y)</span><br><span class="line">X = pd.DataFrame(&#123;<span class="string">&#x27;日志密度&#x27;</span>:<span class="built_in">list</span>(<span class="string">&#x27;sslmlmmlms&#x27;</span>),</span><br><span class="line">                  <span class="string">&#x27;好友密度&#x27;</span>:<span class="built_in">list</span>(<span class="string">&#x27;slmmmlsmss&#x27;</span>),</span><br><span class="line">                  <span class="string">&#x27;真实头像&#x27;</span>:<span class="built_in">list</span>(<span class="string">&#x27;NYYYYNYYYY&#x27;</span>),</span><br><span class="line">                  <span class="string">&#x27;真实用户&#x27;</span>:y&#125;)</span><br><span class="line">X</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><figcaption><span>代码块的标题</span><a href="/aas/asd">/asd/asd</a></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment">###### CONFIG</span></span><br><span class="line">ACCEPTED_HOSTS=<span class="string">&quot;/root/.hag_accepted.conf&quot;</span></span><br><span class="line">BE_VERBOSE=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$UID</span>&quot;</span> -ne 0 ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line"> <span class="built_in">echo</span> <span class="string">&quot;Superuser rights required&quot;</span></span><br><span class="line"> <span class="built_in">exit</span> 2</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">genApacheConf</span></span>()&#123;</span><br><span class="line"> <span class="built_in">echo</span> -e <span class="string">&quot;# Host <span class="variable">$&#123;HOME_DIR&#125;</span><span class="variable">$1</span>/<span class="variable">$2</span> :&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;&quot;quoted&quot;&#x27;</span> | <span class="built_in">tr</span> -d \&quot; &gt; text.txt</span><br></pre></td></tr></table></figure>
 
-<p>模型训练（报错，原因：数据类型是字符串）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"></span><br><span class="line">model = DecisionTreeClassifier()</span><br><span class="line"></span><br><span class="line">model.fit(X,y)</span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="attr">myValue</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">init: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">myValue</span> = init;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">import</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="variable language_">module</span> <span class="title class_">MyModule</span> &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">interface</span> <span class="title class_">MyInterface</span> <span class="keyword">extends</span> <span class="title class_">Other</span> &#123;</span><br><span class="line">    <span class="attr">myProperty</span>: <span class="built_in">any</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">declare</span> magicNumber <span class="built_in">number</span>;</span><br><span class="line">myArray.<span class="title function_">forEach</span>(<span class="function">() =&gt;</span> &#123; &#125;); <span class="comment">// fat arrow syntax</span></span><br></pre></td></tr></table></figure>
 
-<p>数据修改（map 函数，进行数据转换）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X[<span class="string">&#x27;日志密度&#x27;</span>] = X[<span class="string">&#x27;日志密度&#x27;</span>].<span class="built_in">map</span>(&#123;<span class="string">&#x27;s&#x27;</span>:<span class="number">0</span>,<span class="string">&#x27;m&#x27;</span>:<span class="number">1</span>,<span class="string">&#x27;l&#x27;</span>:<span class="number">2</span>&#125;)</span><br><span class="line">X[<span class="string">&#x27;好友密度&#x27;</span>] = X[<span class="string">&#x27;好友密度&#x27;</span>].<span class="built_in">map</span>(&#123;<span class="string">&#x27;s&#x27;</span>:<span class="number">0</span>,<span class="string">&#x27;m&#x27;</span>:<span class="number">1</span>,<span class="string">&#x27;l&#x27;</span>:<span class="number">2</span>&#125;)</span><br><span class="line">X[<span class="string">&#x27;真实头像&#x27;</span>] = X[<span class="string">&#x27;真实头像&#x27;</span>].<span class="built_in">map</span>(&#123;<span class="string">&#x27;N&#x27;</span>:<span class="number">0</span>,<span class="string">&#x27;Y&#x27;</span>:<span class="number">1</span>&#125;)</span><br><span class="line">X</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">$initHighlight</span>(<span class="params">block, cls</span>) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (cls.<span class="title function_">search</span>(<span class="regexp">/\bno\-highlight\b/</span>) != -<span class="number">1</span>)</span><br><span class="line">      <span class="keyword">return</span> <span class="title function_">process</span>(block, <span class="literal">true</span>, <span class="number">0x0F</span>) +</span><br><span class="line">             <span class="string">` class=&quot;<span class="subst">$&#123;cls&#125;</span>&quot;`</span>;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    <span class="comment">/* handle exception */</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span> / <span class="number">2</span>; i &lt; classes.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">checkCondition</span>(classes[i]) === <span class="literal">undefined</span>)</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;undefined&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">web-component</span>&gt;</span>&#123;block&#125;<span class="tag">&lt;/<span class="name">web-component</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span>  $initHighlight;</span><br></pre></td></tr></table></figure>
 
-<p>模型训练可视化</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment"># 使用信息熵，作为分裂标准</span></span><br><span class="line">model = DecisionTreeClassifier(criterion=<span class="string">&#x27;entropy&#x27;</span>)</span><br><span class="line">model.fit(X,y)</span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.family&#x27;</span>] = <span class="string">&#x27;STKaiti&#x27;</span></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>,<span class="number">16</span>))</span><br><span class="line">fn = X.columns</span><br><span class="line">_ = tree.plot_tree(model,filled = <span class="literal">True</span>,feature_names=fn)</span><br><span class="line">plt.savefig(<span class="string">&#x27;./iris.jpg&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> System.IO.Compression;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> <span class="keyword">warning</span> disable 414, 3021</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">MyApplication</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">Obsolete(<span class="string">&quot;...&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">class</span> <span class="title">Program</span> : <span class="title">IInterface</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;<span class="built_in">int</span>&gt; <span class="title">JustDoIt</span>(<span class="params"><span class="built_in">int</span> count</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            Span&lt;<span class="built_in">int</span>&gt; numbers = <span class="keyword">stackalloc</span> <span class="built_in">int</span>[length];</span><br><span class="line">            Console.WriteLine(<span class="string">$&quot;Hello <span class="subst">&#123;Name&#125;</span>!&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> List&lt;<span class="built_in">int</span>&gt;(<span class="keyword">new</span> <span class="built_in">int</span>[] &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><code>&lt;img src=&quot;/img/post/Dscision Tree - Classifcation/4-account.jpg&quot; style=&quot;zoom:50%;&quot; /&gt;</code></p>
-<p>数据可视化另一种方式，<a href="https://blog.csdn.net/Soft_Po/article/details/118899477">安装教程</a></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="keyword">import</span> graphviz</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> tree</span><br><span class="line">model = DecisionTreeClassifier(criterion=<span class="string">&#x27;entropy&#x27;</span>)</span><br><span class="line">model.fit(X,y)</span><br><span class="line">dot_data = tree.export_graphviz(model, out_file=<span class="literal">None</span>,</span><br><span class="line">                            feature_names= X.columns,<span class="comment"># 特征名</span></span><br><span class="line">                            class_names=np.unique(y),<span class="comment"># 类别名</span></span><br><span class="line">                            filled=<span class="literal">True</span>, <span class="comment"># 填充颜色</span></span><br><span class="line">                            rounded=<span class="literal">True</span>) <span class="comment"># 圆角</span></span><br><span class="line">graph = graphviz.Source(dot_data)</span><br><span class="line">graph.render(<span class="string">&#x27;Account&#x27;</span>,<span class="built_in">format</span>=<span class="string">&#x27;png&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: Chunkfive; <span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">&#x27;Chunkfive.otf&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span>, <span class="selector-class">.usertext</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#F0F0F0</span>; <span class="attribute">background</span>: <span class="number">#600</span>;</span><br><span class="line">  <span class="attribute">font-family</span>: Chunkfive, sans;</span><br><span class="line">  <span class="attr">--heading-1</span>: <span class="number">30px</span>/<span class="number">32px</span> Helvetica, sans-serif;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@import</span> url(print.css);</span><br><span class="line"><span class="keyword">@media</span> print &#123;</span><br><span class="line">  <span class="selector-tag">a</span><span class="selector-attr">[href^=http]</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">    <span class="attribute">content</span>: <span class="built_in">attr</span>(href)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>修改中文乱码</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="comment"># 打开 dot_data.dot，修改 fontname=&quot;支持的中文字体&quot;</span></span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&#x27;Account&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;./Account2&#x27;</span>, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> file:</span><br><span class="line">    file.write(re.sub(<span class="string">r&#x27;fontname=helvetica&#x27;</span>, <span class="string">&#x27;fontname=Fangsong&#x27;</span>, f.read()))</span><br><span class="line">f.close()</span><br><span class="line"><span class="comment"># 从文件中加载，展示</span></span><br><span class="line">graph = graphviz.Source.from_file(<span class="string">&#x27;./Account2&#x27;</span>)</span><br><span class="line">graph.render(<span class="string">&#x27;Account&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"><span class="selector-tag">body</span> &#123;<span class="attribute">width</span>: <span class="number">500px</span>;&#125;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;application/javascript&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">function</span> <span class="title function_">$init</span>(<span class="params"></span>) &#123;<span class="keyword">return</span> <span class="literal">true</span>;&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">checked</span> <span class="attr">class</span>=<span class="string">&quot;title&quot;</span> <span class="attr">id</span>=<span class="string">&#x27;title&#x27;</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- here goes the rest of the page --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>![](&#x2F;img&#x2F;post&#x2F;Dscision Tree - Classifcation&#x2F;5-Account.png)</p>
-<h3 id="2-3、信息熵"><a href="#2-3、信息熵" class="headerlink" title="2.3、信息熵"></a>2.3、信息熵</h3><ul>
-<li><p>构建好一颗树，数据变的有顺序了（构建前，一堆数据，杂乱无章；构建一颗，整整齐齐，顺序），用什么度量衡表示，数据是否有顺序：信息熵</p>
-</li>
-<li><p>物理学，热力学第二定律（熵），描述的是封闭系统的混乱程度</p>
-<p>![](&#x2F;img&#x2F;post&#x2F;Dscision Tree - Classifcation&#x2F;6-entropy.gif)</p>
-</li>
-<li><p>信息熵，和物理学中熵类似的</p>
-<p><code>&lt;img src=&quot;/img/post/Dscision Tree - Classifcation/7-entropy.png&quot; style=&quot;zoom:67%;&quot; /&gt;</code></p>
-</li>
-<li><p><font size = 5>$H(x) &#x3D; -\sum\limits_{i &#x3D; 1}^n p(x)log_2p(x)$<code>&lt;/font&gt;</code></p>
-</li>
-<li><p><font size = 5>$H(x) &#x3D; \sum\limits_{i &#x3D; 1}^n p(x)log_2\frac{1}{p(x)}$<code>&lt;/font&gt;</code></p>
-</li>
-</ul>
-<h3 id="2-4、信息增益"><a href="#2-4、信息增益" class="headerlink" title="2.4、信息增益"></a>2.4、信息增益</h3><p>信息增益是知道了某个条件后，事件的不确定性下降的程度。写作 g(X,Y)。它的计算方式为熵减去条件熵，如下</p>
-<p>$g(X,y) \rm &#x3D; H(Y) - H(Y|X)$</p>
-<p>表示的是，知道了某个条件后，原来事件不确定性降低的幅度。</p>
-<h3 id="2-5、手动计算实现决策树分类"><a href="#2-5、手动计算实现决策树分类" class="headerlink" title="2.5、手动计算实现决策树分类"></a>2.5、手动计算实现决策树分类</h3><p>数据整合</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X[<span class="string">&#x27;真实用户&#x27;</span>] = y</span><br><span class="line">X</span><br></pre></td></tr></table></figure>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section"># hello world</span></span><br><span class="line"></span><br><span class="line">you can write text [<span class="string">with links</span>](<span class="link">http://example.com</span>) inline or [<span class="string">link references</span>][<span class="symbol">1</span>].</span><br><span class="line"></span><br><span class="line"><span class="bullet">*</span> one <span class="emphasis">_thing_</span> has <span class="emphasis">*em*</span>phasis</span><br><span class="line"><span class="bullet">*</span> two <span class="strong">__things__</span> are <span class="strong">**bold**</span></span><br><span class="line"></span><br><span class="line">[<span class="symbol">1</span>]: <span class="link">http://example.com</span></span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line"><span class="section">hello world</span></span><br><span class="line"><span class="section">===========</span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">this_is</span> <span class="attr">inline</span>=<span class="string">&quot;xml&quot;</span>&gt;</span></span><span class="language-xml"><span class="tag">&lt;/<span class="name">this_is</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="quote">&gt; markdown is so cool</span></span><br><span class="line"></span><br><span class="line"><span class="code">    so are code segments</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="bullet">1.</span> one thing (yeah!)</span><br><span class="line"><span class="bullet">2.</span> two thing <span class="code">`i can write code`</span>, and <span class="code">`more`</span> wipee!</span><br></pre></td></tr></table></figure>
 
-<p>计算未划分信息熵</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = X[<span class="string">&#x27;真实用户&#x27;</span>]</span><br><span class="line">p = s.value_counts()/s.size</span><br><span class="line">(p * np.log2(<span class="number">1</span>/p)).<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
-
-<p>按照日志密度进行划分</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = X[<span class="string">&#x27;日志密度&#x27;</span>].unique()</span><br><span class="line">x.sort()</span><br><span class="line"><span class="comment"># 如何划分呢，分成两部分</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(x) - <span class="number">1</span>):</span><br><span class="line">    split = x[i:i+<span class="number">2</span>].mean()</span><br><span class="line">    cond = X[<span class="string">&#x27;日志密度&#x27;</span>] &lt;= split</span><br><span class="line">    <span class="comment"># 概率分布</span></span><br><span class="line">    p = cond.value_counts()/cond.size</span><br><span class="line">    <span class="comment"># 按照条件划分，两边的概率分布情况</span></span><br><span class="line">    indexs =p.index</span><br><span class="line">    entropy = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> indexs:</span><br><span class="line">        user = X[cond == index][<span class="string">&#x27;真实用户&#x27;</span>]</span><br><span class="line">        p_user = user.value_counts()/user.size</span><br><span class="line">        entropy += (p_user * np.log2(<span class="number">1</span>/p_user)).<span class="built_in">sum</span>() * p[index]</span><br><span class="line">    <span class="built_in">print</span>(split,entropy)</span><br></pre></td></tr></table></figure>
-
-<p>筛选最佳划分条件</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">columns = [<span class="string">&#x27;日志密度&#x27;</span>,<span class="string">&#x27;好友密度&#x27;</span>,<span class="string">&#x27;真实头像&#x27;</span>]</span><br><span class="line">lower_entropy = <span class="number">1</span></span><br><span class="line">condition = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> col <span class="keyword">in</span> columns:</span><br><span class="line">    x = X[col].unique()</span><br><span class="line">    x.sort()</span><br><span class="line">    <span class="built_in">print</span>(x)</span><br><span class="line">    <span class="comment"># 如何划分呢，分成两部分</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(x) - <span class="number">1</span>):</span><br><span class="line">        split = x[i:i+<span class="number">2</span>].mean()</span><br><span class="line">        cond = X[col] &lt;= split</span><br><span class="line">        <span class="comment"># 概率分布</span></span><br><span class="line">        p = cond.value_counts()/cond.size</span><br><span class="line">        <span class="comment"># 按照条件划分，两边的概率分布情况</span></span><br><span class="line">        indexs =p.index</span><br><span class="line">        entropy = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> indexs:</span><br><span class="line">            user = X[cond == index][<span class="string">&#x27;真实用户&#x27;</span>]</span><br><span class="line">            p_user = user.value_counts()/user.size</span><br><span class="line">            entropy += (p_user * np.log2(<span class="number">1</span>/p_user)).<span class="built_in">sum</span>() * p[index]</span><br><span class="line">        <span class="built_in">print</span>(col,split,entropy)</span><br><span class="line">        <span class="keyword">if</span> entropy &lt; lower_entropy:</span><br><span class="line">            condition.clear()</span><br><span class="line">            lower_entropy = entropy</span><br><span class="line">            condition[col] = split</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;最佳列分条件是：&#x27;</span>,condition)</span><br></pre></td></tr></table></figure>
-
-<p><code>&lt;img src=&quot;/img/post/Dscision Tree - Classifcation/8-Account.png&quot; style=&quot;zoom:67%;&quot; /&gt;</code></p>
-<p>进一步列分</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cond = X[<span class="string">&#x27;好友密度&#x27;</span>] &lt; <span class="number">0.5</span></span><br><span class="line">X_ = X[cond]</span><br><span class="line">columns = [<span class="string">&#x27;日志密度&#x27;</span>,<span class="string">&#x27;真实头像&#x27;</span>]</span><br><span class="line">lower_entropy = <span class="number">1</span></span><br><span class="line">condition = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> col <span class="keyword">in</span> columns:</span><br><span class="line">    x = X_[col].unique()</span><br><span class="line">    x.sort()</span><br><span class="line">    <span class="built_in">print</span>(x)</span><br><span class="line">    <span class="comment"># 如何划分呢，分成两部分</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(x) - <span class="number">1</span>):</span><br><span class="line">        split = x[i:i+<span class="number">2</span>].mean()</span><br><span class="line">        cond = X_[col] &lt;= split</span><br><span class="line">        <span class="comment"># 概率分布</span></span><br><span class="line">        p = cond.value_counts()/cond.size</span><br><span class="line">        <span class="comment"># 按照条件划分，两边的概率分布情况</span></span><br><span class="line">        indexs =p.index</span><br><span class="line">        entropy = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> indexs:</span><br><span class="line">            user = X_[cond == index][<span class="string">&#x27;真实用户&#x27;</span>]</span><br><span class="line">            p_user = user.value_counts()/user.size</span><br><span class="line">            entropy += (p_user * np.log2(<span class="number">1</span>/p_user)).<span class="built_in">sum</span>() * p[index]</span><br><span class="line">        <span class="built_in">print</span>(col,split,entropy)</span><br><span class="line">        <span class="keyword">if</span> entropy &lt; lower_entropy:</span><br><span class="line">            condition.clear()</span><br><span class="line">            lower_entropy = entropy</span><br><span class="line">            condition[col] = split</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;最佳列分条件是：&#x27;</span>,condition)</span><br></pre></td></tr></table></figure>
-
-<p><code>&lt;img src=&quot;/img/post/Dscision Tree - Classifcation/9-Account.png&quot; style=&quot;zoom:67%;&quot; /&gt;</code></p>
-<h2 id="3、决策树分裂指标"><a href="#3、决策树分裂指标" class="headerlink" title="3、决策树分裂指标"></a>3、决策树分裂指标</h2><p>常用的分裂条件时：</p>
-<ul>
-<li>信息增益</li>
-<li>Gini 系数</li>
-<li>信息增益率</li>
-<li>MSE（回归问题）</li>
-</ul>
-<h3 id="3-1、信息熵（ID3）"><a href="#3-1、信息熵（ID3）" class="headerlink" title="3.1、信息熵（ID3）"></a>3.1、信息熵（ID3）</h3><p>在信息论里熵叫作信息量，即熵是对不确定性的度量。从控制论的角度来看，应叫不确定性。信息论的创始人香农在其著作《通信的数学理论》中提出了建立在概率统计模型上的信息度量。他把信息定义为“用来消除不确定性的东西”。在信息世界，熵越高，则能传输越多的信息，熵越低，则意味着传输的信息越少。还是举例说明，假设 Dammi 在买衣服的时候有颜色，尺寸，款式以及设计年份四种要求，而 Sara 只有颜色和尺寸的要求，那么在购买衣服这个层面上 Dammi 由于选择更多因而不确定性因素更大，最终 Dammi 所获取的信息更多，也就是熵更大。所以信息量&#x3D;熵&#x3D;不确定性，通俗易懂。在叙述决策树时我们用熵表示不纯度（Impurity）。</p>
-<p>对应公式如下：</p>
-<p><font size = 5>$H(x) &#x3D; -\sum\limits_{i &#x3D; 1}^n p(x)log_2p(x)$<code>&lt;/font&gt;</code></p>
-<p>熵的变化越大，说明划分越纯，信息增益越大~</p>
-<h3 id="3-2、Gini-系数（CART）"><a href="#3-2、Gini-系数（CART）" class="headerlink" title="3.2、Gini 系数（CART）"></a>3.2、Gini 系数（CART）</h3><p>基尼系数是指国际上通用的、用以衡量一个国家或地区居民收入差距的常用指标。</p>
-<p>基尼系数最大为“1”，最小等于“0”。基尼系数越接近 0 表明收入分配越是趋向平等。国际惯例把 0.2 以下视为收入绝对平均，0.2-0.3 视为收入比较平均；0.3-0.4 视为收入相对合理；0.4-0.5 视为收入差距较大，当基尼系数达到 0.5 以上时，则表示收入悬殊。</p>
-<p>基尼系数的实际数值只能介于 0 ～ 1 之间，基尼系数越小收入分配越平均，基尼系数越大收入分配越不平均。国际上通常把 0.4 作为贫富差距的警戒线，大于这一数值容易出现社会动荡。</p>
-<p>Gini 系数越小，代表集合中的数据越纯，所有我们可以计算分裂前的值在按照某个维度对数据集进行划分，然后可以去计算多个节点的 Gini 系数。</p>
-<p>对应公式如下：</p>
-<p><font size = 5>$\rm gini &#x3D; \sum\limits_{i &#x3D; 1}^np_i(1 - p_i)$<code>&lt;/font&gt;</code></p>
-<p>在对数据进行分类是 gini 系数的变化越大，说明划分越纯，效果越好~</p>
-<h3 id="3-3、信息增益率"><a href="#3-3、信息增益率" class="headerlink" title="3.3、信息增益率"></a>3.3、信息增益率</h3><p>大学期末的数学考试只有单选题。对于一个完全没有学习过的学生。该如何过关呢？</p>
-<p>4 个选项是正确选项的概率都是 1&#x2F;4。那么单项选择题的答案的熵就是：</p>
-<p>$H(Y) \rm &#x3D; -0.25log_2(0.25) \times 4 &#x3D; 2bit$</p>
-<p>在学霸圈做单项选择题有一个秘籍：三长一短选最短，三短一长选最长。姑且假设学霸的秘籍一般都是正确的。</p>
-<p>如果在某场考试中，有 10%的单项选题是三长一短，10%的选题是三短一长。计算该考试单项选题的关于长短题的条件熵：</p>
-<table>
-<thead>
-<tr>
-<th align="center">题目类型</th>
-<th align="center">答案概率</th>
-<th align="center">题目概率</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">三长一短</td>
-<td align="center">(1,0,0,0)熵是 0，结果确定！</td>
-<td align="center">10%</td>
-</tr>
-<tr>
-<td align="center">三短一长</td>
-<td align="center">(1,0,0,0)熵是 0</td>
-<td align="center">10%</td>
-</tr>
-<tr>
-<td align="center">一样长</td>
-<td align="center">(0.25,0.25,0.25,0.25)熵是 2</td>
-<td align="center">80%</td>
-</tr>
-</tbody></table>
-<p>计算条件熵（条件就是：题目不同类型）</p>
-<p>$H(Y|X) \rm &#x3D; 0.1\times 0 + 0.1 \times 0 + 0.8 \times 2 &#x3D; 1.6bit$</p>
-<p>那么信息增益是：</p>
-<p>$g(X,Y) \rm &#x3D; H(Y) - H(Y|X) &#x3D; 2 - 1.6 &#x3D; 0.4bit$</p>
-<p><strong>信息增益率</strong>在信息增益的基础上增加了惩罚项，惩罚项是特征的固有值。</p>
-<p>写作 gr(X,Y)。定义为信息增益除以特征的固有值，如下：</p>
-<p><font size = 5>$gr(X,Y) &#x3D; \frac{g(X,Y)}{Info(X)}$<code>&lt;/font&gt;</code></p>
-<p><font size = 5>$Info(X) &#x3D; -\sum\limits_{v \in values(X)}\frac{num(v)}{num(X)}log_2{\frac{num(v)}{num(X)}}$<code>&lt;/font&gt;</code></p>
-<p>计算上面单选题题目长短案例的信息增益率：</p>
-<p><font size = 5>$Info(X) &#x3D; -(0.1 \times log_20.1 \times 2 + 0.8 \times log_20.8) &#x3D; 0.92$<code>&lt;/font&gt;</code></p>
-<p><font size = 5>$gr(X,Y) &#x3D; \frac{g(X,Y)}{Info(X)} &#x3D; \frac{0.4}{0.92} &#x3D; 0.43$<code>&lt;/font&gt;</code></p>
-<p>对于取值多的属性，尤其一些连续型数值，这个单独的属性就可以划分所有的样本，使得所有分支下的样本集合都是“纯的”（最极端的情况是每个叶子节点只有一个样本）。<br>一个属性的信息增益越大，表明属性对样本的熵减少的能力更强，这个属性使得数据由不确定性变成确定性的能力越强。<br>所以如果是取值更多的属性，更容易使得数据更“纯”（尤其是连续型数值），其信息增益更大，决策树会首先挑选这个属性作为树的顶点。结果训练出来的形状是一棵庞大且深度很浅的树，这样的划分是极为不合理的。</p>
-<p>![](&#x2F;img&#x2F;post&#x2F;Dscision Tree - Classifcation&#x2F;10-信息增益率.png)</p>
-<p>C4.5 使用了信息增益率，在信息增益的基础上除了一项 split information,来惩罚值更多的属性。从而使划分更加合理！</p>
-<h3 id="3-4、MSE"><a href="#3-4、MSE" class="headerlink" title="3.4、MSE"></a>3.4、MSE</h3><p>用于回归树，后面章节具体介绍</p>
-<p>![](&#x2F;img&#x2F;post&#x2F;Dscision Tree - Classifcation&#x2F;11-回归树.png)</p>
-<h2 id="4、鸢尾花分类代码实战"><a href="#4、鸢尾花分类代码实战" class="headerlink" title="4、鸢尾花分类代码实战"></a>4、鸢尾花分类代码实战</h2><h3 id="4-1、决策树分类鸢尾花数据集"><a href="#4-1、决策树分类鸢尾花数据集" class="headerlink" title="4.1、决策树分类鸢尾花数据集"></a>4.1、决策树分类鸢尾花数据集</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> tree</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">X,y = datasets.load_iris(return_X_y=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 随机拆分</span></span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(X,y,random_state = <span class="number">256</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># max_depth调整树深度：剪枝操作</span></span><br><span class="line"><span class="comment"># max_depth默认，深度最大，延伸到将数据完全划分开为止。</span></span><br><span class="line">model = DecisionTreeClassifier(max_depth=<span class="literal">None</span>,criterion=<span class="string">&#x27;entropy&#x27;</span>)</span><br><span class="line">model.fit(X_train,y_train)</span><br><span class="line">y_ = model.predict(X_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;真实类别是：&#x27;</span>,y_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;算法预测是：&#x27;</span>,y_)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;准确率是：&#x27;</span>,model.score(X_test,y_test))</span><br><span class="line"><span class="comment"># 决策树提供了predict_proba这个方法，发现这个方法，返回值要么是0，要么是1</span></span><br><span class="line">model.predict_proba(X_test)</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-2、决策树可视化"><a href="#4-2、决策树可视化" class="headerlink" title="4.2、决策树可视化"></a>4.2、决策树可视化</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> graphviz</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> tree</span><br><span class="line"><span class="comment"># 导出数据</span></span><br><span class="line">dot_data = tree.export_graphviz(model,feature_names=fn,</span><br><span class="line">                     class_names=iris[<span class="string">&#x27;target_names&#x27;</span>],<span class="comment"># 类别名</span></span><br><span class="line">                     filled=<span class="literal">True</span>, <span class="comment"># 填充颜色</span></span><br><span class="line">                     rounded=<span class="literal">True</span>,)</span><br><span class="line">graph = graphviz.Source(dot_data)</span><br><span class="line">graph.render(<span class="string">&#x27;iris&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>![](&#x2F;img&#x2F;post&#x2F;Dscision Tree - Classifcation&#x2F;12-iris.png)</p>
-<h3 id="4-3、决策树剪枝"><a href="#4-3、决策树剪枝" class="headerlink" title="4.3、决策树剪枝"></a>4.3、决策树剪枝</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置图片的尺寸</span></span><br><span class="line"><span class="comment"># 鸢尾花4个属性</span></span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line"></span><br><span class="line">X = iris[<span class="string">&#x27;data&#x27;</span>]</span><br><span class="line">y = iris[<span class="string">&#x27;target&#x27;</span>]</span><br><span class="line">fn = iris[<span class="string">&#x27;feature_names&#x27;</span>]</span><br><span class="line"><span class="comment"># 随机拆分</span></span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(X,y,random_state = <span class="number">256</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># max_depth调整树深度：剪枝操作</span></span><br><span class="line"><span class="comment"># max_depth默认，深度最大，延伸到将数据完全划分开为止。</span></span><br><span class="line"><span class="comment"># min_impurity_decrease（节点划分最小不纯度）如果某节点的不纯度(基尼系数，信息增益，均方差)小于这个阈值，则该节点不再生成子节点</span></span><br><span class="line"><span class="comment"># max_depth（决策树最大深度）；min_samples_split（内部节点再划分所需最小样本数）</span></span><br><span class="line"><span class="comment"># min_samples_leaf（叶子节点最少样本数）；max_leaf_nodes（最大叶子节点数）</span></span><br><span class="line">model = DecisionTreeClassifier(criterion=<span class="string">&#x27;entropy&#x27;</span>,min_impurity_decrease=<span class="number">0.2</span>)</span><br><span class="line">model.fit(X_train,y_train)</span><br><span class="line">y_ = model.predict(X_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;真实类别是：&#x27;</span>,y_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;算法预测是：&#x27;</span>,y_)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;准确率是：&#x27;</span>,model.score(X_test,y_test))</span><br><span class="line"><span class="comment"># 导出数据</span></span><br><span class="line">dot_data = tree.export_graphviz(model,feature_names=fn,</span><br><span class="line">                     class_names=iris[<span class="string">&#x27;target_names&#x27;</span>],<span class="comment"># 类别名</span></span><br><span class="line">                     filled=<span class="literal">True</span>, <span class="comment"># 填充颜色</span></span><br><span class="line">                     rounded=<span class="literal">True</span>,)</span><br><span class="line">graph = graphviz.Source(dot_data)</span><br><span class="line">graph.render(<span class="string">&#x27;./13-iris-裁剪&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>![](&#x2F;img&#x2F;post&#x2F;Dscision Tree - Classifcation&#x2F;13-iris-剪枝.png)</p>
-<h3 id="4-4、选择合适的超参数并可视化"><a href="#4-4、选择合适的超参数并可视化" class="headerlink" title="4.4、选择合适的超参数并可视化"></a>4.4、选择合适的超参数并可视化</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> tree</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">X,y = datasets.load_iris(return_X_y=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 随机拆分</span></span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(X,y,random_state = <span class="number">256</span>)</span><br><span class="line">depth = np.arange(<span class="number">1</span>,<span class="number">16</span>)</span><br><span class="line">err = []</span><br><span class="line"><span class="keyword">for</span> d <span class="keyword">in</span> depth:</span><br><span class="line">    model = DecisionTreeClassifier(criterion=<span class="string">&#x27;entropy&#x27;</span>,max_depth=d)</span><br><span class="line">    model.fit(X_train,y_train)</span><br><span class="line">    score = model.score(X_test,y_test)</span><br><span class="line">    err.append(<span class="number">1</span> - score)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;错误率为%0.3f%%&#x27;</span> % (<span class="number">100</span> * (<span class="number">1</span> - score)))</span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.family&#x27;</span>] = <span class="string">&#x27;STKaiti&#x27;</span></span><br><span class="line">plt.plot(depth,err,<span class="string">&#x27;ro-&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;决策树深度&#x27;</span>,fontsize = <span class="number">18</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;错误率&#x27;</span>,fontsize = <span class="number">18</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;筛选合适决策树深度&#x27;</span>)</span><br><span class="line">plt.grid()</span><br><span class="line">plt.savefig(<span class="string">&#x27;./14-筛选超参数.png&#x27;</span>,dpi = <span class="number">200</span>)</span><br></pre></td></tr></table></figure>
-
-<p>![](&#x2F;img&#x2F;post&#x2F;Dscision Tree - Classifcation&#x2F;14-筛选超参数.png)</p>
-<h3 id="4-5、决策树副产物"><a href="#4-5、决策树副产物" class="headerlink" title="4.5、决策树副产物"></a>4.5、决策树副产物</h3><ul>
-<li><p>特征重要性</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">model.feature_importances_</span><br></pre></td></tr></table></figure></li>
-</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> &quot;topic&quot; (</span><br><span class="line">    &quot;id&quot; <span class="type">integer</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    &quot;forum_id&quot; <span class="type">integer</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">    &quot;subject&quot; <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span></span><br><span class="line">);</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> &quot;topic&quot;</span><br><span class="line"><span class="keyword">ADD</span> <span class="keyword">CONSTRAINT</span> forum_id <span class="keyword">FOREIGN</span> KEY (&quot;forum_id&quot;)</span><br><span class="line"><span class="keyword">REFERENCES</span> &quot;forum&quot; (&quot;id&quot;);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- Initials</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> &quot;topic&quot; (&quot;forum_id&quot;, &quot;subject&quot;)</span><br><span class="line"><span class="keyword">values</span> (<span class="number">2</span>, <span class="string">&#x27;D&#x27;&#x27;artagnian&#x27;</span>);</span><br></pre></td></tr></table></figure>
 ]]></content>
-      <categories>
-        <category>学习记录类</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>机器学习</tag>
-      </tags>
+  </entry>
+  <entry>
+    <title>KaTeX</title>
+    <url>/2022/09/22/katex/</url>
+    <content><![CDATA[<h2 id="KaTeX"><a href="#KaTeX" class="headerlink" title="KaTeX"></a>KaTeX</h2><ul>
+<li><a href="https://katex.org/docs/autorender.html">https://katex.org/docs/autorender.html</a></li>
+</ul>
+<h3 id="行内公式"><a href="#行内公式" class="headerlink" title="行内公式"></a>行内公式</h3><figure class="highlight md"><table><tr><td class="code"><pre><span class="line"><span class="quote">&gt; <span class="language-xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span></span>$\&#123;x | Ax = b\&#125;$<span class="language-xml"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span></span><br></pre></td></tr></table></figure>
+
+<p><span>$\mathcal{X}_{c^*}&lt;1, \mathcal{X}_{q^*}&lt;1$</span></p>
+<p>$E &#x3D; mc^2$</p>
+<p>$\frac{\partial}{\partial t}$</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span>E = mc<span class="built_in">^</span>2<span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="keyword">\frac</span>&#123;<span class="keyword">\partial</span>&#125;&#123;<span class="keyword">\partial</span> t&#125;<span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="行间公式"><a href="#行间公式" class="headerlink" title="行间公式"></a>行间公式</h3><p>$$ E &#x3D; mc^2 $$</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span> E = mc<span class="built_in">^</span>2 <span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<p>注意，在 Markdown 文件中直接书写时，你需要多一个 <code>\</code> 来转译 <code>\</code>。或直接使用 <code>$$ E = mc^2 $$</code> 的形式。</p>
+<p>使用 <code>\\[ E = mc^2 \\]</code> 而不是 <code>\[ E = mc^2 \]</code>。</p>
+<blockquote>
+<p>如果你有过多需要转译的字符，你可以直接使用 HTML 标签包裹它（内部的字符将不会被作为 Markdown 解析），而无需使用多个 <code>\</code> 来转译。</p>
+</blockquote>
+<p>譬如：</p>
+<div>
+\[ E = mc^2 \]
+</div>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>\[ E = mc^2 \]<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>\[ E &#x3D; mc^2 \]</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\[</span> E = mc<span class="built_in">^</span>2 <span class="keyword">\]</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>\( E &#x3D; mc^2 \)</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\(</span> E = mc<span class="built_in">^</span>2 <span class="keyword">\)</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>$$ \vec a&#x3D;\frac{d\vec v}{dt}&#x3D;\frac{d(\frac{dr}{dt}\vec e*{i}+r\frac{d\theta}{dt}\vec e*{j})}{dt}&#x3D;\frac{d^2r}{dt^2}\vec e*{i}+\frac{dr}{dt}\frac{d\vec e*{i}}{dt}+\frac{dr}{dt}\frac{d\theta}{dt}\vec e*{j}+r\frac{d^2\theta}{dt^2}\vec e*{j}+r\frac{d\theta}{dt}\frac{d\vec e_{j}}{dt} $$</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\[</span> <span class="keyword">\vec</span> a=<span class="keyword">\frac</span>&#123;d<span class="keyword">\vec</span> v&#125;&#123;dt&#125;=<span class="keyword">\frac</span>&#123;d(<span class="keyword">\frac</span>&#123;dr&#125;&#123;dt&#125;<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;i&#125;+r<span class="keyword">\frac</span>&#123;d<span class="keyword">\theta</span>&#125;&#123;dt&#125;<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;j&#125;)&#125;&#123;dt&#125;=<span class="keyword">\frac</span>&#123;d<span class="built_in">^</span>2r&#125;&#123;dt<span class="built_in">^</span>2&#125;<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;i&#125;+<span class="keyword">\frac</span>&#123;dr&#125;&#123;dt&#125;<span class="keyword">\frac</span>&#123;d<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;i&#125;&#125;&#123;dt&#125;+<span class="keyword">\frac</span>&#123;dr&#125;&#123;dt&#125;<span class="keyword">\frac</span>&#123;d<span class="keyword">\theta</span>&#125;&#123;dt&#125;<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;j&#125;+r<span class="keyword">\frac</span>&#123;d<span class="built_in">^</span>2<span class="keyword">\theta</span>&#125;&#123;dt<span class="built_in">^</span>2&#125;<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;j&#125;+r<span class="keyword">\frac</span>&#123;d<span class="keyword">\theta</span>&#125;&#123;dt&#125;<span class="keyword">\frac</span>&#123;d<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;j&#125;&#125;&#123;dt&#125; <span class="keyword">\]</span></span><br></pre></td></tr></table></figure>
+
+<p>$$ m_t&#x3D;g_t $$</p>
+<p>$$ V_t&#x3D;1 $$</p>
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span> m<span class="built_in">_</span>t=g<span class="built_in">_</span>t <span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span> V<span class="built_in">_</span>t=1 <span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+
+<div>
+
+<p>$$ \eta_t&#x3D;lr*{\frac {m_t}{\sqrt V_t}}&#x3D;lr*g_t $$</p>
+<p>$$ w_{t+1}&#x3D;w_t-\eta_t&#x3D;w_t-lr*{\frac {m_t}{\sqrt V_t}}&#x3D;w_t-lr*g_t $$</p>
+<font size=5 color=red>
+
+<p>$$ {\Rightarrow \boxed{w_{t+1}&#x3D;w_t-lr*{\frac {\partial loss}{\partial w_t}}}} $$</p>
+</font>
+
+</div>
+
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span> <span class="keyword">\eta</span><span class="built_in">_</span>t=lr*&#123;<span class="keyword">\frac</span> &#123;m<span class="built_in">_</span>t&#125;&#123;<span class="keyword">\sqrt</span> V<span class="built_in">_</span>t&#125;&#125;=lr*g<span class="built_in">_</span>t <span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span> w<span class="built_in">_</span>&#123;t+1&#125;=w<span class="built_in">_</span>t-<span class="keyword">\eta</span><span class="built_in">_</span>t=w<span class="built_in">_</span>t-lr*&#123;<span class="keyword">\frac</span> &#123;m<span class="built_in">_</span>t&#125;&#123;<span class="keyword">\sqrt</span> V<span class="built_in">_</span>t&#125;&#125;=w<span class="built_in">_</span>t-lr*g<span class="built_in">_</span>t <span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"></span><br><span class="line">&lt;font size=5 color=red&gt;</span><br><span class="line"></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span> &#123;<span class="keyword">\Rightarrow</span> <span class="keyword">\boxed</span>&#123;w<span class="built_in">_</span>&#123;t+1&#125;=w<span class="built_in">_</span>t-lr*&#123;<span class="keyword">\frac</span> &#123;<span class="keyword">\partial</span> loss&#125;&#123;<span class="keyword">\partial</span> w<span class="built_in">_</span>t&#125;&#125;&#125;&#125; <span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"></span><br><span class="line">&lt;/font&gt;</span><br></pre></td></tr></table></figure>
+
+<div>
+$$ \begin{bmatrix} a & b \\ c & d \end{bmatrix} $$
+</div>
+
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span> <span class="keyword">\begin</span>&#123;bmatrix&#125; a <span class="built_in">&amp;</span> b <span class="keyword">\\</span> c <span class="built_in">&amp;</span> d <span class="keyword">\end</span>&#123;bmatrix&#125; <span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<div>
+$$
+\begin{equation}
+  \left\{
+    \begin{aligned}
+      x=a\cos\theta\\
+      y=b\sin\theta\\
+    \end{aligned}
+  \right.
+\end{equation}
+$$
+</div>
+
+<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;equation&#125;</span><br><span class="line">  <span class="keyword">\left</span><span class="keyword">\&#123;</span></span><br><span class="line">    <span class="keyword">\begin</span>&#123;aligned&#125;</span><br><span class="line">      x=a<span class="keyword">\cos</span><span class="keyword">\theta</span><span class="keyword">\\</span></span><br><span class="line">      y=b<span class="keyword">\sin</span><span class="keyword">\theta</span><span class="keyword">\\</span></span><br><span class="line">    end&#123;aligned&#125;</span><br><span class="line">  <span class="keyword">\right</span>.</span><br><span class="line"><span class="keyword">\end</span>&#123;equation&#125;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+]]></content>
   </entry>
   <entry>
     <title>Hello Theme Async</title>
@@ -277,126 +124,6 @@
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>Markdown</title>
-    <url>/2022/09/21/markdown/</url>
-    <content><![CDATA[<p>主题 Hexo-theme-async 文章页面适配预览。</p>
-<span id="more"></span>
-
-<h2 id="Markdown-基础语法"><a href="#Markdown-基础语法" class="headerlink" title="Markdown 基础语法"></a>Markdown 基础语法</h2><h3 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h3><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><h5 id="五级标题"><a href="#五级标题" class="headerlink" title="五级标题"></a>五级标题</h5><h6 id="六级标题"><a href="#六级标题" class="headerlink" title="六级标题"></a>六级标题</h6><h3 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h3><p>粗体、斜体、粗体和斜体，删除线，需要在文字前后加不同的标记符号。如下：</p>
-<p><strong>这个是粗体</strong></p>
-<p><em>这个是斜体</em></p>
-<p><em><strong>这个是粗体加斜体</strong></em></p>
-<p><del>这里想用删除线</del></p>
-<p>注：如果想给字体换颜色、字体或者居中显示，需要使用内嵌HTML来实现。</p>
-<h3 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h3><p>无序列表的使用，在符号<code>-</code>后加空格使用。如下：</p>
-<ul>
-<li>无序列表 1</li>
-<li>无序列表 2</li>
-<li>无序列表 3</li>
-</ul>
-<p>多层嵌套效果。如下：</p>
-<ul>
-<li>无序列表 1</li>
-<li>无序列表 2<ul>
-<li>无序列表 2.1</li>
-<li>无序列表 2.2<ul>
-<li>无序列表 2.2.1</li>
-<li>无序列表 2.2.2</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h3><p>有序列表的使用，在数字及符号<code>.</code>后加空格后输入内容，如下：</p>
-<ol>
-<li>有序列表 1</li>
-<li>有序列表 2</li>
-<li>有序列表 3</li>
-</ol>
-<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>引用的格式是在符号<code>&gt;</code>后面书写文字。如下：</p>
-<blockquote>
-<p>读一本好书，就是在和高尚的人谈话。 ——歌德</p>
-</blockquote>
-<blockquote>
-<p>雇用制度对工人不利，但工人根本无力摆脱这个制度。 ——阮一峰</p>
-</blockquote>
-<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p>关于 <code>Hexo-theme-async</code> 的使用文档可以<a href="https://hexo-theme-async.imalun.com/">点击这里</a>查看</p>
-<h3 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h3><p>插入图片，格式如下：</p>
-<p><img src="https://hexo-theme-async.imalun.com/github_star.png" alt="这里写图片描述" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<p><img src="https://markdown.com.cn/images/i-am-svg.svg" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
-<img src="https://hexo-theme-async.imalun.com/github_star.png" align="left" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
-<img src="https://hexo-theme-async.imalun.com/github_star.png" align="right" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
-
-<div class="row">
-  <div class="col-lg-4">
-    <img src="https://hexo-theme-async.imalun.com/github_star.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
-  </div>
-  <div class="col-lg-4">
-    <img src="https://hexo-theme-async.imalun.com/github_star.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
-  </div>
-  <div class="col-lg-4">
-    <img src="https://hexo-theme-async.imalun.com/github_star.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
-  </div>
-</div>
-
-<h3 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h3><p>可以在一行中用三个以上的减号来建立一个分隔线，同时需要在分隔线的上面空一行。如下：</p>
-<hr>
-<h3 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h3><p>可以使用冒号来定义表格的对齐方式，如下：</p>
-<table>
-<thead>
-<tr>
-<th align="left">姓名</th>
-<th align="center">年龄</th>
-<th align="right">工作</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">小可爱</td>
-<td align="center">18</td>
-<td align="right">吃可爱多</td>
-</tr>
-<tr>
-<td align="left">小小勇敢</td>
-<td align="center">20</td>
-<td align="right">爬棵勇敢树</td>
-</tr>
-<tr>
-<td align="left">小小小机智</td>
-<td align="center">22</td>
-<td align="right">看一本机智书</td>
-</tr>
-</tbody></table>
-<h2 id="特殊语法"><a href="#特殊语法" class="headerlink" title="特殊语法"></a>特殊语法</h2><h3 id="脚注"><a href="#脚注" class="headerlink" title="脚注"></a>脚注</h3><p>Here’s a sentence with a footnote. [^1]<br>[^1]: This is the footnote.</p>
-<h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><p>如果在一个行内需要引用代码，只要用反引号引起来就好，如下：</p>
-<p>Use the <code>printf()</code> function.</p>
-<p>在需要高亮的代码块的前一行及后一行使用三个反引号，同时<strong>第一行反引号后面表示代码块所使用的语言</strong>，如下：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// FileName: HelloWorld.java</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloWorld</span> &#123;</span><br><span class="line">  <span class="comment">// Java 入口程序，程序从此入口</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Hello,World!&quot;</span>); <span class="comment">// 向控制台打印一条语句</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>diff 不能同时和其他语言的高亮同时显示，使用效果如下:</p>
-<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="addition">+ 新增项</span></span><br><span class="line"><span class="deletion">- 删除项</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="数学公式"><a href="#数学公式" class="headerlink" title="数学公式"></a>数学公式</h3><p>行内公式使用方法：\(ce{Hg^2+ -&gt;[I-] HgI2 -&gt;[I-] [Hg^{II}I4]^2-}\)</p>
-<p>块公式使用方法如下：</p>
-<p>$$H(D_2) &#x3D; -\left(\frac{2}{4}\log_2 \frac{2}{4} + \frac{2}{4}\log_2 \frac{2}{4}\right) &#x3D; 1$$</p>
-<h3 id="定义列表"><a href="#定义列表" class="headerlink" title="定义列表"></a>定义列表</h3><dl><dt>First Term</dt><dd>This is the definition of the first term.</dd></dl><dl><dt>Second Term<br>: This is one definition of the second term.</dt><dd>This is another definition of the second term.</dd></dl><h3 id="任务列表"><a href="#任务列表" class="headerlink" title="任务列表"></a>任务列表</h3><ul>
-<li><input checked="" disabled="" type="checkbox"> Write the press release</li>
-<li><input disabled="" type="checkbox"> Update the website</li>
-<li><input disabled="" type="checkbox"> Contact the media</li>
-</ul>
-<h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><h3 id="注音标签"><a href="#注音标签" class="headerlink" title="注音标签"></a>注音标签</h3><p><ruby>喜大普奔<rt>hē hē hē hē</rt></ruby></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ruby</span>&gt;</span>喜大普奔<span class="tag">&lt;<span class="name">rt</span>&gt;</span>hē hē hē hē<span class="tag">&lt;/<span class="name">rt</span>&gt;</span><span class="tag">&lt;/<span class="name">ruby</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="details"><a href="#details" class="headerlink" title="details"></a>details</h3><details>
-  <summary>Async 安装方法</summary>
-
-<p>进入您的 Hexo 博客根目录，执行：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i hexo-theme-async@latest</span><br></pre></td></tr></table></figure>
-</details>]]></content>
-      <categories>
-        <category>测试分类</category>
-      </categories>
   </entry>
   <entry>
     <title>Tag Plugins</title>
@@ -572,104 +299,377 @@
       </categories>
   </entry>
   <entry>
-    <title>Code Snippet</title>
-    <url>/2023/01/05/code_snippet/</url>
-    <content><![CDATA[
+    <title>Markdown</title>
+    <url>/2022/09/21/markdown/</url>
+    <content><![CDATA[<p>主题 Hexo-theme-async 文章页面适配预览。</p>
+<span id="more"></span>
 
-<figure class="highlight bash"><figcaption><span>代码块的标题</span><a href="/aas/asd">/asd/asd</a></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment">###### CONFIG</span></span><br><span class="line">ACCEPTED_HOSTS=<span class="string">&quot;/root/.hag_accepted.conf&quot;</span></span><br><span class="line">BE_VERBOSE=<span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$UID</span>&quot;</span> -ne 0 ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line"> <span class="built_in">echo</span> <span class="string">&quot;Superuser rights required&quot;</span></span><br><span class="line"> <span class="built_in">exit</span> 2</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">genApacheConf</span></span>()&#123;</span><br><span class="line"> <span class="built_in">echo</span> -e <span class="string">&quot;# Host <span class="variable">$&#123;HOME_DIR&#125;</span><span class="variable">$1</span>/<span class="variable">$2</span> :&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;&quot;quoted&quot;&#x27;</span> | <span class="built_in">tr</span> -d \&quot; &gt; text.txt</span><br></pre></td></tr></table></figure>
+<h2 id="Markdown-基础语法"><a href="#Markdown-基础语法" class="headerlink" title="Markdown 基础语法"></a>Markdown 基础语法</h2><h3 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h3><h2 id="二级标题"><a href="#二级标题" class="headerlink" title="二级标题"></a>二级标题</h2><h3 id="三级标题"><a href="#三级标题" class="headerlink" title="三级标题"></a>三级标题</h3><h4 id="四级标题"><a href="#四级标题" class="headerlink" title="四级标题"></a>四级标题</h4><h5 id="五级标题"><a href="#五级标题" class="headerlink" title="五级标题"></a>五级标题</h5><h6 id="六级标题"><a href="#六级标题" class="headerlink" title="六级标题"></a>六级标题</h6><h3 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h3><p>粗体、斜体、粗体和斜体，删除线，需要在文字前后加不同的标记符号。如下：</p>
+<p><strong>这个是粗体</strong></p>
+<p><em>这个是斜体</em></p>
+<p><em><strong>这个是粗体加斜体</strong></em></p>
+<p><del>这里想用删除线</del></p>
+<p>注：如果想给字体换颜色、字体或者居中显示，需要使用内嵌HTML来实现。</p>
+<h3 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h3><p>无序列表的使用，在符号<code>-</code>后加空格使用。如下：</p>
+<ul>
+<li>无序列表 1</li>
+<li>无序列表 2</li>
+<li>无序列表 3</li>
+</ul>
+<p>多层嵌套效果。如下：</p>
+<ul>
+<li>无序列表 1</li>
+<li>无序列表 2<ul>
+<li>无序列表 2.1</li>
+<li>无序列表 2.2<ul>
+<li>无序列表 2.2.1</li>
+<li>无序列表 2.2.2</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h3><p>有序列表的使用，在数字及符号<code>.</code>后加空格后输入内容，如下：</p>
+<ol>
+<li>有序列表 1</li>
+<li>有序列表 2</li>
+<li>有序列表 3</li>
+</ol>
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>引用的格式是在符号<code>&gt;</code>后面书写文字。如下：</p>
+<blockquote>
+<p>读一本好书，就是在和高尚的人谈话。 ——歌德</p>
+</blockquote>
+<blockquote>
+<p>雇用制度对工人不利，但工人根本无力摆脱这个制度。 ——阮一峰</p>
+</blockquote>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p>关于 <code>Hexo-theme-async</code> 的使用文档可以<a href="https://hexo-theme-async.imalun.com/">点击这里</a>查看</p>
+<h3 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h3><p>插入图片，格式如下：</p>
+<p><img src="https://hexo-theme-async.imalun.com/github_star.png" alt="这里写图片描述" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="https://markdown.com.cn/images/i-am-svg.svg" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<img src="https://hexo-theme-async.imalun.com/github_star.png" align="left" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
+<img src="https://hexo-theme-async.imalun.com/github_star.png" align="right" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
 
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="attr">myValue</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">init: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">myValue</span> = init;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">import</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="variable language_">module</span> <span class="title class_">MyModule</span> &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">interface</span> <span class="title class_">MyInterface</span> <span class="keyword">extends</span> <span class="title class_">Other</span> &#123;</span><br><span class="line">    <span class="attr">myProperty</span>: <span class="built_in">any</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">declare</span> magicNumber <span class="built_in">number</span>;</span><br><span class="line">myArray.<span class="title function_">forEach</span>(<span class="function">() =&gt;</span> &#123; &#125;); <span class="comment">// fat arrow syntax</span></span><br></pre></td></tr></table></figure>
+<div class="row">
+  <div class="col-lg-4">
+    <img src="https://hexo-theme-async.imalun.com/github_star.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
+  </div>
+  <div class="col-lg-4">
+    <img src="https://hexo-theme-async.imalun.com/github_star.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
+  </div>
+  <div class="col-lg-4">
+    <img src="https://hexo-theme-async.imalun.com/github_star.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>
+  </div>
+</div>
 
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">$initHighlight</span>(<span class="params">block, cls</span>) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (cls.<span class="title function_">search</span>(<span class="regexp">/\bno\-highlight\b/</span>) != -<span class="number">1</span>)</span><br><span class="line">      <span class="keyword">return</span> <span class="title function_">process</span>(block, <span class="literal">true</span>, <span class="number">0x0F</span>) +</span><br><span class="line">             <span class="string">` class=&quot;<span class="subst">$&#123;cls&#125;</span>&quot;`</span>;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    <span class="comment">/* handle exception */</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span> / <span class="number">2</span>; i &lt; classes.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">checkCondition</span>(classes[i]) === <span class="literal">undefined</span>)</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;undefined&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">web-component</span>&gt;</span>&#123;block&#125;<span class="tag">&lt;/<span class="name">web-component</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span>  $initHighlight;</span><br></pre></td></tr></table></figure>
+<h3 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h3><p>可以在一行中用三个以上的减号来建立一个分隔线，同时需要在分隔线的上面空一行。如下：</p>
+<hr>
+<h3 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h3><p>可以使用冒号来定义表格的对齐方式，如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">姓名</th>
+<th align="center">年龄</th>
+<th align="right">工作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">小可爱</td>
+<td align="center">18</td>
+<td align="right">吃可爱多</td>
+</tr>
+<tr>
+<td align="left">小小勇敢</td>
+<td align="center">20</td>
+<td align="right">爬棵勇敢树</td>
+</tr>
+<tr>
+<td align="left">小小小机智</td>
+<td align="center">22</td>
+<td align="right">看一本机智书</td>
+</tr>
+</tbody></table>
+<h2 id="特殊语法"><a href="#特殊语法" class="headerlink" title="特殊语法"></a>特殊语法</h2><h3 id="脚注"><a href="#脚注" class="headerlink" title="脚注"></a>脚注</h3><p>Here’s a sentence with a footnote. [^1]<br>[^1]: This is the footnote.</p>
+<h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><p>如果在一个行内需要引用代码，只要用反引号引起来就好，如下：</p>
+<p>Use the <code>printf()</code> function.</p>
+<p>在需要高亮的代码块的前一行及后一行使用三个反引号，同时<strong>第一行反引号后面表示代码块所使用的语言</strong>，如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// FileName: HelloWorld.java</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HelloWorld</span> &#123;</span><br><span class="line">  <span class="comment">// Java 入口程序，程序从此入口</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;Hello,World!&quot;</span>); <span class="comment">// 向控制台打印一条语句</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> System.IO.Compression;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> <span class="keyword">warning</span> disable 414, 3021</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">MyApplication</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">Obsolete(<span class="string">&quot;...&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">class</span> <span class="title">Program</span> : <span class="title">IInterface</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;<span class="built_in">int</span>&gt; <span class="title">JustDoIt</span>(<span class="params"><span class="built_in">int</span> count</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            Span&lt;<span class="built_in">int</span>&gt; numbers = <span class="keyword">stackalloc</span> <span class="built_in">int</span>[length];</span><br><span class="line">            Console.WriteLine(<span class="string">$&quot;Hello <span class="subst">&#123;Name&#125;</span>!&quot;</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> List&lt;<span class="built_in">int</span>&gt;(<span class="keyword">new</span> <span class="built_in">int</span>[] &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>diff 不能同时和其他语言的高亮同时显示，使用效果如下:</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="addition">+ 新增项</span></span><br><span class="line"><span class="deletion">- 删除项</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: Chunkfive; <span class="attribute">src</span>: <span class="built_in">url</span>(<span class="string">&#x27;Chunkfive.otf&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span>, <span class="selector-class">.usertext</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#F0F0F0</span>; <span class="attribute">background</span>: <span class="number">#600</span>;</span><br><span class="line">  <span class="attribute">font-family</span>: Chunkfive, sans;</span><br><span class="line">  <span class="attr">--heading-1</span>: <span class="number">30px</span>/<span class="number">32px</span> Helvetica, sans-serif;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@import</span> url(print.css);</span><br><span class="line"><span class="keyword">@media</span> print &#123;</span><br><span class="line">  <span class="selector-tag">a</span><span class="selector-attr">[href^=http]</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">    <span class="attribute">content</span>: <span class="built_in">attr</span>(href)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="数学公式"><a href="#数学公式" class="headerlink" title="数学公式"></a>数学公式</h3><p>行内公式使用方法：\(ce{Hg^2+ -&gt;[I-] HgI2 -&gt;[I-] [Hg^{II}I4]^2-}\)</p>
+<p>块公式使用方法如下：</p>
+<p>$$H(D_2) &#x3D; -\left(\frac{2}{4}\log_2 \frac{2}{4} + \frac{2}{4}\log_2 \frac{2}{4}\right) &#x3D; 1$$</p>
+<h3 id="定义列表"><a href="#定义列表" class="headerlink" title="定义列表"></a>定义列表</h3><dl><dt>First Term</dt><dd>This is the definition of the first term.</dd></dl><dl><dt>Second Term<br>: This is one definition of the second term.</dt><dd>This is another definition of the second term.</dd></dl><h3 id="任务列表"><a href="#任务列表" class="headerlink" title="任务列表"></a>任务列表</h3><ul>
+<li><input checked="" disabled="" type="checkbox"> Write the press release</li>
+<li><input disabled="" type="checkbox"> Update the website</li>
+<li><input disabled="" type="checkbox"> Contact the media</li>
+</ul>
+<h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><h3 id="注音标签"><a href="#注音标签" class="headerlink" title="注音标签"></a>注音标签</h3><p><ruby>喜大普奔<rt>hē hē hē hē</rt></ruby></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ruby</span>&gt;</span>喜大普奔<span class="tag">&lt;<span class="name">rt</span>&gt;</span>hē hē hē hē<span class="tag">&lt;/<span class="name">rt</span>&gt;</span><span class="tag">&lt;/<span class="name">ruby</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"><span class="selector-tag">body</span> &#123;<span class="attribute">width</span>: <span class="number">500px</span>;&#125;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;application/javascript&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">function</span> <span class="title function_">$init</span>(<span class="params"></span>) &#123;<span class="keyword">return</span> <span class="literal">true</span>;&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">checked</span> <span class="attr">class</span>=<span class="string">&quot;title&quot;</span> <span class="attr">id</span>=<span class="string">&#x27;title&#x27;</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- here goes the rest of the page --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="details"><a href="#details" class="headerlink" title="details"></a>details</h3><details>
+  <summary>Async 安装方法</summary>
 
-<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section"># hello world</span></span><br><span class="line"></span><br><span class="line">you can write text [<span class="string">with links</span>](<span class="link">http://example.com</span>) inline or [<span class="string">link references</span>][<span class="symbol">1</span>].</span><br><span class="line"></span><br><span class="line"><span class="bullet">*</span> one <span class="emphasis">_thing_</span> has <span class="emphasis">*em*</span>phasis</span><br><span class="line"><span class="bullet">*</span> two <span class="strong">__things__</span> are <span class="strong">**bold**</span></span><br><span class="line"></span><br><span class="line">[<span class="symbol">1</span>]: <span class="link">http://example.com</span></span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line"><span class="section">hello world</span></span><br><span class="line"><span class="section">===========</span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">this_is</span> <span class="attr">inline</span>=<span class="string">&quot;xml&quot;</span>&gt;</span></span><span class="language-xml"><span class="tag">&lt;/<span class="name">this_is</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="quote">&gt; markdown is so cool</span></span><br><span class="line"></span><br><span class="line"><span class="code">    so are code segments</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="bullet">1.</span> one thing (yeah!)</span><br><span class="line"><span class="bullet">2.</span> two thing <span class="code">`i can write code`</span>, and <span class="code">`more`</span> wipee!</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> &quot;topic&quot; (</span><br><span class="line">    &quot;id&quot; <span class="type">integer</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    &quot;forum_id&quot; <span class="type">integer</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line">    &quot;subject&quot; <span class="type">varchar</span>(<span class="number">255</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span></span><br><span class="line">);</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> &quot;topic&quot;</span><br><span class="line"><span class="keyword">ADD</span> <span class="keyword">CONSTRAINT</span> forum_id <span class="keyword">FOREIGN</span> KEY (&quot;forum_id&quot;)</span><br><span class="line"><span class="keyword">REFERENCES</span> &quot;forum&quot; (&quot;id&quot;);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- Initials</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> &quot;topic&quot; (&quot;forum_id&quot;, &quot;subject&quot;)</span><br><span class="line"><span class="keyword">values</span> (<span class="number">2</span>, <span class="string">&#x27;D&#x27;&#x27;artagnian&#x27;</span>);</span><br></pre></td></tr></table></figure>
-]]></content>
+<p>进入您的 Hexo 博客根目录，执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm i hexo-theme-async@latest</span><br></pre></td></tr></table></figure>
+</details>]]></content>
+      <categories>
+        <category>测试分类</category>
+      </categories>
   </entry>
   <entry>
-    <title>KaTeX</title>
-    <url>/2022/09/22/katex/</url>
-    <content><![CDATA[<h2 id="KaTeX"><a href="#KaTeX" class="headerlink" title="KaTeX"></a>KaTeX</h2><ul>
-<li><a href="https://katex.org/docs/autorender.html">https://katex.org/docs/autorender.html</a></li>
+    <title>决策树分类算法原理</title>
+    <url>/2021/06/12/DecisionTree-Classification/</url>
+    <content><![CDATA[<h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><span id="more"></span>
+
+<h2 id="1、决策树概述"><a href="#1、决策树概述" class="headerlink" title="1、决策树概述"></a>1、决策树概述</h2><p>决策树是属于有监督机器学习的一种，起源非常早，符合直觉并且非常直观，模仿人类做决策的过程，早期人工智能模型中有很多应用，现在更多的是使用基于决策树的一些集成学习的算法。这一章我们把决策树算法理解透彻了，非常有利于后面去学习集成学习。</p>
+<h3 id="1-1、示例一"><a href="#1-1、示例一" class="headerlink" title="1.1、示例一"></a>1.1、示例一</h3><p>我们有如下数据：</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>拥有房产（是&#x2F;否）</th>
+<th>婚姻[单身，已婚，离婚]</th>
+<th>年收入（单位：千元）</th>
+<th>无法偿还债务（是&#x2F;否）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>是</td>
+<td>单身</td>
+<td>125</td>
+<td>否</td>
+</tr>
+<tr>
+<td>2</td>
+<td>否</td>
+<td>已婚</td>
+<td>100</td>
+<td>否</td>
+</tr>
+<tr>
+<td>3</td>
+<td>否</td>
+<td>单身</td>
+<td>70</td>
+<td>否</td>
+</tr>
+<tr>
+<td>4</td>
+<td>是</td>
+<td>已婚</td>
+<td>120</td>
+<td>否</td>
+</tr>
+<tr>
+<td>5</td>
+<td>否</td>
+<td>离婚</td>
+<td>95</td>
+<td>是</td>
+</tr>
+<tr>
+<td>6</td>
+<td>否</td>
+<td>已婚</td>
+<td>60</td>
+<td>否</td>
+</tr>
+<tr>
+<td>7</td>
+<td>是</td>
+<td>离婚</td>
+<td>220</td>
+<td>否</td>
+</tr>
+<tr>
+<td>8</td>
+<td>否</td>
+<td>单身</td>
+<td>85</td>
+<td>是</td>
+</tr>
+<tr>
+<td>9</td>
+<td>否</td>
+<td>已婚</td>
+<td>75</td>
+<td>否</td>
+</tr>
+<tr>
+<td>10</td>
+<td>否</td>
+<td>单身</td>
+<td>90</td>
+<td>是</td>
+</tr>
+</tbody></table>
+<p>上表根据历史数据，记录已有的用户是否可以偿还债务，以及相关的信息。通过该数据，构建的决策树如下：</p>
+<p><img src="/img/post/DscisionTree-Classifcation/1-%E5%86%B3%E7%AD%96%E6%A0%91.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>比如新来一个用户：无房产，单身，年收入 55K，那么根据上面的决策树，可以预测他无法偿还债务（蓝色虚线路径）。从上面的决策树，还可以知道是否拥有房产可以很大的决定用户是否可以偿还债务，对借贷业务具有指导意义。</p>
+<h3 id="1-2、示例二"><a href="#1-2、示例二" class="headerlink" title="1.2、示例二"></a>1.2、示例二</h3><p>女孩母亲要给她介绍对象，年龄是多少，母亲说 24。长得帅吗？挺帅的。收入高吗？中等收入。是公务员吗？母亲说，是的。女孩：好，我去见见。</p>
+<p>根据<strong>实力</strong>构建决策树：</p>
+<p><code>&lt;img src=&quot;/img/post/DscisionTree-Classifcation/2-相亲.png&quot; style=&quot;zoom:67%;&quot; /&gt;</code></p>
+<p>问题：图片是二叉树吗？</p>
+<p>决策树是标准的二叉树，每个节点只有两个分支~</p>
+<ul>
+<li>上面那棵树中，属性：绿色的节点（年龄、长相、收入、是否是公务员）<ul>
+<li>属性叫做，data，数据，一般使用 X 表示</li>
+<li>跟属性对应，目标值（橘色节点），一般使用 y 表示</li>
 </ul>
-<h3 id="行内公式"><a href="#行内公式" class="headerlink" title="行内公式"></a>行内公式</h3><figure class="highlight md"><table><tr><td class="code"><pre><span class="line"><span class="quote">&gt; <span class="language-xml"><span class="tag">&lt;<span class="name">span</span>&gt;</span></span>$\&#123;x | Ax = b\&#125;$<span class="language-xml"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li>构建这棵树时，先后顺序，每个人，标准不同，树结构不同</li>
+<li>计算机，构建树，标准一致的，构建出来的树，一致</li>
+</ul>
+<h3 id="1-3、决策树算法特点"><a href="#1-3、决策树算法特点" class="headerlink" title="1.3、决策树算法特点"></a>1.3、决策树算法特点</h3><ul>
+<li>可以处理非线性的问题</li>
+<li>可解释性强，没有方程系数 $\theta$</li>
+<li>模型简单，模型预测效率高 if else</li>
+</ul>
+<h2 id="2、DecisionTreeClassifier-使用"><a href="#2、DecisionTreeClassifier-使用" class="headerlink" title="2、DecisionTreeClassifier 使用"></a>2、DecisionTreeClassifier 使用</h2><h3 id="2-1、算例介绍"><a href="#2-1、算例介绍" class="headerlink" title="2.1、算例介绍"></a>2.1、算例介绍</h3><p><img src="/img/post/DscisionTree-Classifcation/3-%E8%B4%A6%E5%8F%B7%E7%9C%9F%E4%BC%AA.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>其中 s、m 和 l 分别表示小、中和大。</p>
+<p>账号是否真实跟属性：<strong>日志密度、好友密度、是否使用真实头像</strong>有关系~</p>
+<h3 id="2-2、构建决策树并可视化"><a href="#2-2、构建决策树并可视化" class="headerlink" title="2.2、构建决策树并可视化"></a>2.2、构建决策树并可视化</h3><p>数据创建</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">y = np.array(<span class="built_in">list</span>(<span class="string">&#x27;NYYYYYNYYN&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(y)</span><br><span class="line">X = pd.DataFrame(&#123;<span class="string">&#x27;日志密度&#x27;</span>:<span class="built_in">list</span>(<span class="string">&#x27;sslmlmmlms&#x27;</span>),</span><br><span class="line">                  <span class="string">&#x27;好友密度&#x27;</span>:<span class="built_in">list</span>(<span class="string">&#x27;slmmmlsmss&#x27;</span>),</span><br><span class="line">                  <span class="string">&#x27;真实头像&#x27;</span>:<span class="built_in">list</span>(<span class="string">&#x27;NYYYYNYYYY&#x27;</span>),</span><br><span class="line">                  <span class="string">&#x27;真实用户&#x27;</span>:y&#125;)</span><br><span class="line">X</span><br></pre></td></tr></table></figure>
 
-<p><span>$\mathcal{X}_{c^*}&lt;1, \mathcal{X}_{q^*}&lt;1$</span></p>
-<p>$E &#x3D; mc^2$</p>
-<p>$\frac{\partial}{\partial t}$</p>
-<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span>E = mc<span class="built_in">^</span>2<span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="keyword">\frac</span>&#123;<span class="keyword">\partial</span>&#125;&#123;<span class="keyword">\partial</span> t&#125;<span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+<p>模型训练（报错，原因：数据类型是字符串）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"></span><br><span class="line">model = DecisionTreeClassifier()</span><br><span class="line"></span><br><span class="line">model.fit(X,y)</span><br></pre></td></tr></table></figure>
 
-<h3 id="行间公式"><a href="#行间公式" class="headerlink" title="行间公式"></a>行间公式</h3><p>$$ E &#x3D; mc^2 $$</p>
-<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span> E = mc<span class="built_in">^</span>2 <span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+<p>数据修改（map 函数，进行数据转换）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X[<span class="string">&#x27;日志密度&#x27;</span>] = X[<span class="string">&#x27;日志密度&#x27;</span>].<span class="built_in">map</span>(&#123;<span class="string">&#x27;s&#x27;</span>:<span class="number">0</span>,<span class="string">&#x27;m&#x27;</span>:<span class="number">1</span>,<span class="string">&#x27;l&#x27;</span>:<span class="number">2</span>&#125;)</span><br><span class="line">X[<span class="string">&#x27;好友密度&#x27;</span>] = X[<span class="string">&#x27;好友密度&#x27;</span>].<span class="built_in">map</span>(&#123;<span class="string">&#x27;s&#x27;</span>:<span class="number">0</span>,<span class="string">&#x27;m&#x27;</span>:<span class="number">1</span>,<span class="string">&#x27;l&#x27;</span>:<span class="number">2</span>&#125;)</span><br><span class="line">X[<span class="string">&#x27;真实头像&#x27;</span>] = X[<span class="string">&#x27;真实头像&#x27;</span>].<span class="built_in">map</span>(&#123;<span class="string">&#x27;N&#x27;</span>:<span class="number">0</span>,<span class="string">&#x27;Y&#x27;</span>:<span class="number">1</span>&#125;)</span><br><span class="line">X</span><br></pre></td></tr></table></figure>
 
-<p>注意，在 Markdown 文件中直接书写时，你需要多一个 <code>\</code> 来转译 <code>\</code>。或直接使用 <code>$$ E = mc^2 $$</code> 的形式。</p>
-<p>使用 <code>\\[ E = mc^2 \\]</code> 而不是 <code>\[ E = mc^2 \]</code>。</p>
-<blockquote>
-<p>如果你有过多需要转译的字符，你可以直接使用 HTML 标签包裹它（内部的字符将不会被作为 Markdown 解析），而无需使用多个 <code>\</code> 来转译。</p>
-</blockquote>
-<p>譬如：</p>
-<div>
-\[ E = mc^2 \]
-</div>
+<p>模型训练可视化</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="comment"># 使用信息熵，作为分裂标准</span></span><br><span class="line">model = DecisionTreeClassifier(criterion=<span class="string">&#x27;entropy&#x27;</span>)</span><br><span class="line">model.fit(X,y)</span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.family&#x27;</span>] = <span class="string">&#x27;STKaiti&#x27;</span></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>,<span class="number">16</span>))</span><br><span class="line">fn = X.columns</span><br><span class="line">_ = tree.plot_tree(model,filled = <span class="literal">True</span>,feature_names=fn)</span><br><span class="line">plt.savefig(<span class="string">&#x27;./iris.jpg&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>\[ E = mc^2 \]<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>&lt;img src=&quot;/img/post/DscisionTree-Classifcation/4-account.jpg&quot; style=&quot;zoom:50%;&quot; /&gt;</code></p>
+<p>数据可视化另一种方式，<a href="https://blog.csdn.net/Soft_Po/article/details/118899477">安装教程</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="keyword">import</span> graphviz</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> tree</span><br><span class="line">model = DecisionTreeClassifier(criterion=<span class="string">&#x27;entropy&#x27;</span>)</span><br><span class="line">model.fit(X,y)</span><br><span class="line">dot_data = tree.export_graphviz(model, out_file=<span class="literal">None</span>,</span><br><span class="line">                            feature_names= X.columns,<span class="comment"># 特征名</span></span><br><span class="line">                            class_names=np.unique(y),<span class="comment"># 类别名</span></span><br><span class="line">                            filled=<span class="literal">True</span>, <span class="comment"># 填充颜色</span></span><br><span class="line">                            rounded=<span class="literal">True</span>) <span class="comment"># 圆角</span></span><br><span class="line">graph = graphviz.Source(dot_data)</span><br><span class="line">graph.render(<span class="string">&#x27;Account&#x27;</span>,<span class="built_in">format</span>=<span class="string">&#x27;png&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
-<hr>
-<p>\[ E &#x3D; mc^2 \]</p>
-<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\[</span> E = mc<span class="built_in">^</span>2 <span class="keyword">\]</span></span><br></pre></td></tr></table></figure>
+<p>修改中文乱码</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="comment"># 打开 dot_data.dot，修改 fontname=&quot;支持的中文字体&quot;</span></span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&#x27;Account&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;./Account2&#x27;</span>, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> file:</span><br><span class="line">    file.write(re.sub(<span class="string">r&#x27;fontname=helvetica&#x27;</span>, <span class="string">&#x27;fontname=Fangsong&#x27;</span>, f.read()))</span><br><span class="line">f.close()</span><br><span class="line"><span class="comment"># 从文件中加载，展示</span></span><br><span class="line">graph = graphviz.Source.from_file(<span class="string">&#x27;./Account2&#x27;</span>)</span><br><span class="line">graph.render(<span class="string">&#x27;Account&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
-<hr>
-<p>\( E &#x3D; mc^2 \)</p>
-<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\(</span> E = mc<span class="built_in">^</span>2 <span class="keyword">\)</span></span><br></pre></td></tr></table></figure>
+<p><img src="/img/post/DscisionTree-Classifcation/5-Account.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h3 id="2-3、信息熵"><a href="#2-3、信息熵" class="headerlink" title="2.3、信息熵"></a>2.3、信息熵</h3><ul>
+<li><p>构建好一颗树，数据变的有顺序了（构建前，一堆数据，杂乱无章；构建一颗，整整齐齐，顺序），用什么度量衡表示，数据是否有顺序：信息熵</p>
+</li>
+<li><p>物理学，热力学第二定律（熵），描述的是封闭系统的混乱程度</p>
+<p><img src="/img/post/DscisionTree-Classifcation/6-entropy.gif" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+</li>
+<li><p>信息熵，和物理学中熵类似的</p>
+<p><code>&lt;img src=&quot;/img/post/DscisionTree-Classifcation/7-entropy.png&quot; style=&quot;zoom:67%;&quot; /&gt;</code></p>
+</li>
+<li><p><font size = 5>$H(x) &#x3D; -\sum\limits_{i &#x3D; 1}^n p(x)log_2p(x)$<code>&lt;/font&gt;</code></p>
+</li>
+<li><p><font size = 5>$H(x) &#x3D; \sum\limits_{i &#x3D; 1}^n p(x)log_2\frac{1}{p(x)}$<code>&lt;/font&gt;</code></p>
+</li>
+</ul>
+<h3 id="2-4、信息增益"><a href="#2-4、信息增益" class="headerlink" title="2.4、信息增益"></a>2.4、信息增益</h3><p>信息增益是知道了某个条件后，事件的不确定性下降的程度。写作 g(X,Y)。它的计算方式为熵减去条件熵，如下</p>
+<p>$g(X,y) \rm &#x3D; H(Y) - H(Y|X)$</p>
+<p>表示的是，知道了某个条件后，原来事件不确定性降低的幅度。</p>
+<h3 id="2-5、手动计算实现决策树分类"><a href="#2-5、手动计算实现决策树分类" class="headerlink" title="2.5、手动计算实现决策树分类"></a>2.5、手动计算实现决策树分类</h3><p>数据整合</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X[<span class="string">&#x27;真实用户&#x27;</span>] = y</span><br><span class="line">X</span><br></pre></td></tr></table></figure>
 
-<hr>
-<p>$$ \vec a&#x3D;\frac{d\vec v}{dt}&#x3D;\frac{d(\frac{dr}{dt}\vec e*{i}+r\frac{d\theta}{dt}\vec e*{j})}{dt}&#x3D;\frac{d^2r}{dt^2}\vec e*{i}+\frac{dr}{dt}\frac{d\vec e*{i}}{dt}+\frac{dr}{dt}\frac{d\theta}{dt}\vec e*{j}+r\frac{d^2\theta}{dt^2}\vec e*{j}+r\frac{d\theta}{dt}\frac{d\vec e_{j}}{dt} $$</p>
-<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="keyword">\[</span> <span class="keyword">\vec</span> a=<span class="keyword">\frac</span>&#123;d<span class="keyword">\vec</span> v&#125;&#123;dt&#125;=<span class="keyword">\frac</span>&#123;d(<span class="keyword">\frac</span>&#123;dr&#125;&#123;dt&#125;<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;i&#125;+r<span class="keyword">\frac</span>&#123;d<span class="keyword">\theta</span>&#125;&#123;dt&#125;<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;j&#125;)&#125;&#123;dt&#125;=<span class="keyword">\frac</span>&#123;d<span class="built_in">^</span>2r&#125;&#123;dt<span class="built_in">^</span>2&#125;<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;i&#125;+<span class="keyword">\frac</span>&#123;dr&#125;&#123;dt&#125;<span class="keyword">\frac</span>&#123;d<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;i&#125;&#125;&#123;dt&#125;+<span class="keyword">\frac</span>&#123;dr&#125;&#123;dt&#125;<span class="keyword">\frac</span>&#123;d<span class="keyword">\theta</span>&#125;&#123;dt&#125;<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;j&#125;+r<span class="keyword">\frac</span>&#123;d<span class="built_in">^</span>2<span class="keyword">\theta</span>&#125;&#123;dt<span class="built_in">^</span>2&#125;<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;j&#125;+r<span class="keyword">\frac</span>&#123;d<span class="keyword">\theta</span>&#125;&#123;dt&#125;<span class="keyword">\frac</span>&#123;d<span class="keyword">\vec</span> e<span class="built_in">_</span>&#123;j&#125;&#125;&#123;dt&#125; <span class="keyword">\]</span></span><br></pre></td></tr></table></figure>
+<p>计算未划分信息熵</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = X[<span class="string">&#x27;真实用户&#x27;</span>]</span><br><span class="line">p = s.value_counts()/s.size</span><br><span class="line">(p * np.log2(<span class="number">1</span>/p)).<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
 
-<p>$$ m_t&#x3D;g_t $$</p>
-<p>$$ V_t&#x3D;1 $$</p>
-<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span> m<span class="built_in">_</span>t=g<span class="built_in">_</span>t <span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span> V<span class="built_in">_</span>t=1 <span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></table></figure>
+<p>按照日志密度进行划分</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x = X[<span class="string">&#x27;日志密度&#x27;</span>].unique()</span><br><span class="line">x.sort()</span><br><span class="line"><span class="comment"># 如何划分呢，分成两部分</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(x) - <span class="number">1</span>):</span><br><span class="line">    split = x[i:i+<span class="number">2</span>].mean()</span><br><span class="line">    cond = X[<span class="string">&#x27;日志密度&#x27;</span>] &lt;= split</span><br><span class="line">    <span class="comment"># 概率分布</span></span><br><span class="line">    p = cond.value_counts()/cond.size</span><br><span class="line">    <span class="comment"># 按照条件划分，两边的概率分布情况</span></span><br><span class="line">    indexs =p.index</span><br><span class="line">    entropy = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> indexs:</span><br><span class="line">        user = X[cond == index][<span class="string">&#x27;真实用户&#x27;</span>]</span><br><span class="line">        p_user = user.value_counts()/user.size</span><br><span class="line">        entropy += (p_user * np.log2(<span class="number">1</span>/p_user)).<span class="built_in">sum</span>() * p[index]</span><br><span class="line">    <span class="built_in">print</span>(split,entropy)</span><br></pre></td></tr></table></figure>
 
-<div>
+<p>筛选最佳划分条件</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">columns = [<span class="string">&#x27;日志密度&#x27;</span>,<span class="string">&#x27;好友密度&#x27;</span>,<span class="string">&#x27;真实头像&#x27;</span>]</span><br><span class="line">lower_entropy = <span class="number">1</span></span><br><span class="line">condition = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> col <span class="keyword">in</span> columns:</span><br><span class="line">    x = X[col].unique()</span><br><span class="line">    x.sort()</span><br><span class="line">    <span class="built_in">print</span>(x)</span><br><span class="line">    <span class="comment"># 如何划分呢，分成两部分</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(x) - <span class="number">1</span>):</span><br><span class="line">        split = x[i:i+<span class="number">2</span>].mean()</span><br><span class="line">        cond = X[col] &lt;= split</span><br><span class="line">        <span class="comment"># 概率分布</span></span><br><span class="line">        p = cond.value_counts()/cond.size</span><br><span class="line">        <span class="comment"># 按照条件划分，两边的概率分布情况</span></span><br><span class="line">        indexs =p.index</span><br><span class="line">        entropy = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> indexs:</span><br><span class="line">            user = X[cond == index][<span class="string">&#x27;真实用户&#x27;</span>]</span><br><span class="line">            p_user = user.value_counts()/user.size</span><br><span class="line">            entropy += (p_user * np.log2(<span class="number">1</span>/p_user)).<span class="built_in">sum</span>() * p[index]</span><br><span class="line">        <span class="built_in">print</span>(col,split,entropy)</span><br><span class="line">        <span class="keyword">if</span> entropy &lt; lower_entropy:</span><br><span class="line">            condition.clear()</span><br><span class="line">            lower_entropy = entropy</span><br><span class="line">            condition[col] = split</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;最佳列分条件是：&#x27;</span>,condition)</span><br></pre></td></tr></table></figure>
 
-<p>$$ \eta_t&#x3D;lr*{\frac {m_t}{\sqrt V_t}}&#x3D;lr*g_t $$</p>
-<p>$$ w_{t+1}&#x3D;w_t-\eta_t&#x3D;w_t-lr*{\frac {m_t}{\sqrt V_t}}&#x3D;w_t-lr*g_t $$</p>
-<font size=5 color=red>
+<p><code>&lt;img src=&quot;/img/post/DscisionTree-Classifcation/8-Account.png&quot; style=&quot;zoom:67%;&quot; /&gt;</code></p>
+<p>进一步列分</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cond = X[<span class="string">&#x27;好友密度&#x27;</span>] &lt; <span class="number">0.5</span></span><br><span class="line">X_ = X[cond]</span><br><span class="line">columns = [<span class="string">&#x27;日志密度&#x27;</span>,<span class="string">&#x27;真实头像&#x27;</span>]</span><br><span class="line">lower_entropy = <span class="number">1</span></span><br><span class="line">condition = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> col <span class="keyword">in</span> columns:</span><br><span class="line">    x = X_[col].unique()</span><br><span class="line">    x.sort()</span><br><span class="line">    <span class="built_in">print</span>(x)</span><br><span class="line">    <span class="comment"># 如何划分呢，分成两部分</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(x) - <span class="number">1</span>):</span><br><span class="line">        split = x[i:i+<span class="number">2</span>].mean()</span><br><span class="line">        cond = X_[col] &lt;= split</span><br><span class="line">        <span class="comment"># 概率分布</span></span><br><span class="line">        p = cond.value_counts()/cond.size</span><br><span class="line">        <span class="comment"># 按照条件划分，两边的概率分布情况</span></span><br><span class="line">        indexs =p.index</span><br><span class="line">        entropy = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> indexs:</span><br><span class="line">            user = X_[cond == index][<span class="string">&#x27;真实用户&#x27;</span>]</span><br><span class="line">            p_user = user.value_counts()/user.size</span><br><span class="line">            entropy += (p_user * np.log2(<span class="number">1</span>/p_user)).<span class="built_in">sum</span>() * p[index]</span><br><span class="line">        <span class="built_in">print</span>(col,split,entropy)</span><br><span class="line">        <span class="keyword">if</span> entropy &lt; lower_entropy:</span><br><span class="line">            condition.clear()</span><br><span class="line">            lower_entropy = entropy</span><br><span class="line">            condition[col] = split</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;最佳列分条件是：&#x27;</span>,condition)</span><br></pre></td></tr></table></figure>
 
-<p>$$ {\Rightarrow \boxed{w_{t+1}&#x3D;w_t-lr*{\frac {\partial loss}{\partial w_t}}}} $$</p>
-</font>
+<p><code>&lt;img src=&quot;/img/post/DscisionTree-Classifcation/9-Account.png&quot; style=&quot;zoom:67%;&quot; /&gt;</code></p>
+<h2 id="3、决策树分裂指标"><a href="#3、决策树分裂指标" class="headerlink" title="3、决策树分裂指标"></a>3、决策树分裂指标</h2><p>常用的分裂条件时：</p>
+<ul>
+<li>信息增益</li>
+<li>Gini 系数</li>
+<li>信息增益率</li>
+<li>MSE（回归问题）</li>
+</ul>
+<h3 id="3-1、信息熵（ID3）"><a href="#3-1、信息熵（ID3）" class="headerlink" title="3.1、信息熵（ID3）"></a>3.1、信息熵（ID3）</h3><p>在信息论里熵叫作信息量，即熵是对不确定性的度量。从控制论的角度来看，应叫不确定性。信息论的创始人香农在其著作《通信的数学理论》中提出了建立在概率统计模型上的信息度量。他把信息定义为“用来消除不确定性的东西”。在信息世界，熵越高，则能传输越多的信息，熵越低，则意味着传输的信息越少。还是举例说明，假设 Dammi 在买衣服的时候有颜色，尺寸，款式以及设计年份四种要求，而 Sara 只有颜色和尺寸的要求，那么在购买衣服这个层面上 Dammi 由于选择更多因而不确定性因素更大，最终 Dammi 所获取的信息更多，也就是熵更大。所以信息量&#x3D;熵&#x3D;不确定性，通俗易懂。在叙述决策树时我们用熵表示不纯度（Impurity）。</p>
+<p>对应公式如下：</p>
+<p><font size = 5>$H(x) &#x3D; -\sum\limits_{i &#x3D; 1}^n p(x)log_2p(x)$<code>&lt;/font&gt;</code></p>
+<p>熵的变化越大，说明划分越纯，信息增益越大~</p>
+<h3 id="3-2、Gini-系数（CART）"><a href="#3-2、Gini-系数（CART）" class="headerlink" title="3.2、Gini 系数（CART）"></a>3.2、Gini 系数（CART）</h3><p>基尼系数是指国际上通用的、用以衡量一个国家或地区居民收入差距的常用指标。</p>
+<p>基尼系数最大为“1”，最小等于“0”。基尼系数越接近 0 表明收入分配越是趋向平等。国际惯例把 0.2 以下视为收入绝对平均，0.2-0.3 视为收入比较平均；0.3-0.4 视为收入相对合理；0.4-0.5 视为收入差距较大，当基尼系数达到 0.5 以上时，则表示收入悬殊。</p>
+<p>基尼系数的实际数值只能介于 0 ～ 1 之间，基尼系数越小收入分配越平均，基尼系数越大收入分配越不平均。国际上通常把 0.4 作为贫富差距的警戒线，大于这一数值容易出现社会动荡。</p>
+<p>Gini 系数越小，代表集合中的数据越纯，所有我们可以计算分裂前的值在按照某个维度对数据集进行划分，然后可以去计算多个节点的 Gini 系数。</p>
+<p>对应公式如下：</p>
+<p><font size = 5>$\rm gini &#x3D; \sum\limits_{i &#x3D; 1}^np_i(1 - p_i)$<code>&lt;/font&gt;</code></p>
+<p>在对数据进行分类是 gini 系数的变化越大，说明划分越纯，效果越好~</p>
+<h3 id="3-3、信息增益率"><a href="#3-3、信息增益率" class="headerlink" title="3.3、信息增益率"></a>3.3、信息增益率</h3><p>大学期末的数学考试只有单选题。对于一个完全没有学习过的学生。该如何过关呢？</p>
+<p>4 个选项是正确选项的概率都是 1&#x2F;4。那么单项选择题的答案的熵就是：</p>
+<p>$H(Y) \rm &#x3D; -0.25log_2(0.25) \times 4 &#x3D; 2bit$</p>
+<p>在学霸圈做单项选择题有一个秘籍：三长一短选最短，三短一长选最长。姑且假设学霸的秘籍一般都是正确的。</p>
+<p>如果在某场考试中，有 10%的单项选题是三长一短，10%的选题是三短一长。计算该考试单项选题的关于长短题的条件熵：</p>
+<table>
+<thead>
+<tr>
+<th align="center">题目类型</th>
+<th align="center">答案概率</th>
+<th align="center">题目概率</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">三长一短</td>
+<td align="center">(1,0,0,0)熵是 0，结果确定！</td>
+<td align="center">10%</td>
+</tr>
+<tr>
+<td align="center">三短一长</td>
+<td align="center">(1,0,0,0)熵是 0</td>
+<td align="center">10%</td>
+</tr>
+<tr>
+<td align="center">一样长</td>
+<td align="center">(0.25,0.25,0.25,0.25)熵是 2</td>
+<td align="center">80%</td>
+</tr>
+</tbody></table>
+<p>计算条件熵（条件就是：题目不同类型）</p>
+<p>$H(Y|X) \rm &#x3D; 0.1\times 0 + 0.1 \times 0 + 0.8 \times 2 &#x3D; 1.6bit$</p>
+<p>那么信息增益是：</p>
+<p>$g(X,Y) \rm &#x3D; H(Y) - H(Y|X) &#x3D; 2 - 1.6 &#x3D; 0.4bit$</p>
+<p><strong>信息增益率</strong>在信息增益的基础上增加了惩罚项，惩罚项是特征的固有值。</p>
+<p>写作 gr(X,Y)。定义为信息增益除以特征的固有值，如下：</p>
+<p><font size = 5>$gr(X,Y) &#x3D; \frac{g(X,Y)}{Info(X)}$<code>&lt;/font&gt;</code></p>
+<p><font size = 5>$Info(X) &#x3D; -\sum\limits_{v \in values(X)}\frac{num(v)}{num(X)}log_2{\frac{num(v)}{num(X)}}$<code>&lt;/font&gt;</code></p>
+<p>计算上面单选题题目长短案例的信息增益率：</p>
+<p><font size = 5>$Info(X) &#x3D; -(0.1 \times log_20.1 \times 2 + 0.8 \times log_20.8) &#x3D; 0.92$<code>&lt;/font&gt;</code></p>
+<p><font size = 5>$gr(X,Y) &#x3D; \frac{g(X,Y)}{Info(X)} &#x3D; \frac{0.4}{0.92} &#x3D; 0.43$<code>&lt;/font&gt;</code></p>
+<p>对于取值多的属性，尤其一些连续型数值，这个单独的属性就可以划分所有的样本，使得所有分支下的样本集合都是“纯的”（最极端的情况是每个叶子节点只有一个样本）。<br>一个属性的信息增益越大，表明属性对样本的熵减少的能力更强，这个属性使得数据由不确定性变成确定性的能力越强。<br>所以如果是取值更多的属性，更容易使得数据更“纯”（尤其是连续型数值），其信息增益更大，决策树会首先挑选这个属性作为树的顶点。结果训练出来的形状是一棵庞大且深度很浅的树，这样的划分是极为不合理的。</p>
+<p><img src="/img/post/DscisionTree-Classifcation/10-%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A%E7%8E%87.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>C4.5 使用了信息增益率，在信息增益的基础上除了一项 split information,来惩罚值更多的属性。从而使划分更加合理！</p>
+<h3 id="3-4、MSE"><a href="#3-4、MSE" class="headerlink" title="3.4、MSE"></a>3.4、MSE</h3><p>用于回归树，后面章节具体介绍</p>
+<p><img src="/img/post/DscisionTree-Classifcation/11-%E5%9B%9E%E5%BD%92%E6%A0%91.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="4、鸢尾花分类代码实战"><a href="#4、鸢尾花分类代码实战" class="headerlink" title="4、鸢尾花分类代码实战"></a>4、鸢尾花分类代码实战</h2><h3 id="4-1、决策树分类鸢尾花数据集"><a href="#4-1、决策树分类鸢尾花数据集" class="headerlink" title="4.1、决策树分类鸢尾花数据集"></a>4.1、决策树分类鸢尾花数据集</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> tree</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">X,y = datasets.load_iris(return_X_y=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 随机拆分</span></span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(X,y,random_state = <span class="number">256</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># max_depth调整树深度：剪枝操作</span></span><br><span class="line"><span class="comment"># max_depth默认，深度最大，延伸到将数据完全划分开为止。</span></span><br><span class="line">model = DecisionTreeClassifier(max_depth=<span class="literal">None</span>,criterion=<span class="string">&#x27;entropy&#x27;</span>)</span><br><span class="line">model.fit(X_train,y_train)</span><br><span class="line">y_ = model.predict(X_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;真实类别是：&#x27;</span>,y_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;算法预测是：&#x27;</span>,y_)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;准确率是：&#x27;</span>,model.score(X_test,y_test))</span><br><span class="line"><span class="comment"># 决策树提供了predict_proba这个方法，发现这个方法，返回值要么是0，要么是1</span></span><br><span class="line">model.predict_proba(X_test)</span><br></pre></td></tr></table></figure>
 
-</div>
+<h3 id="4-2、决策树可视化"><a href="#4-2、决策树可视化" class="headerlink" title="4.2、决策树可视化"></a>4.2、决策树可视化</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> graphviz</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> tree</span><br><span class="line"><span class="comment"># 导出数据</span></span><br><span class="line">dot_data = tree.export_graphviz(model,feature_names=fn,</span><br><span class="line">                     class_names=iris[<span class="string">&#x27;target_names&#x27;</span>],<span class="comment"># 类别名</span></span><br><span class="line">                     filled=<span class="literal">True</span>, <span class="comment"># 填充颜色</span></span><br><span class="line">                     rounded=<span class="literal">True</span>,)</span><br><span class="line">graph = graphviz.Source(dot_data)</span><br><span class="line">graph.render(<span class="string">&#x27;iris&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span> <span class="keyword">\eta</span><span class="built_in">_</span>t=lr*&#123;<span class="keyword">\frac</span> &#123;m<span class="built_in">_</span>t&#125;&#123;<span class="keyword">\sqrt</span> V<span class="built_in">_</span>t&#125;&#125;=lr*g<span class="built_in">_</span>t <span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span> w<span class="built_in">_</span>&#123;t+1&#125;=w<span class="built_in">_</span>t-<span class="keyword">\eta</span><span class="built_in">_</span>t=w<span class="built_in">_</span>t-lr*&#123;<span class="keyword">\frac</span> &#123;m<span class="built_in">_</span>t&#125;&#123;<span class="keyword">\sqrt</span> V<span class="built_in">_</span>t&#125;&#125;=w<span class="built_in">_</span>t-lr*g<span class="built_in">_</span>t <span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"></span><br><span class="line">&lt;font size=5 color=red&gt;</span><br><span class="line"></span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span> &#123;<span class="keyword">\Rightarrow</span> <span class="keyword">\boxed</span>&#123;w<span class="built_in">_</span>&#123;t+1&#125;=w<span class="built_in">_</span>t-lr*&#123;<span class="keyword">\frac</span> &#123;<span class="keyword">\partial</span> loss&#125;&#123;<span class="keyword">\partial</span> w<span class="built_in">_</span>t&#125;&#125;&#125;&#125; <span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"></span><br><span class="line">&lt;/font&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/img/post/DscisionTree-Classifcation/12-iris.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h3 id="4-3、决策树剪枝"><a href="#4-3、决策树剪枝" class="headerlink" title="4.3、决策树剪枝"></a>4.3、决策树剪枝</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置图片的尺寸</span></span><br><span class="line"><span class="comment"># 鸢尾花4个属性</span></span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line"></span><br><span class="line">X = iris[<span class="string">&#x27;data&#x27;</span>]</span><br><span class="line">y = iris[<span class="string">&#x27;target&#x27;</span>]</span><br><span class="line">fn = iris[<span class="string">&#x27;feature_names&#x27;</span>]</span><br><span class="line"><span class="comment"># 随机拆分</span></span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(X,y,random_state = <span class="number">256</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># max_depth调整树深度：剪枝操作</span></span><br><span class="line"><span class="comment"># max_depth默认，深度最大，延伸到将数据完全划分开为止。</span></span><br><span class="line"><span class="comment"># min_impurity_decrease（节点划分最小不纯度）如果某节点的不纯度(基尼系数，信息增益，均方差)小于这个阈值，则该节点不再生成子节点</span></span><br><span class="line"><span class="comment"># max_depth（决策树最大深度）；min_samples_split（内部节点再划分所需最小样本数）</span></span><br><span class="line"><span class="comment"># min_samples_leaf（叶子节点最少样本数）；max_leaf_nodes（最大叶子节点数）</span></span><br><span class="line">model = DecisionTreeClassifier(criterion=<span class="string">&#x27;entropy&#x27;</span>,min_impurity_decrease=<span class="number">0.2</span>)</span><br><span class="line">model.fit(X_train,y_train)</span><br><span class="line">y_ = model.predict(X_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;真实类别是：&#x27;</span>,y_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;算法预测是：&#x27;</span>,y_)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;准确率是：&#x27;</span>,model.score(X_test,y_test))</span><br><span class="line"><span class="comment"># 导出数据</span></span><br><span class="line">dot_data = tree.export_graphviz(model,feature_names=fn,</span><br><span class="line">                     class_names=iris[<span class="string">&#x27;target_names&#x27;</span>],<span class="comment"># 类别名</span></span><br><span class="line">                     filled=<span class="literal">True</span>, <span class="comment"># 填充颜色</span></span><br><span class="line">                     rounded=<span class="literal">True</span>,)</span><br><span class="line">graph = graphviz.Source(dot_data)</span><br><span class="line">graph.render(<span class="string">&#x27;./13-iris-裁剪&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
-<div>
-$$ \begin{bmatrix} a & b \\ c & d \end{bmatrix} $$
-</div>
+<p><img src="/img/post/DscisionTree-Classifcation/13-iris-%E5%89%AA%E6%9E%9D.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h3 id="4-4、选择合适的超参数并可视化"><a href="#4-4、选择合适的超参数并可视化" class="headerlink" title="4.4、选择合适的超参数并可视化"></a>4.4、选择合适的超参数并可视化</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> tree</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">X,y = datasets.load_iris(return_X_y=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 随机拆分</span></span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(X,y,random_state = <span class="number">256</span>)</span><br><span class="line">depth = np.arange(<span class="number">1</span>,<span class="number">16</span>)</span><br><span class="line">err = []</span><br><span class="line"><span class="keyword">for</span> d <span class="keyword">in</span> depth:</span><br><span class="line">    model = DecisionTreeClassifier(criterion=<span class="string">&#x27;entropy&#x27;</span>,max_depth=d)</span><br><span class="line">    model.fit(X_train,y_train)</span><br><span class="line">    score = model.score(X_test,y_test)</span><br><span class="line">    err.append(<span class="number">1</span> - score)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;错误率为%0.3f%%&#x27;</span> % (<span class="number">100</span> * (<span class="number">1</span> - score)))</span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.family&#x27;</span>] = <span class="string">&#x27;STKaiti&#x27;</span></span><br><span class="line">plt.plot(depth,err,<span class="string">&#x27;ro-&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;决策树深度&#x27;</span>,fontsize = <span class="number">18</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;错误率&#x27;</span>,fontsize = <span class="number">18</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;筛选合适决策树深度&#x27;</span>)</span><br><span class="line">plt.grid()</span><br><span class="line">plt.savefig(<span class="string">&#x27;./14-筛选超参数.png&#x27;</span>,dpi = <span class="number">200</span>)</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span> <span class="keyword">\begin</span>&#123;bmatrix&#125; a <span class="built_in">&amp;</span> b <span class="keyword">\\</span> c <span class="built_in">&amp;</span> d <span class="keyword">\end</span>&#123;bmatrix&#125; <span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-
-<div>
-$$
-\begin{equation}
-  \left\{
-    \begin{aligned}
-      x=a\cos\theta\\
-      y=b\sin\theta\\
-    \end{aligned}
-  \right.
-\end{equation}
-$$
-</div>
-
-<figure class="highlight latex"><table><tr><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line"><span class="keyword">\begin</span>&#123;equation&#125;</span><br><span class="line">  <span class="keyword">\left</span><span class="keyword">\&#123;</span></span><br><span class="line">    <span class="keyword">\begin</span>&#123;aligned&#125;</span><br><span class="line">      x=a<span class="keyword">\cos</span><span class="keyword">\theta</span><span class="keyword">\\</span></span><br><span class="line">      y=b<span class="keyword">\sin</span><span class="keyword">\theta</span><span class="keyword">\\</span></span><br><span class="line">    end&#123;aligned&#125;</span><br><span class="line">  <span class="keyword">\right</span>.</span><br><span class="line"><span class="keyword">\end</span>&#123;equation&#125;</span><br><span class="line"><span class="built_in">$</span><span class="built_in">$</span></span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/img/post/DscisionTree-Classifcation/14-%E7%AD%9B%E9%80%89%E8%B6%85%E5%8F%82%E6%95%B0.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h3 id="4-5、决策树副产物"><a href="#4-5、决策树副产物" class="headerlink" title="4.5、决策树副产物"></a>4.5、决策树副产物</h3><ul>
+<li><p>特征重要性</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">model.feature_importances_</span><br></pre></td></tr></table></figure></li>
+</ul>
 ]]></content>
+      <categories>
+        <category>学习记录类</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>机器学习</tag>
+      </tags>
   </entry>
 </search>
