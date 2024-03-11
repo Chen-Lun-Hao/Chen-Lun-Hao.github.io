@@ -7,6 +7,7 @@ description:
 categories: 学习记录类
 keywords: 决策树,分类
 katex: true
+cover: [/img/post/DecisionTree-Classification/1-决策树.png]
 ---
 
 # 决策树
@@ -47,6 +48,8 @@ katex: true
 根据**实力**构建决策树：
 
 `<img src="/img/post/DscisionTree-Classifcation/2-相亲.png" style="zoom:67%;" />`
+
+![](../img/post/DecisionTree-Classification/10-信息增益率.png)
 
 问题：图片是二叉树吗？
 
