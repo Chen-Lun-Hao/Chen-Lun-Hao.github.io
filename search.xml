@@ -512,6 +512,7 @@ $$
 <h3 id="1-2、示例二"><a href="#1-2、示例二" class="headerlink" title="1.2、示例二"></a>1.2、示例二</h3><p>女孩母亲要给她介绍对象，年龄是多少，母亲说 24。长得帅吗？挺帅的。收入高吗？中等收入。是公务员吗？母亲说，是的。女孩：好，我去见见。</p>
 <p>根据<strong>实力</strong>构建决策树：</p>
 <p><code>&lt;img src=&quot;/img/post/DscisionTree-Classifcation/2-相亲.png&quot; style=&quot;zoom:67%;&quot; /&gt;</code></p>
+<p><img src="/../img/post/DecisionTree-Classification/10-%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A%E7%8E%87.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p>问题：图片是二叉树吗？</p>
 <p>决策树是标准的二叉树，每个节点只有两个分支~</p>
 <ul>
