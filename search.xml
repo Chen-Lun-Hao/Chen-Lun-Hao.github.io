@@ -560,10 +560,10 @@ $$
 </li>
 <li><p>信息熵，和物理学中熵类似的</p>
 <img src="/img/post/DecisionTree-Classification/7-entropy.png" style="zoom:67%;"  loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'/>
+
+<p><font size = 5>$H(x) &#x3D; -\sum\limits_{i &#x3D; 1}^n p(x)log_2p(x)$</font></p>
 </li>
-<li><p><code>&lt;font size = 5&gt;</code>$H(x) &#x3D; -\sum\limits_{i &#x3D; 1}^n p(x)log_2p(x)$<code>&lt;/font&gt;</code></p>
-</li>
-<li><p><code>&lt;font size = 5&gt;</code>$H(x) &#x3D; \sum\limits_{i &#x3D; 1}^n p(x)log_2\frac{1}{p(x)}$<code>&lt;/font&gt;</code></p>
+<li><p><font size = 5>$H(x) &#x3D; \sum\limits_{i &#x3D; 1}^n p(x)log_2\frac{1}{p(x)}$</font></p>
 </li>
 </ul>
 <h3 id="2-4、信息增益"><a href="#2-4、信息增益" class="headerlink" title="2.4、信息增益"></a>2.4、信息增益</h3><p>信息增益是知道了某个条件后，事件的不确定性下降的程度。写作 g(X,Y)。它的计算方式为熵减去条件熵，如下</p>
@@ -597,14 +597,14 @@ $$
 </ul>
 <h3 id="3-1、信息熵（ID3）"><a href="#3-1、信息熵（ID3）" class="headerlink" title="3.1、信息熵（ID3）"></a>3.1、信息熵（ID3）</h3><p>在信息论里熵叫作信息量，即熵是对不确定性的度量。从控制论的角度来看，应叫不确定性。信息论的创始人香农在其著作《通信的数学理论》中提出了建立在概率统计模型上的信息度量。他把信息定义为“用来消除不确定性的东西”。在信息世界，熵越高，则能传输越多的信息，熵越低，则意味着传输的信息越少。还是举例说明，假设 Dammi 在买衣服的时候有颜色，尺寸，款式以及设计年份四种要求，而 Sara 只有颜色和尺寸的要求，那么在购买衣服这个层面上 Dammi 由于选择更多因而不确定性因素更大，最终 Dammi 所获取的信息更多，也就是熵更大。所以信息量&#x3D;熵&#x3D;不确定性，通俗易懂。在叙述决策树时我们用熵表示不纯度（Impurity）。</p>
 <p>对应公式如下：</p>
-<p><font size = 5>$H(x) &#x3D; -\sum\limits_{i &#x3D; 1}^n p(x)log_2p(x)$<code>&lt;/font&gt;</code></p>
+<p><font size = 5>$H(x) &#x3D; -\sum\limits_{i &#x3D; 1}^n p(x)log_2p(x)$</font></p>
 <p>熵的变化越大，说明划分越纯，信息增益越大~</p>
 <h3 id="3-2、Gini-系数（CART）"><a href="#3-2、Gini-系数（CART）" class="headerlink" title="3.2、Gini 系数（CART）"></a>3.2、Gini 系数（CART）</h3><p>基尼系数是指国际上通用的、用以衡量一个国家或地区居民收入差距的常用指标。</p>
 <p>基尼系数最大为“1”，最小等于“0”。基尼系数越接近 0 表明收入分配越是趋向平等。国际惯例把 0.2 以下视为收入绝对平均，0.2-0.3 视为收入比较平均；0.3-0.4 视为收入相对合理；0.4-0.5 视为收入差距较大，当基尼系数达到 0.5 以上时，则表示收入悬殊。</p>
 <p>基尼系数的实际数值只能介于 0 ～ 1 之间，基尼系数越小收入分配越平均，基尼系数越大收入分配越不平均。国际上通常把 0.4 作为贫富差距的警戒线，大于这一数值容易出现社会动荡。</p>
 <p>Gini 系数越小，代表集合中的数据越纯，所有我们可以计算分裂前的值在按照某个维度对数据集进行划分，然后可以去计算多个节点的 Gini 系数。</p>
 <p>对应公式如下：</p>
-<p><font size = 5>$\rm gini &#x3D; \sum\limits_{i &#x3D; 1}^np_i(1 - p_i)$<code>&lt;/font&gt;</code></p>
+<p><font size = 5>$\rm gini &#x3D; \sum\limits_{i &#x3D; 1}^np_i(1 - p_i)$</font></p>
 <p>在对数据进行分类是 gini 系数的变化越大，说明划分越纯，效果越好~</p>
 <h3 id="3-3、信息增益率"><a href="#3-3、信息增益率" class="headerlink" title="3.3、信息增益率"></a>3.3、信息增益率</h3><p>大学期末的数学考试只有单选题。对于一个完全没有学习过的学生。该如何过关呢？</p>
 <p>4 个选项是正确选项的概率都是 1&#x2F;4。那么单项选择题的答案的熵就是：</p>
@@ -641,11 +641,11 @@ $$
 <p>$g(X,Y) \rm &#x3D; H(Y) - H(Y|X) &#x3D; 2 - 1.6 &#x3D; 0.4bit$</p>
 <p><strong>信息增益率</strong>在信息增益的基础上增加了惩罚项，惩罚项是特征的固有值。</p>
 <p>写作 gr(X,Y)。定义为信息增益除以特征的固有值，如下：</p>
-<p><font size = 5>$gr(X,Y) &#x3D; \frac{g(X,Y)}{Info(X)}$<code>&lt;/font&gt;</code></p>
-<p><font size = 5>$Info(X) &#x3D; -\sum\limits_{v \in values(X)}\frac{num(v)}{num(X)}log_2{\frac{num(v)}{num(X)}}$<code>&lt;/font&gt;</code></p>
+<p><font size = 5>$gr(X,Y) &#x3D; \frac{g(X,Y)}{Info(X)}$</font></p>
+<p><font size = 5>$Info(X) &#x3D; -\sum\limits_{v \in values(X)}\frac{num(v)}{num(X)}log_2{\frac{num(v)}{num(X)}}$</font></p>
 <p>计算上面单选题题目长短案例的信息增益率：</p>
-<p><font size = 5>$Info(X) &#x3D; -(0.1 \times log_20.1 \times 2 + 0.8 \times log_20.8) &#x3D; 0.92$<code>&lt;/font&gt;</code></p>
-<p><font size = 5>$gr(X,Y) &#x3D; \frac{g(X,Y)}{Info(X)} &#x3D; \frac{0.4}{0.92} &#x3D; 0.43$<code>&lt;/font&gt;</code></p>
+<p><font size = 5>$Info(X) &#x3D; -(0.1 \times log_20.1 \times 2 + 0.8 \times log_20.8) &#x3D; 0.92$</font></p>
+<p><font size = 5>$gr(X,Y) &#x3D; \frac{g(X,Y)}{Info(X)} &#x3D; \frac{0.4}{0.92} &#x3D; 0.43$</font></p>
 <p>对于取值多的属性，尤其一些连续型数值，这个单独的属性就可以划分所有的样本，使得所有分支下的样本集合都是“纯的”（最极端的情况是每个叶子节点只有一个样本）。<br>一个属性的信息增益越大，表明属性对样本的熵减少的能力更强，这个属性使得数据由不确定性变成确定性的能力越强。<br>所以如果是取值更多的属性，更容易使得数据更“纯”（尤其是连续型数值），其信息增益更大，决策树会首先挑选这个属性作为树的顶点。结果训练出来的形状是一棵庞大且深度很浅的树，这样的划分是极为不合理的。</p>
 <p><img src="/img/post/DecisionTree-Classification/10-%E4%BF%A1%E6%81%AF%E5%A2%9E%E7%9B%8A%E7%8E%87.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <p>C4.5 使用了信息增益率，在信息增益的基础上除了一项 split information,来惩罚值更多的属性。从而使划分更加合理！</p>
