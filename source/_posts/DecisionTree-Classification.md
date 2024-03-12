@@ -37,7 +37,7 @@ cover: [/img/post/DecisionTree-Classification/1-决策树.png]
 
 上表根据历史数据，记录已有的用户是否可以偿还债务，以及相关的信息。通过该数据，构建的决策树如下：
 
-![](../img/post/DscisionTree-Classifcation/1-决策树.png)
+![](/img/post/DscisionTree-Classification/1-决策树.png)
 
 比如新来一个用户：无房产，单身，年收入 55K，那么根据上面的决策树，可以预测他无法偿还债务（蓝色虚线路径）。从上面的决策树，还可以知道是否拥有房产可以很大的决定用户是否可以偿还债务，对借贷业务具有指导意义。
 
@@ -47,7 +47,7 @@ cover: [/img/post/DecisionTree-Classification/1-决策树.png]
 
 根据**实力**构建决策树：
 
-`<img src="../img/post/DscisionTree-Classifcation/2-相亲.png" style="zoom:67%;" />`
+`<img src="/img/post/DscisionTree-Classification/2-相亲.png" style="zoom:67%;" />`
 
 问题：图片是二叉树吗？
 
@@ -69,7 +69,7 @@ cover: [/img/post/DecisionTree-Classification/1-决策树.png]
 
 ### 2.1、算例介绍
 
-![](../img/post/DscisionTree-Classifcation/3-账号真伪.png)
+![](/img/post/DscisionTree-Classification/3-账号真伪.png)
 
 其中 s、m 和 l 分别表示小、中和大。
 
@@ -124,7 +124,7 @@ _ = tree.plot_tree(model,filled = True,feature_names=fn)
 plt.savefig('./iris.jpg')
 ```
 
-`<img src="../img/post/DscisionTree-Classifcation/4-account.jpg" style="zoom:50%;" />`
+`<img src="/img/post/DscisionTree-Classification/4-account.jpg" style="zoom:50%;" />`
 
 数据可视化另一种方式，[安装教程](https://blog.csdn.net/Soft_Po/article/details/118899477)
 
@@ -158,18 +158,18 @@ graph = graphviz.Source.from_file('./Account2')
 graph.render('Account')
 ```
 
-![](../img/post/DscisionTree-Classifcation/5-Account.png)
+![](/img/post/DscisionTree-Classification/5-Account.png)
 
 ### 2.3、信息熵
 
 - 构建好一颗树，数据变的有顺序了（构建前，一堆数据，杂乱无章；构建一颗，整整齐齐，顺序），用什么度量衡表示，数据是否有顺序：信息熵
 - 物理学，热力学第二定律（熵），描述的是封闭系统的混乱程度
 
-  ![](../img/post/DscisionTree-Classifcation/6-entropy.gif)
+  ![](/img/post/DscisionTree-Classification/6-entropy.gif)
 
 - 信息熵，和物理学中熵类似的
 
-  `<img src="../img/post/DscisionTree-Classifcation/7-entropy.png" style="zoom:67%;" />`
+  `<img src="/img/post/DscisionTree-Classification/7-entropy.png" style="zoom:67%;" />`
 
 - <font size = 5>$H(x) = -\sum\limits_{i = 1}^n p(x)log_2p(x)$`</font>`
 - <font size = 5>$H(x) = \sum\limits_{i = 1}^n p(x)log_2\frac{1}{p(x)}$`</font>`
@@ -251,7 +251,7 @@ for col in columns:
 print('最佳列分条件是：',condition)
 ```
 
-`<img src="../img/post/DscisionTree-Classifcation/8-Account.png" style="zoom:67%;" />`
+`<img src="/img/post/DscisionTree-Classification/8-Account.png" style="zoom:67%;" />`
 
 进一步列分
 
@@ -286,7 +286,7 @@ for col in columns:
 print('最佳列分条件是：',condition)
 ```
 
-`<img src="../img/post/DscisionTree-Classifcation/9-Account.png" style="zoom:67%;" />`
+`<img src="/img/post/DscisionTree-Classification/9-Account.png" style="zoom:67%;" />`
 
 ## 3、决策树分裂指标
 
@@ -367,7 +367,7 @@ $g(X,Y) \rm = H(Y) - H(Y|X) = 2 - 1.6 = 0.4bit$
 一个属性的信息增益越大，表明属性对样本的熵减少的能力更强，这个属性使得数据由不确定性变成确定性的能力越强。
 所以如果是取值更多的属性，更容易使得数据更“纯”（尤其是连续型数值），其信息增益更大，决策树会首先挑选这个属性作为树的顶点。结果训练出来的形状是一棵庞大且深度很浅的树，这样的划分是极为不合理的。
 
-![](../img/post/DscisionTree-Classifcation/10-信息增益率.png)
+![](/img/post/DscisionTree-Classification/10-信息增益率.png)
 
 C4.5 使用了信息增益率，在信息增益的基础上除了一项 split information,来惩罚值更多的属性。从而使划分更加合理！
 
@@ -375,7 +375,7 @@ C4.5 使用了信息增益率，在信息增益的基础上除了一项 split in
 
 用于回归树，后面章节具体介绍
 
-![](../img/post/DscisionTree-Classifcation/11-回归树.png)
+![](/img/post/DscisionTree-Classification/11-回归树.png)
 
 ## 4、鸢尾花分类代码实战
 
@@ -420,7 +420,7 @@ graph = graphviz.Source(dot_data)
 graph.render('iris')
 ```
 
-![](../img/post/DscisionTree-Classifcation/12-iris.png)
+![](/img/post/DscisionTree-Classification/12-iris.png)
 
 ### 4.3、决策树剪枝
 
@@ -455,7 +455,7 @@ graph = graphviz.Source(dot_data)
 graph.render('./13-iris-裁剪')
 ```
 
-![](../img/post/DscisionTree-Classifcation/13-iris-剪枝.png)
+![](/img/post/DscisionTree-Classification/13-iris-剪枝.png)
 
 ### 4.4、选择合适的超参数并可视化
 
@@ -488,7 +488,7 @@ plt.grid()
 plt.savefig('./14-筛选超参数.png',dpi = 200)
 ```
 
-![](../img/post/DscisionTree-Classifcation/14-筛选超参数.png)
+![](/img/post/DscisionTree-Classification/14-筛选超参数.png)
 
 ### 4.5、决策树副产物
 
