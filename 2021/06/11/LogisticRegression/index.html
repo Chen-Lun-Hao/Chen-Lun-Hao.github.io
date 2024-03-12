@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="逻辑回归1、广义线性回归到逻辑回归1.1、什么是逻辑回归&emsp;&emsp;逻辑回归不是一个回归的算法，逻辑回归是一个分类的算法，好比卡巴斯基不是司机，红烧狮子头没有狮子头一样。 那为什么逻辑回归不叫逻辑分类？因为逻辑回归算法是基于多元线性回归的算法。而正因为此，逻辑回归这个分类算法是线性的分类器。未来我们要学的基于决策树的一系列算法，基于神经网络的算法等那些是非线性的算法。SVM 支持向量机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="逻辑回归二分类">
+<meta property="og:url" content="https://www.adream.icu/2021/06/11/LogisticRegression/index.html">
+<meta property="og:site_name" content="Adream blog">
+<meta property="og:description" content="逻辑回归1、广义线性回归到逻辑回归1.1、什么是逻辑回归&emsp;&emsp;逻辑回归不是一个回归的算法，逻辑回归是一个分类的算法，好比卡巴斯基不是司机，红烧狮子头没有狮子头一样。 那为什么逻辑回归不叫逻辑分类？因为逻辑回归算法是基于多元线性回归的算法。而正因为此，逻辑回归这个分类算法是线性的分类器。未来我们要学的基于决策树的一系列算法，基于神经网络的算法等那些是非线性的算法。SVM 支持向量机">
+<meta property="og:locale">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="article:published_time" content="2021-06-11T04:20:59.000Z">
+<meta property="article:modified_time" content="2024-03-12T12:09:34.692Z">
+<meta property="article:author" content="Adream">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.adream.icu/img/404.jpg">
+
+    <meta name="keywords" content="线性回归,分类">
+
+
+<title >逻辑回归二分类</title>
+
+<!-- Favicon -->
+
+    <link href='/favicon.png?v=2.1.10' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/favicon.png?v=2.1.10' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=2.1.10' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/katex@latest/dist/katex.min.css">
+
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+    
+<script src="//at.alicdn.com/t/c/font_3637590_i4hyyea14ur.js"></script>
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"www.adream.icu","author":"Adream","root":"/","typed_text":["AI Developer"],"theme_version":"2.1.10","theme":{"switch":false,"default":"auto"},"favicon":{"logo":"favicon.svg","icon16":"favicon.png","icon32":"favicon.png","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":true,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"icon-yunhang","email":"icon-email","next":"icon-arrow-right","calendar":"icon-rili","clock":"icon-shijian","user":"icon-yonghu","back_top":"icon-backtop","close":"icon-guanbi","search":"icon-chaxun","reward":"icon-qiandai","user_tag":"icon-yonghu1","toc_tag":"icon-liebiao","read":"icon-yuedu","arrows":"icon-arrows-h","double_arrows":"icon-angle-double-down","copy":"icon-copy"},"icontype":"symbol","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"toc":{"post_title":false},"live_time":{"start_time":"2021/04/10 17:00:00","prefix":"博客已萌萌哒运行 undefined 天"},"covers":["/img/block.jpg","https://th.wallhaven.cc/orig/wq/wqvkl7.jpg","https://th.wallhaven.cc/orig/rd/rdq3v1.jpg","https://th.wallhaven.cc/orig/rd/rd183j.jpg","https://th.wallhaven.cc/orig/q2/q287wd.jpg","https://th.wallhaven.cc/orig/g7/g79ov3.jpg","https://th.wallhaven.cc/orig/q2/q2mkzr.jpg","https://th.wallhaven.cc/orig/v9/v9j3yp.jpg","https://th.wallhaven.cc/orig/y8/y8yvzx.jpg","https://th.wallhaven.cc/orig/1k/1kdw2w.jpg","https://th.wallhaven.cc/orig/57/57jqk1.jpg","https://th.wallhaven.cc/orig/57/5762p1.jpg","https://th.wallhaven.cc/orig/j3/j3zo1y.jpg","https://th.wallhaven.cc/orig/m9/m9gkky.jpg","https://th.wallhaven.cc/orig/e7/e7kv9k.jpg","https://th.wallhaven.cc/orig/ym/ym9ldk.jpg","https://th.wallhaven.cc/orig/pk/pk5259.jpg","https://th.wallhaven.cc/orig/8o/8opxpk.jpg","https://th.wallhaven.cc/orig/k7/k7yog7.jpg","https://th.wallhaven.cc/orig/v9/v93zv3.jpg","https://th.wallhaven.cc/orig/wq/wqj65q.jpg","https://th.wallhaven.cc/orig/p9/p9kg1m.jpg","https://th.wallhaven.cc/orig/8o/8o9vw1.jpg","https://th.wallhaven.cc/orig/x8/x8yy3o.jpg"],"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto","path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-03-12 20:09:34"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="Adream blog" type="application/atom+xml">
+</head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+  <div class="loader">
+    <div class="inner one"></div>
+    <div class="inner two"></div>
+    <div class="inner three"></div>
+  </div>
+  <div style="margin-top: 120px; font-weight: bold; font-size: 20px">
+    努力加载中......
+  </div>
+</div>
+
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#far fa-sun"></use>
+</svg></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#far fa-moon"></use>
+</svg></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/favicon.svg">
+    
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/projects/" target="">
+                    项目
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    友链
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner video cover -->
+    <video autoplay="autoplay" loop muted playsinline webkit-playinginline class="trm-banner-cover">
+        <source src="//cdn.moji.com/websrc/video/autumn20190924.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        Your browser does not support HTML5 video.
+    </video>
+    <!-- banner video cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            逻辑回归二分类
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2021
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Adream
+    </h5>
+    
+        <div class="trm-label">
+            I`m
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/chne-lun-hao" title="Github" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-github"></use>
+</svg>
+        </a>
+    
+        <a href="https://gitee.com/lunhao2023" title="Gitee" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-gitee"></use>
+</svg>
+        </a>
+    
+        <a href="/atom.xml" title="RSS" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-rss"></use>
+</svg>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                居住地:
+            </div>
+            <div class="trm-label trm-label-light">
+                广州
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                城市:
+            </div>
+            <div class="trm-label trm-label-light">
+                广州
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                年龄:
+            </div>
+            <div class="trm-label trm-label-light">
+                21
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:2085127827chen@gmail.com" class="trm-btn">
+            联系我
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-email"></use>
+</svg>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-rili"></use>
+</svg><br>
+            06/11
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-shijian"></use>
+</svg><br>
+            12:20
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-yonghu"></use>
+</svg><br>
+            Adream
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="逻辑回归"><a href="#逻辑回归" class="headerlink" title="逻辑回归"></a>逻辑回归</h1><h2 id="1、广义线性回归到逻辑回归"><a href="#1、广义线性回归到逻辑回归" class="headerlink" title="1、广义线性回归到逻辑回归"></a>1、广义线性回归到逻辑回归</h2><h3 id="1-1、什么是逻辑回归"><a href="#1-1、什么是逻辑回归" class="headerlink" title="1.1、什么是逻辑回归"></a>1.1、什么是逻辑回归</h3><p>&emsp;&emsp;逻辑回归<strong>不是</strong>一个回归的算法，逻辑回归是一个<strong>分类</strong>的算法，好比卡巴斯基不是司机，红烧狮子头没有狮子头一样。 那为什么逻辑回归不叫逻辑分类？因为逻辑回归算法是基于多元线性回归的算法。而正因为此，逻辑回归这个分类算法是线性的分类器。未来我们要学的基于决策树的一系列算法，基于神经网络的算法等那些是非线性的算法。SVM 支持向量机的本质是线性的，但是也可以通过内部的核函数升维来变成非线性的算法。</p>
+<p>&emsp;&emsp;逻辑回归中对应一条非常重要的曲线 S 型曲线，对应的函数是 Sigmoid 函数：</p>
+<p><font size = 6>$f(x) &#x3D; \frac{1}{1 + e^{-x}}$</font></p>
+<p>它有一个非常棒的特性，其导数可以用其自身表示：</p>
+<p><font size = 6>$f’(x) &#x3D; \frac{e^{-x}}{(1 + e^{-x})^2} &#x3D;f(x) * \frac{1 + e^{-x} - 1}{1 + e^{-x}} &#x3D; f(x) * (1 - f(x))$</font></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sigmoid</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>/(<span class="number">1</span> + np.exp(-x))</span><br><span class="line">x = np.linspace(-<span class="number">5</span>,<span class="number">5</span>,<span class="number">100</span>)</span><br><span class="line">y = sigmoid(x)</span><br><span class="line">plt.plot(x,y,color = <span class="string">&#x27;green&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/post/LogisticRegression/1-S%E5%9E%8B%E6%9B%B2%E7%BA%BF.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h3 id="1-2、Sigmoid-函数介绍"><a href="#1-2、Sigmoid-函数介绍" class="headerlink" title="1.2、Sigmoid 函数介绍"></a>1.2、Sigmoid 函数介绍</h3><p>&emsp;&emsp;逻辑回归就是在多元线性回归基础上把结果缩放到 0 ~ 1 之间。 $h_{\theta}(x)$ 越接近 1 越是正例，$h_{\theta}(x)$ 越接近 0 越是负例，根据中间 0.5 将数据分为二类。其中$h_{\theta}(x)$ 就是概率函数~</p>
+<p><font size = 8>$h_{\theta}(x) &#x3D; g(\theta^Tx) &#x3D; \frac{1}{1 + e^{-\theta^Tx}}$</font></p>
+<p>&emsp;&emsp;我们知道分类器的本质就是要找到分界，所以当我们把 0.5 作为分类边界时，我们要找的就是$\hat{y} &#x3D; h_{\theta}(x) &#x3D; \frac{1}{1 + e^{-\theta^Tx}} &#x3D; 0.5$ ，即 $z &#x3D; \theta^Tx &#x3D; 0$ 时，$\theta$ 的解~</p>
+<p><img src="/../img/post/LogisticRegression/2-sigmoid.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>求解过程如下：</p>
+<p><img src="/../img/post/LogisticRegression/3-Sigmoid.jpeg" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>&emsp;&emsp;什么事情，都要做到知其然，知其所以然，我们知道二分类有个特点就是正例的概率 + 负例的概率 &#x3D; 1。一个非常简单的试验是只有两种可能结果的试验，比如正面或反面，成功或失败，有缺陷或没有缺陷，病人康复或未康复等等。为方便起见，记这两个可能的结果为 0 和 1，下面的定义就是建立在这类试验基础之上的。 如果随机变量 x 只取 0 和 1 两个值，并且相应的概率为：</p>
+<ul>
+<li>$Pr(x &#x3D; 1) &#x3D; p; Pr(x &#x3D; 0) &#x3D; 1-p; 0 &lt; p &lt; 1$</li>
+</ul>
+<p>&emsp;&emsp;则称随机变量 x 服从参数为 p 的<strong>Bernoulli</strong>伯努利分布( 0-1 分布)，则 x 的概率函数可写：</p>
+<ul>
+<li>$f(x | p) &#x3D; \begin{cases}p^x(1 - p)^{1-x}, &amp;x &#x3D;  1、0\0,&amp; x \neq 1、0\end{cases}$</li>
+</ul>
+<p>&emsp;&emsp;逻辑回归二分类任务会把正例的 label 设置为 1，负例的 label 设置为 0，对于上面公式就是 x &#x3D; 0、1。</p>
+<h2 id="2、逻辑回归公式推导"><a href="#2、逻辑回归公式推导" class="headerlink" title="2、逻辑回归公式推导"></a>2、逻辑回归公式推导</h2><h3 id="2-1、损失函数推导"><a href="#2-1、损失函数推导" class="headerlink" title="2.1、损失函数推导"></a>2.1、损失函数推导</h3><p>&emsp;&emsp;这里我们依然会用到最大似然估计思想，根据若干已知的 X,y(训练集) 找到一组 $\theta$ 使得 X 作为已知条件下 y 发生的概率最大。</p>
+<p><font size = 6>$P(y|x;\theta) &#x3D; \begin{cases}h_{\theta}(x), &amp;y &#x3D;  1\1-h_{\theta}(x),&amp; y &#x3D;  0\end{cases}$ </font></p>
+<p><strong>整合到一起（二分类就两种情况：1、0）得到<font color = 'green'>逻辑回归表达式</font>：</strong></p>
+<p><font size = 6 color = 'green'>$P(y|x;\theta) &#x3D; (h_{\theta}(x))^{y}(1 - h_{\theta}(x))^{1-y}$</font></p>
+<p>我们假设训练样本相互独立，那么似然函数表达式为:</p>
+<p><font size = 6>$L(\theta) &#x3D; \prod\limits_{i &#x3D; 1}^nP(y^{(i)}|x^{(i)};\theta)$</font></p>
+<p><font size = 6>$L(\theta) &#x3D; \prod\limits_{i&#x3D;1}^n(h_{\theta}(x^{(i)}))^{y^{(i)}}(1 - h_{\theta}(x^{(i)}))^{1-y^{(i)}}$</font></p>
+<p><font color = red size = 6>对数转换，自然底数为底</font></p>
+<p><font size = 5>$l(\theta) &#x3D; \ln{L(\theta)} &#x3D;\ln( \prod\limits_{i&#x3D;1}^n({h_{\theta}(x^{(i)}))^{y^{(i)}}}{(1 - h_{\theta}(x^{(i)}))^{1-y^{(i)}}})$​​</font></p>
+<p>化简，累乘变累加：</p>
+<p><font size = 5>$l(\theta) &#x3D; \ln{L(\theta)} &#x3D; \sum\limits_{i &#x3D; 1}^n(y^{(i)}\ln(h_{\theta}(x^{(i)})) + (1-y^{(i)})\ln(1-h_{\theta}(x^{(i)})))$</font></p>
+<p>&emsp;&emsp;<strong>总结</strong>，得到了逻辑回归的表达式，下一步跟线性回归类似，构建似然函数，然后最大似然估计，最终推导出 $\theta$ 的迭代更新表达式。只不过这里用的不是梯度下降，而是梯度上升，因为这里是最大化似然函数。通常我们一提到损失函数，往往是求最小，这样我们就可以用<strong>梯度下降</strong>来求解。最终损失函数就是上面公式加负号的形式:</p>
+<p><font size = 5 color = 'green'>$J(\theta) &#x3D; -l(\theta) &#x3D; -\sum\limits_{i &#x3D; 1}^n[y^{(i)}\ln(h_{\theta}(x^{(i)})) + (1-y^{(i)})\ln(1-h_{\theta}(x^{(i)}))]$</font></p>
+<h3 id="2-2、立体化呈现"><a href="#2-2、立体化呈现" class="headerlink" title="2.2、立体化呈现"></a>2.2、立体化呈现</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> mpl_toolkits.mplot3d <span class="keyword">import</span> Axes3D</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> scale <span class="comment"># 数据标准化Z-score</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1、加载乳腺癌数据</span></span><br><span class="line">data = datasets.load_breast_cancer()</span><br><span class="line">X, y = scale(data[<span class="string">&#x27;data&#x27;</span>][:, :<span class="number">2</span>]), data[<span class="string">&#x27;target&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2、求出两个维度对应的数据在逻辑回归算法下的最优解</span></span><br><span class="line">lr = LogisticRegression()</span><br><span class="line">lr.fit(X, y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3、分别把两个维度所对应的参数W1和W2取出来</span></span><br><span class="line">w1 = lr.coef_[<span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line">w2 = lr.coef_[<span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(w1, w2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4、已知w1和w2的情况下，传进来数据的X，返回数据的y_predict</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sigmoid</span>(<span class="params">X, w1, w2</span>):</span><br><span class="line">    z = w1*X[<span class="number">0</span>] + w2*X[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> / (<span class="number">1</span> + np.exp(-z))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5、传入一份已知数据的X，y，如果已知w1和w2的情况下，计算对应这份数据的Loss损失</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">loss_function</span>(<span class="params">X, y, w1, w2</span>):</span><br><span class="line">    loss = <span class="number">0</span></span><br><span class="line">    <span class="comment"># 遍历数据集中的每一条样本，并且计算每条样本的损失，加到loss身上得到整体的数据集损失</span></span><br><span class="line">    <span class="keyword">for</span> x_i, y_i <span class="keyword">in</span> <span class="built_in">zip</span>(X, y):</span><br><span class="line">        <span class="comment"># 这是计算一条样本的y_predict，即概率</span></span><br><span class="line">        p = sigmoid(x_i, w1, w2)</span><br><span class="line">        loss += -<span class="number">1</span>*y_i*np.log(p)-(<span class="number">1</span>-y_i)*np.log(<span class="number">1</span>-p)</span><br><span class="line">    <span class="keyword">return</span> loss</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6、参数w1和w2取值空间</span></span><br><span class="line">w1_space = np.linspace(w1-<span class="number">2</span>, w1+<span class="number">2</span>, <span class="number">100</span>)</span><br><span class="line">w2_space = np.linspace(w2-<span class="number">2</span>, w2+<span class="number">2</span>, <span class="number">100</span>)</span><br><span class="line">loss1_ = np.array([loss_function(X, y, i, w2) <span class="keyword">for</span> i <span class="keyword">in</span> w1_space])</span><br><span class="line">loss2_ = np.array([loss_function(X, y, w1, i) <span class="keyword">for</span> i <span class="keyword">in</span> w2_space])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 7、数据可视化</span></span><br><span class="line">fig1 = plt.figure(figsize=(<span class="number">12</span>, <span class="number">9</span>))</span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">plt.plot(w1_space, loss1_)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">plt.plot(w2_space, loss2_)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">w1_grid, w2_grid = np.meshgrid(w1_space, w2_space)</span><br><span class="line">loss_grid = loss_function(X, y, w1_grid, w2_grid)</span><br><span class="line">plt.contour(w1_grid, w2_grid, loss_grid,<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">2</span>, <span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line">plt.contourf(w1_grid, w2_grid, loss_grid,<span class="number">20</span>)</span><br><span class="line">plt.savefig(<span class="string">&#x27;../img/post/LogisticRegression/4-损失函数可视化.png&#x27;</span>,dpi = <span class="number">200</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 8、3D立体可视化</span></span><br><span class="line">fig2 = plt.figure(figsize=(<span class="number">12</span>,<span class="number">6</span>))</span><br><span class="line">ax = Axes3D(fig2)</span><br><span class="line">ax.plot_surface(w1_grid, w2_grid, loss_grid,cmap = <span class="string">&#x27;viridis&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;w1&#x27;</span>,fontsize = <span class="number">20</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;w2&#x27;</span>,fontsize = <span class="number">20</span>)</span><br><span class="line">ax.view_init(<span class="number">30</span>,-<span class="number">30</span>)</span><br><span class="line">plt.savefig(<span class="string">&#x27;../img/post/LogisticRegression/5-损失函数可视化.png&#x27;</span>,dpi = <span class="number">200</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/post/LogisticRegression/4-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E5%8F%AF%E8%A7%86%E5%8C%96.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="/../img/post/LogisticRegression/5-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%E5%8F%AF%E8%A7%86%E5%8C%96.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="3、逻辑回归迭代公式"><a href="#3、逻辑回归迭代公式" class="headerlink" title="3、逻辑回归迭代公式"></a>3、逻辑回归迭代公式</h2><h3 id="3-1、函数特性"><a href="#3-1、函数特性" class="headerlink" title="3.1、函数特性"></a>3.1、函数特性</h3><p>&emsp;&emsp;逻辑回归参数更新规则和，线性回归一模一样！</p>
+<p><font size = 6>$\theta_j^{t + 1} &#x3D; \theta_j^t - \alpha\frac{\partial}{\partial_{\theta_j}}J(\theta)$</font></p>
+<ul>
+<li>$\alpha$ 表示学习率</li>
+</ul>
+<p>逻辑回归函数：</p>
+<p><font size = 6>$h_{\theta}(x) &#x3D; g(\theta^Tx) &#x3D; g(z) &#x3D; \frac{1}{1 + e^{-z}}$</font></p>
+<ul>
+<li>$z &#x3D; \theta^Tx$</li>
+</ul>
+<p>逻辑回归函数求导时有一个特性，这个特性将在下面的推导中用到，这个特性为：</p>
+<p><font size = 4>$\begin{aligned} g’(z) &amp;&#x3D; \frac{\partial}{\partial z}\frac{1}{1 + e^{-z}} \\&amp;&#x3D; \frac{e^{-z}}{(1 + e^{-z})^2}\\&amp; &#x3D; \frac{1}{(1 + e^{-z})^2}\cdot e^{-z}\\&amp;&#x3D;\frac{1}{1 + e^{-z}} \cdot (1 - \frac{1}{1 + e^{-z}})\\&amp;&#x3D;g(z)\cdot (1 - g(z))\end{aligned}$</font></p>
+<p>回到逻辑回归损失函数求导：</p>
+<p><font size = 4>$J(\theta) &#x3D;  -\sum\limits_{i &#x3D; 1}^n(y^{(i)}\ln(h_{\theta}(x^{i})) + (1-y^{(i)})\ln(1-h_{\theta}(x^{(i)})))$</font></p>
+<h3 id="3-2、求导过程"><a href="#3-2、求导过程" class="headerlink" title="3.2、求导过程"></a>3.2、求导过程</h3><p><font size = 4>$\begin{aligned} \frac{\partial}{\partial{\theta_j}}J(\theta) &amp;&#x3D; -\sum\limits_{i &#x3D; 1}^n(y^{(i)}\frac{1}{h_{\theta}(x^{(i)})}\frac{\partial}{\partial_{\theta_j}}h_{\theta}(x^{i}) + (1-y^{(i)})\frac{1}{1-h_{\theta}(x^{(i)})}\frac{\partial}{\partial_{\theta_j}}(1-h_{\theta}(x^{(i)}))) \\&amp;&#x3D;-\sum\limits_{i &#x3D; 1}^n(y^{(i)}\frac{1}{h_{\theta}(x^{(i)})}\frac{\partial}{\partial_{\theta_j}}h_{\theta}(x^{(i)}) - (1-y^{(i)})\frac{1}{1-h_{\theta}(x^{(i)})}\frac{\partial}{\partial_{\theta_j}}h_{\theta}(x^{(i)}))\\&amp;&#x3D;-\sum\limits_{i &#x3D; 1}^n(y^{(i)}\frac{1}{h_{\theta}(x^{(i)})} - (1-y^{(i)})\frac{1}{1-h_{\theta}(x^{(i)})})\frac{\partial}{\partial_{\theta_j}}h_{\theta}(x^{(i)})\\&amp;&#x3D;-\sum\limits_{i &#x3D; 1}^n(y^{(i)}\frac{1}{h_{\theta}(x^{(i)})} - (1-y^{(i)})\frac{1}{1-h_{\theta}(x^{(i)})})h_{\theta}(x^{(i)})(1-h_{\theta}(x^{(i)}))\frac{\partial}{\partial_{\theta_j}}\theta^Tx\\&amp;&#x3D;-\sum\limits_{i &#x3D; 1}^n(y^{(i)}(1-h_{\theta}(x^{(i)})) - (1-y^{(i)})h_{\theta}(x^{(i)}))\frac{\partial}{\partial_{\theta_j}}\theta^Tx\\&amp;&#x3D;-\sum\limits_{i &#x3D; 1}^n(y^{(i)} - h_{\theta}(x^{(i)}))\frac{\partial}{\partial_{\theta_j}}\theta^Tx\\&amp;&#x3D;\sum\limits_{i &#x3D; 1}^n(h_{\theta}(x^{(i)}) -y^{(i)})x_j^{(i)}\end{aligned}$</font></p>
+<p>求导最终的公式：</p>
+<p><font color = 'red' size = 6>$\frac{\partial}{\partial{\theta_j}}J(\theta) &#x3D; \sum\limits_{i &#x3D; 1}^n(h_{\theta}(x^{(i)}) -y^{(i)})x_j^{(i)}$</font></p>
+<p>这里我们发现导函数的形式和多元线性回归一样~</p>
+<p>逻辑回归参数迭代更新公式：</p>
+<p><font size = 6 color = 'green'>$\theta_j^{t+1} &#x3D; \theta_j^t - \alpha \cdot \sum\limits_{i&#x3D;1}^{n}(h_{\theta}(x^{(i)}) -y^{(i)})x_j^{(i)}$</font></p>
+<h3 id="3-3、代码实战"><a href="#3-3、代码实战" class="headerlink" title="3.3、代码实战"></a>3.3、代码实战</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1、数据加载</span></span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2、数据提取与筛选</span></span><br><span class="line">X = iris[<span class="string">&#x27;data&#x27;</span>]</span><br><span class="line">y = iris[<span class="string">&#x27;target&#x27;</span>]</span><br><span class="line">cond = y != <span class="number">2</span></span><br><span class="line">X = X[cond]</span><br><span class="line">y = y[cond]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3、数据拆分</span></span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(X,y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4、模型训练</span></span><br><span class="line">lr = LogisticRegression()</span><br><span class="line">lr.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5、模型预测</span></span><br><span class="line">y_predict = lr.predict(X_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;测试数据保留类别是：&#x27;</span>,y_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;测试数据算法预测类别是：&#x27;</span>,y_predict)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;测试数据算法预测概率是：\n&#x27;</span>,lr.predict_proba(X_test))</span><br></pre></td></tr></table></figure>
+
+<p><strong>结论：</strong></p>
+<ul>
+<li>通过数据提取与筛选，创建二分类问题</li>
+<li>类别的划分，通过概率比较大小完成了</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 线性回归方程</span></span><br><span class="line">b = lr.intercept_</span><br><span class="line">w = lr.coef_</span><br><span class="line"></span><br><span class="line"><span class="comment"># 逻辑回归函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sigmoid</span>(<span class="params">z</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>/(<span class="number">1</span> + np.exp(-z))</span><br><span class="line"></span><br><span class="line"><span class="comment"># y = 1 概率</span></span><br><span class="line">z = X_test.dot(w.T) + b</span><br><span class="line">p_1 = sigmoid(z)</span><br><span class="line"></span><br><span class="line"><span class="comment"># y = 0 概率</span></span><br><span class="line">p_0 = <span class="number">1</span> - p_1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 最终结果</span></span><br><span class="line">p = np.concatenate([p_0,p_1],axis = <span class="number">1</span>)</span><br><span class="line">p</span><br></pre></td></tr></table></figure>
+
+<p><strong>结论：</strong></p>
+<ul>
+<li>线性方程，对应方程 $z$</li>
+<li>sigmoid 函数，将线性方程转变为概率</li>
+<li>自己求解概率和直接使用 LogisticRegression 结果一样，可知计算流程正确</li>
+</ul>
+<h2 id="4、逻辑回归做多分类"><a href="#4、逻辑回归做多分类" class="headerlink" title="4、逻辑回归做多分类"></a>4、逻辑回归做多分类</h2><h3 id="4-1、One-Vs-Rest-思想"><a href="#4-1、One-Vs-Rest-思想" class="headerlink" title="4.1、One-Vs-Rest 思想"></a>4.1、One-Vs-Rest 思想</h3><p>&emsp;&emsp;在上面，我们主要使用逻辑回归解决二分类的问题，那对于多分类的问题，也可以用逻辑回归来解决！</p>
+<p>多分类问题：</p>
+<ul>
+<li>将邮件分为不同类别&#x2F;标签：工作(y&#x3D;1)，朋友(y&#x3D;2)，家庭(y&#x3D;3)，爱好(y&#x3D;4)</li>
+<li>天气分类：晴天(y&#x3D;1)，多云天(y&#x3D;2)，下雨天(y&#x3D;3)，下雪天(y&#x3D;4)</li>
+<li>医学图示：没生病(y&#x3D;1)，感冒(y&#x3D;2)，流感(y&#x3D;3)</li>
+<li>……</li>
+</ul>
+<p>上面都是多分类问题。</p>
+<p>假设我们要解决一个分类问题，该分类问题有三个类别，分别用 △，□ 和 × 表示，每个实例有两个属性，如果把属性 1 作为 X 轴，属性 2 作为 Y 轴，训练集的分布可以表示为下图：</p>
+<p><img src="/../img/post/LogisticRegression/6-ovr%E5%A4%9A%E5%88%86%E7%B1%BB.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>&emsp;&emsp;One-Vs-Rest（ovr）的思想是把一个多分类的问题变成多个二分类的问题。转变的思路就如同方法名称描述的那样，选择其中一个类别为正类（Positive），使其他所有类别为负类（Negative）。比如第一步，我们可以将 △ 所代表的实例全部视为正类，其他实例全部视为负类，得到的分类器如图：</p>
+<p><img src="/../img/post/LogisticRegression/7-ovr%E5%A4%9A%E5%88%86%E7%B1%BB.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>同理我们把 × 视为正类，其他视为负类，可以得到第二个分类器：</p>
+<p><img src="/../img/post/LogisticRegression/8-ovr%E5%A4%9A%E5%88%86%E7%B1%BB.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>最后，第三个分类器是把 □ 视为正类，其余视为负类：</p>
+<p><img src="/../img/post/LogisticRegression/9-ovr%E5%A4%9A%E5%88%86%E7%B1%BB.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>&emsp;&emsp;对于一个三分类问题，我们最终得到 3 个二元分类器。在预测阶段，每个分类器可以根据测试样本，得到当前类别的概率。即 P(y &#x3D; i | x; θ)，i &#x3D; 1, 2, 3。选择计算结果最高的分类器，其所对应类别就可以作为预测结果。</p>
+<p>One-Vs-Rest 作为一种常用的二分类拓展方法，其优缺点也十分明显：</p>
+<ul>
+<li><p>优点：普适性还比较广，可以应用于能输出值或者概率的分类器，同时效率相对较好，有多少个类别就训练多少个分类器。</p>
+</li>
+<li><p>缺点：很容易造成训练集样本数量的不平衡（Unbalance），尤其在类别较多的情况下，经常容易出现正类样本的数量远远不及负类样本的数量，这样就会造成分类器的偏向性。</p>
+</li>
+</ul>
+<h3 id="4-2、代码实战"><a href="#4-2、代码实战" class="headerlink" title="4.2、代码实战"></a>4.2、代码实战</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1、数据加载</span></span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2、数据提取</span></span><br><span class="line">X = iris[<span class="string">&#x27;data&#x27;</span>]</span><br><span class="line">y = iris[<span class="string">&#x27;target&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3、数据拆分</span></span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(X,y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4、模型训练</span></span><br><span class="line">lr = LogisticRegression(multi_class = <span class="string">&#x27;ovr&#x27;</span>)</span><br><span class="line">lr.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5、模型预测</span></span><br><span class="line">y_predict = lr.predict(X_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;测试数据保留类别是：&#x27;</span>,y_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;测试数据算法预测类别是：&#x27;</span>,y_predict)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;测试数据算法预测概率是：\n&#x27;</span>,lr.predict_proba(X_test))</span><br></pre></td></tr></table></figure>
+
+<p><strong>结论：</strong></p>
+<ul>
+<li>通过数据提取，创建三分类问题</li>
+<li>类别的划分，通过概率比较大小完成了</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 线性回归方程，3个方程</span></span><br><span class="line">b = lr.intercept_</span><br><span class="line">w = lr.coef_</span><br><span class="line"></span><br><span class="line"><span class="comment"># 逻辑回归函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">sigmoid</span>(<span class="params">z</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>/(<span class="number">1</span> + np.exp(-z))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算三个方程的概率</span></span><br><span class="line">z = X_test.dot(w.T) + b</span><br><span class="line">p = sigmoid(z)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 标准化处理，概率求和为1</span></span><br><span class="line">p = p/p.<span class="built_in">sum</span>(axis = <span class="number">1</span>).reshape(-<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">p</span><br></pre></td></tr></table></figure>
+
+<p><strong>结论：</strong></p>
+<ul>
+<li>线性方程，对应方程 $z$ ，此时对应三个方程</li>
+<li>sigmoid 函数，将线性方程转变为概率，并进行标准化处理</li>
+<li>自己求解概率和直接使用 LogisticRegression 结果一样</li>
+</ul>
+<h2 id="5、多分类-Softmax-回归"><a href="#5、多分类-Softmax-回归" class="headerlink" title="5、多分类 Softmax 回归"></a>5、多分类 Softmax 回归</h2><h3 id="5-1、多项分布指数分布族形式"><a href="#5-1、多项分布指数分布族形式" class="headerlink" title="5.1、多项分布指数分布族形式"></a>5.1、多项分布指数分布族形式</h3><p>&emsp;&emsp;Softmax 回归是另一种做多分类的算法。从名字中大家是不是可以联想到广义线性回归，Softmax 回归是假设多项分布的，多项分布可以理解为二项分布的扩展。投硬币是二项分布，掷骰子是多项分布。</p>
+<p>&emsp;&emsp;我们知道，对于伯努利分布，我们采用 Logistic 回归建模。那么我们应该如何处理多分类问题？对于这种多项分布我们使用 softmax 回归建模。</p>
+<p>y 有多个可能的分类： $y \in {1,2,3,……,k}$，</p>
+<p>每种分类对应的概率： $\phi_1,\phi_2……\phi_k$ ，由于 $\sum\limits_{i &#x3D; 1}^k\phi_i &#x3D; 1$ ，所以一般用 k-1 个参数$\phi_1,\phi_2……\phi_{k-1}$ 。其中：</p>
+<ul>
+<li>$p(y &#x3D; i;\phi) &#x3D; \phi_i$</li>
+<li>$p(y &#x3D; k;\phi) &#x3D; 1 - \sum\limits_{i &#x3D; 1}^{k -1}\phi_i$ 。</li>
+</ul>
+<p>为了将多项分布表达为指数族分布，做一下工作：</p>
+<ul>
+<li><p>定义 ，$T(y) \in R^{k-1}$它不再是一个数而是一个变量</p>
+<p><img src="/../img/post/LogisticRegression/9-%E5%A4%9A%E9%A1%B9%E5%BC%8F%E5%88%86%E5%B8%83.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+</li>
+<li><p>引进指示函数：$I{\cdot}$为$I{True} &#x3D; 1$，$I{False} &#x3D; 0$</p>
+<p>$E(T(y)_i) &#x3D; p(y &#x3D; i) &#x3D; \phi_i$</p>
+</li>
+</ul>
+<p>得到它的指数分布族形式：</p>
+<p><font size = 4>$\begin{aligned}p(y;\phi) &amp;&#x3D; \phi_1^{I{y &#x3D; 1}}\phi_2^{I{y &#x3D; 2}}…\phi_k^{I{y &#x3D; k}}\\&amp;&#x3D;\phi_1^{I{y &#x3D; 1}}\phi_2^{I{y &#x3D; 2}}…\phi_k^{1 - \sum\limits_{i&#x3D;1}^{k-1}I{y &#x3D; i}}\\&amp;&#x3D;\phi_1^{(T(y))_1}\phi_2^{(T(y))<em>2}…\phi_k^{1 - \sum\limits</em>{i &#x3D; 1}^{k-1}(T(y))_i}\\&amp;&#x3D;\exp((T(y))_1\log(\phi_1) + (T(y))<em>2\log(\phi_2)…+(1 - \sum\limits</em>{i &#x3D; 1}^{k-1}(T(y))_i)\log(\phi_k))\\&amp;&#x3D;\exp((T(y))<em>1\log\frac{\phi_1}{\phi_k} + (T(y))<em>2\log\frac{\phi_2}{\phi_k} + … + (T(y))</em>{k-1}\log\frac {\phi</em>{k-1}}{\phi_k} + \log(\phi_k))\end{aligned}$</font></p>
+<p>指数分布族标准表达式如下：</p>
+<p><font size = 6>$p(y;\eta) &#x3D; b(y)\exp(\eta T(y) - \alpha(\eta))$</font></p>
+<p><strong>得到对应模型参数：</strong></p>
+<p>$ \eta &#x3D; \left{ \begin{aligned} &amp;\log(\phi<em>1&#x2F;\phi_k) \ &amp;\log(\phi_2&#x2F;\phi_k) \ &amp;…\&amp;\log(\phi</em>{k-1}&#x2F;\phi_k) \end{aligned} \right.$</p>
+<p>$\alpha(\eta) &#x3D; -\log(\phi_k)$</p>
+<p>$b(y) &#x3D; 1$</p>
+<h3 id="5-2、广义线性模型推导-Softmax-回归"><a href="#5-2、广义线性模型推导-Softmax-回归" class="headerlink" title="5.2、广义线性模型推导 Softmax 回归"></a>5.2、广义线性模型推导 Softmax 回归</h3><p>&emsp;&emsp;证明了多项分布属于指数分布族后，接下来求取由它推导出的概率函数 Softmax</p>
+<ul>
+<li><p><font size = 5>$\eta_i &#x3D; \log\frac{\phi_i}{\phi_k}$   —&gt;   $e^{\eta_i} &#x3D; \frac{\phi_i}{\phi_k}$   —&gt;   $\phi_ke^{\eta_i} &#x3D; \phi_i$</font></p>
+</li>
+<li><p><font size = 5>$\phi_k\sum\limits_{i &#x3D; 1}^k e^{\eta_i} &#x3D; \sum\limits_{i &#x3D; 1}^k &#x3D; 1$</font></p>
+</li>
+<li><p><font size = 5>$\phi_k &#x3D; \frac{1}{\sum\limits_{i &#x3D; 1}^ke^{\eta_i}}$</font></p>
+</li>
+<li><p><font size = 5 color = 'red'>$\phi_i &#x3D; \frac{e^{\eta_i}}{\sum\limits_{j &#x3D; 1}^ke^{\eta_j}}$</font></p>
+</li>
+</ul>
+<p>上面这个函数，就叫做 Softmax 函数。</p>
+<p>引用广义线性模型的<strong>假设 3</strong>，即 $\eta$ 是 x 的线性函数，带入 Softmax 函数可以得到：</p>
+<p><font size = 5>$\begin{aligned}p(y &#x3D; i|x;\theta) &amp;&#x3D; \phi_i \\ &amp;&#x3D;\frac{e^{\eta_i}}{\sum\limits_{j &#x3D; 1}^ke^{\eta_j}} \\&amp;&#x3D;\frac{e^{\theta_i^Tx}}{\sum\limits_{j &#x3D; 1}^ke^{\theta_j^Tx}}\end{aligned}$</font></p>
+<p>这个模型被应用到 y &#x3D; {1, 2, …, k}就称作<strong>Softmax 回归</strong>，是逻辑回归的推广。最终可以得到它的假设函数 $h_{\theta}(x)$：</p>
+<p><font size = 5>$ h*{\theta}(x) &#x3D; \left{ \begin{aligned} &amp;\frac{e^{\theta_1^Tx}}{\sum\limits*{j &#x3D; 1}^ke^{\theta<em>j^Tx}} , y &#x3D; 1\ &amp;\frac{e^{\theta_2^Tx}}{\sum\limits</em>{j &#x3D; 1}^ke^{\theta<em>j^Tx}} , y &#x3D; 2\ &amp;…\&amp;\frac{e^{\theta_k^Tx}}{\sum\limits</em>{j &#x3D; 1}^ke^{\theta_j^Tx}}, y &#x3D; k \end{aligned} \right.$</font></p>
+<p>举例说明：</p>
+<p><img src="/../img/post/LogisticRegression/10-softmax.jpeg" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h3 id="5-3、代码实战"><a href="#5-3、代码实战" class="headerlink" title="5.3、代码实战"></a>5.3、代码实战</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1、数据加载</span></span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2、数据提取</span></span><br><span class="line">X = iris[<span class="string">&#x27;data&#x27;</span>]</span><br><span class="line">y = iris[<span class="string">&#x27;target&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3、数据拆分</span></span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(X,y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4、模型训练，使用multinomial分类器，表示多分类</span></span><br><span class="line">lr = LogisticRegression(multi_class = <span class="string">&#x27;multinomial&#x27;</span>,max_iter=<span class="number">5000</span>)</span><br><span class="line">lr.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5、模型预测</span></span><br><span class="line">y_predict = lr.predict(X_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;测试数据保留类别是：&#x27;</span>,y_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;测试数据算法预测类别是：&#x27;</span>,y_predict)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;测试数据算法预测概率是：\n&#x27;</span>,lr.predict_proba(X_test))</span><br></pre></td></tr></table></figure>
+
+<p><strong>结论：</strong></p>
+<ul>
+<li>通过数据提取，创建三分类问题</li>
+<li>参数 multi_class 设置成 multinomial 表示多分类，使用交叉熵作为损失函数</li>
+<li>类别的划分，通过概率比较大小完成了</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 线性回归方程，3个方程</span></span><br><span class="line">b = lr.intercept_</span><br><span class="line">w = lr.coef_</span><br><span class="line"></span><br><span class="line"><span class="comment"># softmax函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">softmax</span>(<span class="params">z</span>):</span><br><span class="line">    <span class="keyword">return</span> np.exp(z)/np.exp(z).<span class="built_in">sum</span>(axis = <span class="number">1</span>).reshape(-<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算三个方程的概率</span></span><br><span class="line">z = X_test.dot(w.T) + b</span><br><span class="line">p = softmax(z)</span><br><span class="line">p</span><br></pre></td></tr></table></figure>
+
+<p><strong>结论：</strong></p>
+<ul>
+<li>线性方程，对应方程 $z$ ，多分类，此时对应三个方程</li>
+<li>softmax 函数，将线性方程转变为概率</li>
+<li>自己求解概率和直接使用 LogisticRegression 结果一样</li>
+</ul>
+<h2 id="6、逻辑回归与-Softmax-回归对比"><a href="#6、逻辑回归与-Softmax-回归对比" class="headerlink" title="6、逻辑回归与 Softmax 回归对比"></a>6、逻辑回归与 Softmax 回归对比</h2><h3 id="6-1、逻辑回归是-Softmax-回归特例证明"><a href="#6-1、逻辑回归是-Softmax-回归特例证明" class="headerlink" title="6.1、逻辑回归是 Softmax 回归特例证明"></a>6.1、逻辑回归是 Softmax 回归特例证明</h3><p>逻辑回归可以看成是 Softmax 回归的特例，当 k &#x3D; 2 时，softmax 回归退化为逻辑回归，softmax 回归的假设函数为：</p>
+<p><font size = 5>$h_{\theta}(x) &#x3D; \frac{1}{e^{\theta_1^Tx} + e^{\theta_2^Tx}} \Bigg[\begin{aligned}e^{\theta_1^Tx}\e^{\theta_2^Tx} \end{aligned}\Bigg]$</font></p>
+<p>利用 softmax 回归参数冗余的特点，我们令$\psi &#x3D; \theta_1$并且从两个参数向量中都减去向量 $\theta_1$ ，得到:</p>
+<p><font size = 5>$h_{\theta}(x) &#x3D; \frac{1}{e^{\vec{0}^Tx}   + e^{(\theta_2 - \theta_1)^Tx}} \Bigg[\begin{aligned}&amp;e^{\vec{0}^Tx}\&amp;e^{(\theta_2 - \theta_1)^Tx} \end{aligned}\Bigg]$</font></p>
+<p>展开：</p>
+<p><font size = 5>$\frac{e^{\vec{0}^Tx} }{e^{\vec{0}^Tx}   + e^{(\theta_2 - \theta_1)^Tx}}$</font> —&gt; <font size = 5>$\frac{1}{1   + e^{(\theta_2 - \theta_1)^Tx}}$</font></p>
+<p><font size =5>$\frac{ e^{(\theta_2 - \theta_1)^Tx} }{e^{\vec{0}^Tx}   + e^{(\theta_2 - \theta_1)^Tx}}$</font> —&gt; <font size =5>$\frac{ e^{(\theta_2 - \theta_1)^Tx} }{1   + e^{(\theta_2 - \theta_1)^Tx}}$</font></p>
+<p>因此，用$\theta$ 来表示 $\theta_2 - \theta_1$：</p>
+<p><font size = 5>$\frac{1}{1   + e^{\theta^Tx}}$</font></p>
+<p><font size =5>$\frac{ e^{\theta^Tx} }{1   + e^{\theta^Tx}}$</font> —&gt;<font size =5>$\frac{ 1 }{1   + e^{-\theta^Tx}}$</font> （这就是逻辑回归公式）</p>
+<h3 id="6-2、Softmax-损失函数"><a href="#6-2、Softmax-损失函数" class="headerlink" title="6.2、Softmax 损失函数"></a>6.2、Softmax 损失函数</h3><p>求极大似然：</p>
+<p><font size = 5>$L(\theta) &#x3D; \prod\limits_{i &#x3D; 1}^np(y^{(i)}|x^{(i)};\theta) &#x3D; \prod\limits_{i &#x3D; 1}^n\prod\limits_{j &#x3D; 1}^k\phi_j^{I&lt;!–swig￼8–&gt;}$</font></p>
+<p>求对数：</p>
+<p><font size = 5>$\begin{aligned}l(\theta) &amp;&#x3D; \sum\limits_{i &#x3D; 1}^n\log p(y^{(i)}|x^{(i)};\theta) \ \&amp;&#x3D;\sum\limits_{i &#x3D; 1}^n\log\prod\limits_{j &#x3D; 1}^k\phi_j^{I&lt;!–swig￼9–&gt;}\\&amp;&#x3D; \sum\limits_{i &#x3D; 1}^n\log\prod\limits_{j &#x3D; 1}^k(\frac{e^{\theta_j^Tx^{(i)}}}{\sum\limits_{l &#x3D; 1}^ke^{\theta_l^Tx^{(i)}}})^{I&lt;!–swig￼10–&gt;}\end{aligned}$</font></p>
+<p>取反，损失函数是：</p>
+<p><font size = 5>$\begin{aligned}J(\theta) &amp;&#x3D; -\sum\limits*{i &#x3D; 1}^n\log\prod\limits*{j &#x3D; 1}^k(\frac{e^{\theta<em>j^Tx^{(i)}}}{\sum\limits</em>{l &#x3D; 1}^ke^{\theta<em>l^Tx^{(i)}}})^{I&lt;!–swig￼11–&gt;}\\ &amp;&#x3D; \sum\limits</em>{i &#x3D; 1}^n\sum\limits*{j &#x3D; 1}^kI&lt;!–swig￼12–&gt;\log\frac{e^{\theta_j^Tx^{(i)}}}{\sum\limits*{l &#x3D; 1}^ke^{\theta_l^Tx^{(i)}}}\end{aligned} $</font></p>
+<p>上面公式对应着<strong>交叉熵</strong>！</p>
+<p>对比百度百科给出的交叉熵定义公式，H(p,q)称之为交叉熵（p 为真实分布，q 为非真实分布即预测概率）：</p>
+<p><font size =5>$H(p,q) &#x3D; \sum\limits_ip(i)\cdot log(\frac{1}{q(i)})$</font></p>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>本文作者：</strong>
+        Adream
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>本文链接：</strong>
+        <a id="original-link" href="https://www.adream.icu/2021/06/11/LogisticRegression/" title="逻辑回归二分类">https://www.adream.icu/2021/06/11/LogisticRegression/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>版权声明：</strong>
+        本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> 许可协议。
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2021/06/12/DecisionTree-Classification/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/post/DecisionTree-Classification/1-%E5%86%B3%E7%AD%96%E6%A0%91.png">
+                </span>
+                <h6 class="trm-op-title">决策树分类算法原理</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>21/06/12</li>
+                <li>23:20</li>
+                <li>学习记录类</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2021- 2024</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Adream</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v7.1.1
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                主题 - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.1.10
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        目录导航
+				<span id="post-toc-top">
+					置顶
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title="逻辑回归"><a rel="nofollow" class="trm-toc-link" href="#逻辑回归"><span class="trm-toc-text">逻辑回归</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title="1、广义线性回归到逻辑回归"><a rel="nofollow" class="trm-toc-link" href="#1、广义线性回归到逻辑回归"><span class="trm-toc-text">1、广义线性回归到逻辑回归</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1.1、什么是逻辑回归"><a rel="nofollow" class="trm-toc-link" href="#1-1、什么是逻辑回归"><span class="trm-toc-text">1.1、什么是逻辑回归</span></a></li><li class="trm-toc-item trm-toc-level-3" title="1.2、Sigmoid 函数介绍"><a rel="nofollow" class="trm-toc-link" href="#1-2、Sigmoid-函数介绍"><span class="trm-toc-text">1.2、Sigmoid 函数介绍</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="2、逻辑回归公式推导"><a rel="nofollow" class="trm-toc-link" href="#2、逻辑回归公式推导"><span class="trm-toc-text">2、逻辑回归公式推导</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="2.1、损失函数推导"><a rel="nofollow" class="trm-toc-link" href="#2-1、损失函数推导"><span class="trm-toc-text">2.1、损失函数推导</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2.2、立体化呈现"><a rel="nofollow" class="trm-toc-link" href="#2-2、立体化呈现"><span class="trm-toc-text">2.2、立体化呈现</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="3、逻辑回归迭代公式"><a rel="nofollow" class="trm-toc-link" href="#3、逻辑回归迭代公式"><span class="trm-toc-text">3、逻辑回归迭代公式</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="3.1、函数特性"><a rel="nofollow" class="trm-toc-link" href="#3-1、函数特性"><span class="trm-toc-text">3.1、函数特性</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3.2、求导过程"><a rel="nofollow" class="trm-toc-link" href="#3-2、求导过程"><span class="trm-toc-text">3.2、求导过程</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3.3、代码实战"><a rel="nofollow" class="trm-toc-link" href="#3-3、代码实战"><span class="trm-toc-text">3.3、代码实战</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="4、逻辑回归做多分类"><a rel="nofollow" class="trm-toc-link" href="#4、逻辑回归做多分类"><span class="trm-toc-text">4、逻辑回归做多分类</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="4.1、One-Vs-Rest 思想"><a rel="nofollow" class="trm-toc-link" href="#4-1、One-Vs-Rest-思想"><span class="trm-toc-text">4.1、One-Vs-Rest 思想</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4.2、代码实战"><a rel="nofollow" class="trm-toc-link" href="#4-2、代码实战"><span class="trm-toc-text">4.2、代码实战</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="5、多分类 Softmax 回归"><a rel="nofollow" class="trm-toc-link" href="#5、多分类-Softmax-回归"><span class="trm-toc-text">5、多分类 Softmax 回归</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="5.1、多项分布指数分布族形式"><a rel="nofollow" class="trm-toc-link" href="#5-1、多项分布指数分布族形式"><span class="trm-toc-text">5.1、多项分布指数分布族形式</span></a></li><li class="trm-toc-item trm-toc-level-3" title="5.2、广义线性模型推导 Softmax 回归"><a rel="nofollow" class="trm-toc-link" href="#5-2、广义线性模型推导-Softmax-回归"><span class="trm-toc-text">5.2、广义线性模型推导 Softmax 回归</span></a></li><li class="trm-toc-item trm-toc-level-3" title="5.3、代码实战"><a rel="nofollow" class="trm-toc-link" href="#5-3、代码实战"><span class="trm-toc-text">5.3、代码实战</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="6、逻辑回归与 Softmax 回归对比"><a rel="nofollow" class="trm-toc-link" href="#6、逻辑回归与-Softmax-回归对比"><span class="trm-toc-text">6、逻辑回归与 Softmax 回归对比</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="6.1、逻辑回归是 Softmax 回归特例证明"><a rel="nofollow" class="trm-toc-link" href="#6-1、逻辑回归是-Softmax-回归特例证明"><span class="trm-toc-text">6.1、逻辑回归是 Softmax 回归特例证明</span></a></li><li class="trm-toc-item trm-toc-level-3" title="6.2、Softmax 损失函数"><a rel="nofollow" class="trm-toc-link" href="#6-2、Softmax-损失函数"><span class="trm-toc-text">6.2、Softmax 损失函数</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </div>
+
+            <div class="trm-fixed-container"><div class="trm-fixed-btn post-toc-btn" data-title="目录"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-liebiao"></use>
+</svg></div><div class="trm-fixed-btn" id="trm-search-btn" data-title="查询"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-chaxun"></use>
+</svg></div><div class="trm-fixed-btn" data-title="切换主题模式" onclick="asyncFun.switchThemeMode(document.documentElement.classList.contains('dark')?'style-light':'style-dark')"><i class="fas fa-sun"></i></div><div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-yuedu"></use>
+</svg></div><div class="trm-fixed-btn hidden-md" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-arrows-h"></use>
+</svg></div><div class="trm-fixed-btn" id="trm-back-top" data-title="回到顶部"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-backtop"></use>
+</svg></div></div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-chaxun"></use>
+</svg>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-guanbi"></use>
+</svg>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://npm.elemecdn.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.1.10"></script>
+    
+
+    
+        
+<script src="https://npm.elemecdn.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.1.10"></script>
+    
+
+    <!-- 数学公式 -->
+    
+        
+<script src="https://npm.elemecdn.com/katex@latest/dist/katex.min.js" data-swup-reload-script></script>
+
+        
+            
+<script src="https://npm.elemecdn.com/katex@latest/dist/contrib/copy-tex.min.js" data-swup-reload-script></script>
+
+        
+        
+<script src="https://npm.elemecdn.com/katex@latest/dist/contrib/auto-render.min.js" data-swup-reload-script></script>
+
+        <script data-swup-reload-script>
+              window.renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true },
+                ],
+                ...{},
+            })
+        </script>
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.1.10"></script>
+
+</body>
+
+</html>
