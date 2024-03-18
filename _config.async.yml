@@ -5,7 +5,7 @@ user:
   last_name:
   email: 2085127827chen@gmail.com
   domain: https://www.adream.icu
-  # avatar: https://www.imalun.com/images/avatar.jpg?v=1
+  avatar: /img/sun.jpg
   describe: 醒，亦在人间；梦，亦在人间。
   ruleText: <br/>暂不接受个人博客以外的友链申请，确保您的网站内容积极向上，部署HTTPS。
 
@@ -227,3 +227,7 @@ layout:
   post_card: async/post-card
   fixed_btn: async/fixed-btn
   header_search: async/empty
+
+categorie_card:
+  enable: true
+  len: 3

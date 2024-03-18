@@ -58,8 +58,8 @@ comments: false
             与小组成员合作，共同完成了系统原型，并在内部评估中达到了90%的准确率。<br/>
         </div>
         <div class="trm-card trm-active-el">
-            <strong>MindSpore开源社区</strong><br/>
-            MindSpore开源实习生，2023.01-2024.06<br/>
+            <strong>中科院软件研究所</strong><br/>
+            MindSpore算法实习生，2023.01-2023.06<br/>
             开发了一系列计算机视觉领域的应用案例，如图像分类、目标检测和图像分割，以增强MindSpore框架在视觉任务中的应用。<br/>
             开发了基于神经网络的Possion方程求解器，解决了传统数值方法难以处理的复杂方程求解问题，为科研人员提供了新的求解途径。<br/>
             运用MindSpore的高级API和工具，实现了高效的模型训练和推理流程，并实现量化部署。<br/>
@@ -94,6 +94,8 @@ comments: false
                 <li>数维杯国际赛，二等奖，内蒙古创新教育学会，2022</li>
                 <li>创新创业大赛，三等奖，广东省教育部，2023</li>
                 <li>英语，四级，教育部，2023</li>
+                <li>软件设计师，中级，广东省教育部，2023</li>
+                <li>Mindspore开发者，资深，Mindspore开源社区，2023</li>
             </ul>
         </div>
     </div>
