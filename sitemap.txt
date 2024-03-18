@@ -1,8 +1,8 @@
+https://www.adream.icu/2021/06/12/Digitalimageprocessing-Frequencydomainfiltering/
 https://www.adream.icu/2021/06/12/DigitalImageProcessing-WaveletTransform/
 https://www.adream.icu/2021/06/12/Digitalimageprocessing-Spatialfiltering/
 https://www.adream.icu/2021/06/12/DigitalImageProcessing-FeatureExtraction/
 https://www.adream.icu/2021/06/12/DigitalImageProcessing-ImageCompression/
-https://www.adream.icu/2021/06/12/Digitalimageprocessing-Frequencydomainfiltering/
 https://www.adream.icu/about/index.html
 https://www.adream.icu/projects/index.html
 https://www.adream.icu/2021/06/11/LogisticRegression/
