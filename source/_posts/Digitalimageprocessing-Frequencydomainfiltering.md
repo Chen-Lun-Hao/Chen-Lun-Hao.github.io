@@ -40,12 +40,12 @@ cover: [/img/post/Digitalimageprocessing-Frequencydomainfiltering/picture1.png]
 ### 1.1 一维傅里叶变换
 
 - 傅里叶变换中，一般要求要求函数 `f(x)`满足狄力克雷条件（在周期内存在有限个间断点）、有限极值条件、绝对可积条件
-  $( ∫ − ∞ ∞ ∣ f ( x ) ∣ d x < + ∞ \\int^{\\infty}\_{-\\infty}|f(x)|dx<+\\infty ∫−∞∞∣f(x)∣dx<+∞)$
+  ( $\int_{-∞}^{∞}|f(x)|dx<+\infty$ )
   只有满足这 3 个条件，函数的傅里叶变换才是存在的。
 - 一个函数的傅里叶变换可以表示为
-  $F ( u ) = ∫ − ∞ ∞ f ( x ) e − j 2 π u x d x F(u)=\\int\_{-\\infty}^{\\infty}f(x)e^{-j2\\pi ux}dx F(u)\=∫−∞∞f(x)e−j2πuxdx$
+  $F(u)=\int_{-∞}^{0}f(x)e^{-j2 \pi ux}dx$
   其对应的傅里叶逆变换表示为
-  $f ( u ) = ∫ − ∞ ∞ F ( u ) e j 2 π u x d u f(u)=\\int\_{-\\infty}^{\\infty}F(u)e^{j2\\pi ux}du f(u)\=∫−∞∞F(u)ej2πuxdu$
+  $f(u)=\int_{-∞}^{0}F(u)e^{-j2 \pi ux}du$
   其中 j = − 1 , u j=\\sqrt{-1},u j\=−1 ,u 为频率分量
 - 傅里叶变换中基函数的物理意义非常明确，每个基函数都是一个单频率谐波，对应的系数（又称频谱）表明了原函数在此基函数上投影的大小，或者也可以看作是原函数中此种频率谐波成分的比重。
 
