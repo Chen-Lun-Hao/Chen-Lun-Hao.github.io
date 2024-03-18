@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="图像小波变换与多分辨率 小波变换是近年来图像处理中十分受重视的新技术，面向图像压缩、特征检测、纹理分析等提出了很多新方法，如多分辨率分析、时频域分析、金字塔算法等，都属于小波变换的范畴。 信号分析是为了时间和频率之间的相互关系。傅里叶变换提供了有关频域的信息，但有关时间的局部化信息却基本丢失。与傅里叶变换不同，小波变换是通过缩放母小波（Mother Wavelet）的宽度获得信号的频域特征，通过平">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小波变换">
+<meta property="og:url" content="https://www.adream.icu/2021/06/12/DigitalImageProcessing-WaveletTransform/index.html">
+<meta property="og:site_name" content="Adream blog">
+<meta property="og:description" content="图像小波变换与多分辨率 小波变换是近年来图像处理中十分受重视的新技术，面向图像压缩、特征检测、纹理分析等提出了很多新方法，如多分辨率分析、时频域分析、金字塔算法等，都属于小波变换的范畴。 信号分析是为了时间和频率之间的相互关系。傅里叶变换提供了有关频域的信息，但有关时间的局部化信息却基本丢失。与傅里叶变换不同，小波变换是通过缩放母小波（Mother Wavelet）的宽度获得信号的频域特征，通过平">
+<meta property="og:locale">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="article:published_time" content="2021-06-12T15:20:59.000Z">
+<meta property="article:modified_time" content="2024-03-18T01:35:10.364Z">
+<meta property="article:author" content="Adream">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="opencv">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.adream.icu/img/404.jpg">
+
+    <meta name="keywords" content="图像处理,python">
+
+
+<title >小波变换</title>
+
+<!-- Favicon -->
+
+    <link href='/favicon.png?v=2.1.10' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/favicon.png?v=2.1.10' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=2.1.10' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/katex@latest/dist/katex.min.css">
+
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+    
+<script src="//at.alicdn.com/t/c/font_3637590_i4hyyea14ur.js"></script>
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"www.adream.icu","author":"Adream","root":"/","typed_text":["AI Developer"],"theme_version":"2.1.10","theme":{"switch":false,"default":"auto"},"favicon":{"logo":"favicon.svg","icon16":"favicon.png","icon32":"favicon.png","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":true,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"icon-yunhang","email":"icon-email","next":"icon-arrow-right","calendar":"icon-rili","clock":"icon-shijian","user":"icon-yonghu","back_top":"icon-backtop","close":"icon-guanbi","search":"icon-chaxun","reward":"icon-qiandai","user_tag":"icon-yonghu1","toc_tag":"icon-liebiao","read":"icon-yuedu","arrows":"icon-arrows-h","double_arrows":"icon-angle-double-down","copy":"icon-copy"},"icontype":"symbol","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"toc":{"post_title":false},"live_time":{"start_time":"2021/04/10 17:00:00","prefix":"博客已萌萌哒运行 undefined 天"},"covers":["/img/block.jpg","https://th.wallhaven.cc/orig/wq/wqvkl7.jpg","https://th.wallhaven.cc/orig/rd/rdq3v1.jpg","https://th.wallhaven.cc/orig/rd/rd183j.jpg","https://th.wallhaven.cc/orig/q2/q287wd.jpg","https://th.wallhaven.cc/orig/g7/g79ov3.jpg","https://th.wallhaven.cc/orig/q2/q2mkzr.jpg","https://th.wallhaven.cc/orig/v9/v9j3yp.jpg","https://th.wallhaven.cc/orig/y8/y8yvzx.jpg","https://th.wallhaven.cc/orig/1k/1kdw2w.jpg","https://th.wallhaven.cc/orig/57/57jqk1.jpg","https://th.wallhaven.cc/orig/57/5762p1.jpg","https://th.wallhaven.cc/orig/j3/j3zo1y.jpg","https://th.wallhaven.cc/orig/m9/m9gkky.jpg","https://th.wallhaven.cc/orig/e7/e7kv9k.jpg","https://th.wallhaven.cc/orig/ym/ym9ldk.jpg","https://th.wallhaven.cc/orig/pk/pk5259.jpg","https://th.wallhaven.cc/orig/8o/8opxpk.jpg","https://th.wallhaven.cc/orig/k7/k7yog7.jpg","https://th.wallhaven.cc/orig/v9/v93zv3.jpg","https://th.wallhaven.cc/orig/wq/wqj65q.jpg","https://th.wallhaven.cc/orig/p9/p9kg1m.jpg","https://th.wallhaven.cc/orig/8o/8o9vw1.jpg","https://th.wallhaven.cc/orig/x8/x8yy3o.jpg"],"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto","path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-03-18 09:35:10"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="Adream blog" type="application/atom+xml">
+</head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+  <div class="loader">
+    <div class="inner one"></div>
+    <div class="inner two"></div>
+    <div class="inner three"></div>
+  </div>
+  <div style="margin-top: 120px; font-weight: bold; font-size: 20px">
+    努力加载中......
+  </div>
+</div>
+
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#far fa-sun"></use>
+</svg></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#far fa-moon"></use>
+</svg></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/favicon.svg">
+    
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/projects/" target="">
+                    项目
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    友链
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner video cover -->
+    <video autoplay="autoplay" loop muted playsinline webkit-playinginline class="trm-banner-cover">
+        <source src="//cdn.moji.com/websrc/video/autumn20190924.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        Your browser does not support HTML5 video.
+    </video>
+    <!-- banner video cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            小波变换
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2021
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/sun.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Adream
+    </h5>
+    
+        <div class="trm-label">
+            I`m
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/chne-lun-hao" title="Github" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-github"></use>
+</svg>
+        </a>
+    
+        <a href="https://gitee.com/lunhao2023" title="Gitee" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-gitee"></use>
+</svg>
+        </a>
+    
+        <a href="/atom.xml" title="RSS" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-rss"></use>
+</svg>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                居住地:
+            </div>
+            <div class="trm-label trm-label-light">
+                广州
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                城市:
+            </div>
+            <div class="trm-label trm-label-light">
+                广州
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                年龄:
+            </div>
+            <div class="trm-label trm-label-light">
+                21
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:2085127827chen@gmail.com" class="trm-btn">
+            联系我
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-email"></use>
+</svg>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-rili"></use>
+</svg><br>
+            06/12
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-shijian"></use>
+</svg><br>
+            23:20
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-yonghu"></use>
+</svg><br>
+            Adream
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="图像小波变换与多分辨率"><a href="#图像小波变换与多分辨率" class="headerlink" title="图像小波变换与多分辨率"></a>图像小波变换与多分辨率</h1><ul>
+<li>小波变换是近年来图像处理中十分受重视的新技术，面向图像压缩、特征检测、纹理分析等提出了很多新方法，如多分辨率分析、时频域分析、金字塔算法等，都属于小波变换的范畴。</li>
+<li>信号分析是为了时间和频率之间的相互关系。傅里叶变换提供了有关频域的信息，但有关时间的局部化信息却基本丢失。与傅里叶变换不同，小波变换是通过缩放母小波（Mother Wavelet）的宽度获得信号的频域特征，通过平移母小波获得信号的时间信息。对母小波的缩放和平移是为了计算小波系数，这些小波系数反映了小波和局部信号之间的相关程度。</li>
+<li>像傅里叶分析一样，小波分析就是把一个信号分解为将母小波经过缩放和平移之后的一系列小波，因此小波是小波变换的基函数。小波变换可以理解为用经过缩放和平移的一系列小波函数，代替傅里叶变换的正弦波和余弦波进行傅里叶变换的结果。</li>
+<li>小波变换中的 <code>小</code>是指在时域具有紧支集或近似紧支集，<code>波</code>是指具有正负交替的波动性，直流分量为 0。小波本质上是定义在有限间隔而且其平均值为 0 的一种函数。</li>
+<li>与傅里叶变换相比，小波变换是空间（时间）和频率的局部变换，通过伸缩平移运算，对信号逐步进行多尺度细化，最终达到高频处时间细分，低频处频率细分，能自动适应时频信号分析的要求，从而可聚焦到信号的任意细节。</li>
+<li>小波变换是基于具有变化的频率和有限持续时间的小型波进行的。</li>
+</ul>
+<h2 id="1-从傅里叶变换到小波变换"><a href="#1-从傅里叶变换到小波变换" class="headerlink" title="1 从傅里叶变换到小波变换"></a>1 从傅里叶变换到小波变换</h2><h3 id="1-1-小波"><a href="#1-1-小波" class="headerlink" title="1.1 小波"></a>1.1 小波</h3><h4 id="小波的概念"><a href="#小波的概念" class="headerlink" title="小波的概念"></a>小波的概念</h4><ul>
+<li>小波是在有限时间范围内变化且其平均值为 0 的数学函数。具有两个特点。（1）具有有限的持续时间和突变的频率和振幅。（2）在有限的时间范围内，它的平均值为 0</li>
+<li>小波变换的结果为各种小波系数，这些系数由尺度和位移函数组成。</li>
+</ul>
+<h4 id="小波变换"><a href="#小波变换" class="headerlink" title="小波变换"></a>小波变换</h4><ul>
+<li>通过小波对一个信号在空间和时间上进行局部化的一种数学变换，通过平移母小波，捕获到信号信息。通过缩放母小波的宽度捕获到信号的频域特性。对母小波的平移和缩放操作是为计算小波分量的系数，这些系数代表局部信号和小波之间的相互关系，这些参数反映了信号的时间属性和频率属性。</li>
+</ul>
+<h3 id="1-2-感性认识小波变换"><a href="#1-2-感性认识小波变换" class="headerlink" title="1.2 感性认识小波变换"></a>1.2 感性认识小波变换</h3><ul>
+<li>傅里叶变换一直是信号处理领域应用最广泛、效果最好的一种分析手段，是时域到频域互相转化的工具。从物理意义上，傅里叶变换的实质是把对原函数的研究转化为对其傅里叶变换的研究。但是，傅里叶变换只能提供信号在整个时域上的频率，不能提供信号在某个局部时间段上的频率信息。</li>
+<li>傅里叶变换：在时域的常量函数，在频域将表现为冲击函数，表明具有很好的频域局部化性质。<br><img src="/../img/post/DigitalImageProcessing-WaveletTransform/picture1.png" alt="在这里插入图片描述" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> scipy.fftpack <span class="keyword">import</span> fft</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">t = np.linspace(<span class="number">0</span>, <span class="number">1</span>, <span class="number">400</span>, endpoint=<span class="literal">False</span>)</span><br><span class="line">cond = [t &lt; <span class="number">0.25</span>, (t &gt;= <span class="number">0.25</span>) &amp; (t &lt; <span class="number">0.5</span>), t &gt;= <span class="number">0.5</span>]</span><br><span class="line">f1 = <span class="keyword">lambda</span> t: np.cos(<span class="number">2</span> * np.pi * <span class="number">10</span> * t)</span><br><span class="line">f2 = <span class="keyword">lambda</span> t: np.cos(<span class="number">2</span> * np.pi * <span class="number">50</span> * t)</span><br><span class="line">f3 = <span class="keyword">lambda</span> t: np.cos(<span class="number">2</span> * np.pi * <span class="number">100</span> * t)</span><br><span class="line">y1 = np.piecewise(t, cond, [f1, f2, f3])</span><br><span class="line">y2 = np.piecewise(t, cond, [f2, f1, f3])</span><br><span class="line">Y1 = <span class="built_in">abs</span>(fft(y1))</span><br><span class="line">Y2 = <span class="built_in">abs</span>(fft(y2))</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>, <span class="number">9</span>))</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.plot(t, y1)</span><br><span class="line">plt.title(<span class="string">&#x27;信号1 时间域&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;时间/s&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.plot(<span class="built_in">range</span>(<span class="number">400</span>), Y1)</span><br><span class="line">plt.title(<span class="string">&#x27;信号1 频率域&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;频率/Hz&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.plot(t, y2)</span><br><span class="line">plt.title(<span class="string">&#x27;信号2 时间域&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;时间/s&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.plot(<span class="built_in">range</span>(<span class="number">400</span>), Y2)</span><br><span class="line">plt.title(<span class="string">&#x27;信号2 频率域&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;频率/Hz&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>从时域上看，相差很大的两个信号，在频域上却非常相近。一个很自然的方法是加窗（短时距傅里叶变换），将长时间信号分成数个较短的等长信号，然后再分别对每个窗进行傅里叶变换，从而得到频率随时间的变化，这就是短时距傅里叶变换<br><img src="/../img/post/DigitalImageProcessing-WaveletTransform/picture2.png" alt="在这里插入图片描述" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>小波变换可以解决这个问题。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pywt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">t = np.linspace(<span class="number">0</span>, <span class="number">1</span>, <span class="number">400</span>, endpoint=<span class="literal">False</span>)</span><br><span class="line">cond = [t &lt; <span class="number">0.25</span>, (t &gt;= <span class="number">0.25</span>) &amp; (t &lt; <span class="number">0.5</span>), t &gt;= <span class="number">0.5</span>]</span><br><span class="line"></span><br><span class="line">f1 = <span class="keyword">lambda</span> t: np.cos(<span class="number">2</span> * np.pi * <span class="number">10</span> * t)</span><br><span class="line">f2 = <span class="keyword">lambda</span> t: np.cos(<span class="number">2</span> * np.pi * <span class="number">50</span> * t)</span><br><span class="line">f3 = <span class="keyword">lambda</span> t: np.cos(<span class="number">2</span> * np.pi * <span class="number">100</span> * t)</span><br><span class="line"></span><br><span class="line">y1 = np.piecewise(t, cond, [f1, f2, f3])</span><br><span class="line">y2 = np.piecewise(t, cond, [f2, f1, f3])</span><br><span class="line"></span><br><span class="line">cwtmatr1, freqs1 = pywt.cwt(y1, np.arange(<span class="number">1</span>, <span class="number">200</span>), <span class="string">&#x27;cgau8&#x27;</span>, <span class="number">1</span> / <span class="number">400</span>)</span><br><span class="line">cwtmatr2, freqs2 = pywt.cwt(y2, np.arange(<span class="number">1</span>, <span class="number">200</span>), <span class="string">&#x27;cgau8&#x27;</span>, <span class="number">1</span> / <span class="number">400</span>)</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>, <span class="number">9</span>))</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.plot(t, y1)</span><br><span class="line">plt.title(<span class="string">&#x27;信号1 时间域&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;时间/s&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.contourf(t, freqs1, <span class="built_in">abs</span>(cwtmatr1))</span><br><span class="line">plt.title(<span class="string">&#x27;信号1 时间频率关系&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;时间/s&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;频率/Hz&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.plot(t, y2)</span><br><span class="line">plt.title(<span class="string">&#x27;信号2 时间域&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;时间/s&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.contourf(t, freqs2, <span class="built_in">abs</span>(cwtmatr2))</span><br><span class="line">plt.title(<span class="string">&#x27;信号2 时间频率关系&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;时间/s&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;频率/Hz&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>图中不仅可以看到信号中有哪些频率，还可以看到不同的频率成分在什么时间出现。傅里叶变换类似棱镜，可以将不同的信号分解。小波变换类似于显微镜，不仅知道信号中有哪些成分，还可以知道各种成分在什么位置出现。<br><img src="/../img/post/DigitalImageProcessing-WaveletTransform/picture3.png" alt="在这里插入图片描述" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>经典的傅里叶变换把信号按正弦、余弦展开，将任意函数表示为具有不同频率的谐波函数的线性叠加，能较好的刻画信号的频率特性。但在时空域上无任何分辨，不能做局部分析。</li>
+<li>小波分析优于傅里叶分析之处在于：小波分析在时域和频域同时具有良好的局部化性质，因为小波函数是紧支集，而正弦、余弦的区间是无穷区间，所以小波变换可以对高频成分采用逐渐精细的时域或空域取代步长。，从而可以聚焦到对象的任意细节。</li>
+</ul>
+<h2 id="2-简单小波示例"><a href="#2-简单小波示例" class="headerlink" title="2 简单小波示例"></a>2 简单小波示例</h2><h3 id="2-1-哈尔小波构建"><a href="#2-1-哈尔小波构建" class="headerlink" title="2.1 哈尔小波构建"></a>2.1 哈尔小波构建</h3><ul>
+<li>哈尔基函数可以捕捉到信号的尺度信息，而哈尔小波函数信号的细节信息。哈尔小波变换要做的就是将信号分解到不同的基函数及小波函数上，并求每个函数对应分量的值。</li>
+<li>哈尔小波具有如下特点：<br>（1）哈尔小波在时域是紧支撑的，即其非零区间为[0,1)<br>（2）哈尔小波属于正交小波。<br>（3）哈尔小波是对称的。系统的单位冲击响应若具有对称性，则该系统具有线性相位，这对于去除相位失真是非常有利的，哈尔小波是目前唯一一个具有对称性，又是有限支撑的正交小波。<br>（4）哈尔小波仅取+1 和-1，计算简单。<br>（5）哈尔小波是不连续小波，在实际的信号分析与处理中受到了限制。</li>
+</ul>
+<h2 id="3-图像多分辨率"><a href="#3-图像多分辨率" class="headerlink" title="3 图像多分辨率"></a>3 图像多分辨率</h2><h3 id="3-1-小波多分辨率"><a href="#3-1-小波多分辨率" class="headerlink" title="3.1 小波多分辨率"></a>3.1 小波多分辨率</h3><ul>
+<li>多分辨分析是小波分析中最重要的概念之一，将一个函数表示为一个低频成分与不同分辨率下的高频成分，并且多分辨分析能提供一种构造小波的统一框架，提供函数分解与重构的快速算法。</li>
+<li>单调性。</li>
+<li>伸缩性。</li>
+<li>平移不变性。</li>
+<li>Riesz 基。</li>
+</ul>
+<h3 id="3-2-图像金字塔"><a href="#3-2-图像金字塔" class="headerlink" title="3.2 图像金字塔"></a>3.2 图像金字塔</h3><ul>
+<li>当观察图象时，通常看到是相连接的纹理与灰度级相似的区域，它们相互结合形成物体。如果物体的尺寸较小或者对比度不高，通常采用较高的分辨率观察；如果物体的尺寸很大或者对比度很强，只需要较低的分辨率。</li>
+<li>如果物体的尺寸有大有小，或者对比度有强有弱的情况同时发生，那么，以若干个分辨率对他们进行研究将具有优势。</li>
+<li>以多分辨率解释图像的一种有效但概念简单的结构是图像金字塔，图像金字塔最初用于机器视觉或者图像压缩，将图像表示为一系列分辨率逐渐降低的集合。</li>
+<li>多分辨率分析：将信号或图像用多种分辨率层次表示。在某个分辨率层次上难以检测到的特征，可能很容易在其他分辨率特征上检测出来，每层中包含一个近似图像和一个残差图像，多种分辨率层次联合起来可以称为图像金字塔。<br><img src="/../img/post/DigitalImageProcessing-WaveletTransform/picture4.png" alt="在这里插入图片描述" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h3 id="3-3-图像子带编码"><a href="#3-3-图像子带编码" class="headerlink" title="3.3 图像子带编码"></a>3.3 图像子带编码</h3><ul>
+<li>在子带编码中，一幅图像被分解成一系列频带受限的分量，称为子带。子带可以重组在一起，无失真的重建原始图像。每个子带通过对输入图像进行带通滤波而得到。</li>
+</ul>
+<h2 id="4-图像小波变换"><a href="#4-图像小波变换" class="headerlink" title="4 图像小波变换"></a>4 图像小波变换</h2><h3 id="4-1-二维小波变换基础"><a href="#4-1-二维小波变换基础" class="headerlink" title="4.1 二维小波变换基础"></a>4.1 二维小波变换基础</h3><ul>
+<li>通过小波变换得到 N 个小波系数，而二维离散小波变换输入的是二维矩阵，每个步骤输出的是近似图像，水平细节，垂直细节和对角细节</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pywt.data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">original = pywt.data.camera()</span><br><span class="line"><span class="comment"># Wavelet transform of image, and plot approximation and details</span></span><br><span class="line">titles = [<span class="string">&#x27;近似图像&#x27;</span>, <span class="string">&#x27;水平细节&#x27;</span>, <span class="string">&#x27;垂直细节&#x27;</span>, <span class="string">&#x27;对角线细节&#x27;</span>]</span><br><span class="line">coeffs2 = pywt.dwt2(original, <span class="string">&#x27;haar&#x27;</span>)</span><br><span class="line">LL, (LH, HL, HH) = coeffs2</span><br><span class="line">fig = plt.figure(figsize=(<span class="number">12</span>, <span class="number">3</span>))</span><br><span class="line"><span class="keyword">for</span> i, a <span class="keyword">in</span> <span class="built_in">enumerate</span>([LL, LH, HL, HH]):</span><br><span class="line">    ax = fig.add_subplot(<span class="number">1</span>, <span class="number">4</span>, i + <span class="number">1</span>)</span><br><span class="line">    ax.imshow(a, interpolation=<span class="string">&quot;nearest&quot;</span>, cmap=plt.cm.gray)</span><br><span class="line">    ax.set_title(titles[i], fontsize=<span class="number">10</span>)</span><br><span class="line">    ax.set_xticks([])</span><br><span class="line">    ax.set_yticks([])</span><br><span class="line">fig.tight_layout()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>基于哈尔小波对图像进行二维小波变换结果<br><img src="/../img/post/DigitalImageProcessing-WaveletTransform/picture5.png" alt="在这里插入图片描述" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h3 id="4-2-小波变换在图像处理中的应用"><a href="#4-2-小波变换在图像处理中的应用" class="headerlink" title="4.2 小波变换在图像处理中的应用"></a>4.2 小波变换在图像处理中的应用</h3><ul>
+<li>小波变换在图像处理中的应用与傅里叶变换类似，基本方法是：（1）计算一幅图像的二维小波变换，并得到小波系数（2）对小波系数进行修改，保留有效成分，过滤不必要成分（3）使用修改后的小波系数进行图像重建</li>
+<li>基于小波变换的图像去噪步骤<br>（1）图像小波变换。选择一个小波，计算噪声图像的小波系数。<br>（2）对细节系数通过阈值进行过滤。选择一个细节系数阈值，并对所有细节系数进行阈值化操作。<br>（3）基于阈值化过滤后的细节系数及原始近似系数，使用小波变换对图像进行重建。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pywt</span><br><span class="line"><span class="keyword">from</span> skimage.restoration <span class="keyword">import</span> denoise_wavelet</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">x = pywt.data.ecg().astype(<span class="built_in">float</span>) / <span class="number">256</span></span><br><span class="line"></span><br><span class="line">sigma = <span class="number">.05</span></span><br><span class="line">x_noisy = x + sigma * np.random.randn(x.size)</span><br><span class="line">x_denoise = denoise_wavelet(x_noisy, sigma=sigma, wavelet=<span class="string">&#x27;sym4&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">311</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;原始信号&#x27;</span>)</span><br><span class="line">plt.plot(x)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">312</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;加噪图像&#x27;</span>)</span><br><span class="line">plt.plot(x_noisy)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">313</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;去噪图像&#x27;</span>)</span><br><span class="line">plt.plot(x_denoise)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>小波对一维信号去噪<br><img src="/../img/post/DigitalImageProcessing-WaveletTransform/picture6.png" alt="在这里插入图片描述" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> skimage.restoration <span class="keyword">import</span> (denoise_wavelet, estimate_sigma)</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, img_as_float</span><br><span class="line"><span class="keyword">from</span> skimage.util <span class="keyword">import</span> random_noise</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">original = img_as_float(data.coffee())</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line">plt.imshow(original)</span><br><span class="line"></span><br><span class="line">sigma = <span class="number">0.2</span></span><br><span class="line">noisy = random_noise(original, var=sigma ** <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;加噪图像&#x27;</span>)</span><br><span class="line">plt.imshow(noisy)</span><br><span class="line"></span><br><span class="line">im_haar = denoise_wavelet(noisy, wavelet=<span class="string">&#x27;db2&#x27;</span>,</span><br><span class="line">                          channel_axis=-<span class="number">1</span>, convert2ycbcr=<span class="literal">True</span>)</span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;使用haar去噪后&#x27;</span>)</span><br><span class="line">plt.imshow(im_haar)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 不同颜色通道的噪声平均标准差</span></span><br><span class="line">sigma_est = estimate_sigma(noisy, channel_axis=-<span class="number">1</span>, average_sigmas=<span class="literal">True</span>)</span><br><span class="line">im_haar_sigma = denoise_wavelet(</span><br><span class="line">    noisy, wavelet=<span class="string">&#x27;db2&#x27;</span>, channel_axis=-<span class="number">1</span>, convert2ycbcr=<span class="literal">True</span>, sigma=sigma_est)</span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;使用haar with sigma去噪后&#x27;</span>)</span><br><span class="line">plt.imshow(im_haar_sigma)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>二维小波图像去噪<br><img src="/../img/post/DigitalImageProcessing-WaveletTransform/picture7.png" alt="在这里插入图片描述" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>本文作者：</strong>
+        Adream
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>本文链接：</strong>
+        <a id="original-link" href="https://www.adream.icu/2021/06/12/DigitalImageProcessing-WaveletTransform/" title="小波变换">https://www.adream.icu/2021/06/12/DigitalImageProcessing-WaveletTransform/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>版权声明：</strong>
+        本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> 许可协议。
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2021/06/12/DigitalImageProcessing-ImageCompression/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/post/DigitalImageProcessing-ImageCompression/picture1.png">
+                </span>
+                <h6 class="trm-op-title">图像压缩</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>21/06/12</li>
+                <li>23:20</li>
+                <li>学习记录类</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2021/06/11/LogisticRegression/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/post/LogisticRegression/1-S%E5%9E%8B%E6%9B%B2%E7%BA%BF.png">
+                </span>
+                <h6 class="trm-op-title">逻辑回归二分类</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>21/06/11</li>
+                <li>12:20</li>
+                <li>学习记录类</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2021- 2024</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Adream</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v7.1.1
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                主题 - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.1.10
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        目录导航
+				<span id="post-toc-top">
+					置顶
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title="图像小波变换与多分辨率"><a rel="nofollow" class="trm-toc-link" href="#图像小波变换与多分辨率"><span class="trm-toc-text">图像小波变换与多分辨率</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title="1 从傅里叶变换到小波变换"><a rel="nofollow" class="trm-toc-link" href="#1-从傅里叶变换到小波变换"><span class="trm-toc-text">1 从傅里叶变换到小波变换</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1.1 小波"><a rel="nofollow" class="trm-toc-link" href="#1-1-小波"><span class="trm-toc-text">1.1 小波</span></a></li><li class="trm-toc-item trm-toc-level-3" title="1.2 感性认识小波变换"><a rel="nofollow" class="trm-toc-link" href="#1-2-感性认识小波变换"><span class="trm-toc-text">1.2 感性认识小波变换</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="2 简单小波示例"><a rel="nofollow" class="trm-toc-link" href="#2-简单小波示例"><span class="trm-toc-text">2 简单小波示例</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="2.1 哈尔小波构建"><a rel="nofollow" class="trm-toc-link" href="#2-1-哈尔小波构建"><span class="trm-toc-text">2.1 哈尔小波构建</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="3 图像多分辨率"><a rel="nofollow" class="trm-toc-link" href="#3-图像多分辨率"><span class="trm-toc-text">3 图像多分辨率</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="3.1 小波多分辨率"><a rel="nofollow" class="trm-toc-link" href="#3-1-小波多分辨率"><span class="trm-toc-text">3.1 小波多分辨率</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3.2 图像金字塔"><a rel="nofollow" class="trm-toc-link" href="#3-2-图像金字塔"><span class="trm-toc-text">3.2 图像金字塔</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3.3 图像子带编码"><a rel="nofollow" class="trm-toc-link" href="#3-3-图像子带编码"><span class="trm-toc-text">3.3 图像子带编码</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="4 图像小波变换"><a rel="nofollow" class="trm-toc-link" href="#4-图像小波变换"><span class="trm-toc-text">4 图像小波变换</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="4.1 二维小波变换基础"><a rel="nofollow" class="trm-toc-link" href="#4-1-二维小波变换基础"><span class="trm-toc-text">4.1 二维小波变换基础</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4.2 小波变换在图像处理中的应用"><a rel="nofollow" class="trm-toc-link" href="#4-2-小波变换在图像处理中的应用"><span class="trm-toc-text">4.2 小波变换在图像处理中的应用</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </div>
+
+            <div class="trm-fixed-container"><div class="trm-fixed-btn post-toc-btn" data-title="目录"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-liebiao"></use>
+</svg></div><div class="trm-fixed-btn" id="trm-search-btn" data-title="查询"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-chaxun"></use>
+</svg></div><div class="trm-fixed-btn" data-title="切换主题模式" onclick="asyncFun.switchThemeMode(document.documentElement.classList.contains('dark')?'style-light':'style-dark')"><i class="fas fa-sun"></i></div><div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-yuedu"></use>
+</svg></div><div class="trm-fixed-btn hidden-md" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-arrows-h"></use>
+</svg></div><div class="trm-fixed-btn" id="trm-back-top" data-title="回到顶部"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-backtop"></use>
+</svg></div></div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-chaxun"></use>
+</svg>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-guanbi"></use>
+</svg>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://npm.elemecdn.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.1.10"></script>
+    
+
+    
+        
+<script src="https://npm.elemecdn.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.1.10"></script>
+    
+
+    <!-- 数学公式 -->
+    
+        
+<script src="https://npm.elemecdn.com/katex@latest/dist/katex.min.js" data-swup-reload-script></script>
+
+        
+            
+<script src="https://npm.elemecdn.com/katex@latest/dist/contrib/copy-tex.min.js" data-swup-reload-script></script>
+
+        
+        
+<script src="https://npm.elemecdn.com/katex@latest/dist/contrib/auto-render.min.js" data-swup-reload-script></script>
+
+        <script data-swup-reload-script>
+              window.renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true },
+                ],
+                ...{},
+            })
+        </script>
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.1.10"></script>
+
+</body>
+
+</html>

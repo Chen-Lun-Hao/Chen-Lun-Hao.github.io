@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="空间滤波">
+<meta property="og:type" content="article">
+<meta property="og:title" content="空间滤波">
+<meta property="og:url" content="https://www.adream.icu/2021/06/12/Digitalimageprocessing-Spatialfiltering/index.html">
+<meta property="og:site_name" content="Adream blog">
+<meta property="og:description" content="空间滤波">
+<meta property="og:locale">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="article:published_time" content="2021-06-12T15:20:59.000Z">
+<meta property="article:modified_time" content="2024-03-18T01:21:37.133Z">
+<meta property="article:author" content="Adream">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="opencv">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.adream.icu/img/404.jpg">
+
+    <meta name="keywords" content="图像处理,python">
+
+
+<title >空间滤波</title>
+
+<!-- Favicon -->
+
+    <link href='/favicon.png?v=2.1.10' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/favicon.png?v=2.1.10' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=2.1.10' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/katex@latest/dist/katex.min.css">
+
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+    
+<script src="//at.alicdn.com/t/c/font_3637590_i4hyyea14ur.js"></script>
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"www.adream.icu","author":"Adream","root":"/","typed_text":["AI Developer"],"theme_version":"2.1.10","theme":{"switch":false,"default":"auto"},"favicon":{"logo":"favicon.svg","icon16":"favicon.png","icon32":"favicon.png","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":true,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"icon-yunhang","email":"icon-email","next":"icon-arrow-right","calendar":"icon-rili","clock":"icon-shijian","user":"icon-yonghu","back_top":"icon-backtop","close":"icon-guanbi","search":"icon-chaxun","reward":"icon-qiandai","user_tag":"icon-yonghu1","toc_tag":"icon-liebiao","read":"icon-yuedu","arrows":"icon-arrows-h","double_arrows":"icon-angle-double-down","copy":"icon-copy"},"icontype":"symbol","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"toc":{"post_title":false},"live_time":{"start_time":"2021/04/10 17:00:00","prefix":"博客已萌萌哒运行 undefined 天"},"covers":["/img/block.jpg","https://th.wallhaven.cc/orig/wq/wqvkl7.jpg","https://th.wallhaven.cc/orig/rd/rdq3v1.jpg","https://th.wallhaven.cc/orig/rd/rd183j.jpg","https://th.wallhaven.cc/orig/q2/q287wd.jpg","https://th.wallhaven.cc/orig/g7/g79ov3.jpg","https://th.wallhaven.cc/orig/q2/q2mkzr.jpg","https://th.wallhaven.cc/orig/v9/v9j3yp.jpg","https://th.wallhaven.cc/orig/y8/y8yvzx.jpg","https://th.wallhaven.cc/orig/1k/1kdw2w.jpg","https://th.wallhaven.cc/orig/57/57jqk1.jpg","https://th.wallhaven.cc/orig/57/5762p1.jpg","https://th.wallhaven.cc/orig/j3/j3zo1y.jpg","https://th.wallhaven.cc/orig/m9/m9gkky.jpg","https://th.wallhaven.cc/orig/e7/e7kv9k.jpg","https://th.wallhaven.cc/orig/ym/ym9ldk.jpg","https://th.wallhaven.cc/orig/pk/pk5259.jpg","https://th.wallhaven.cc/orig/8o/8opxpk.jpg","https://th.wallhaven.cc/orig/k7/k7yog7.jpg","https://th.wallhaven.cc/orig/v9/v93zv3.jpg","https://th.wallhaven.cc/orig/wq/wqj65q.jpg","https://th.wallhaven.cc/orig/p9/p9kg1m.jpg","https://th.wallhaven.cc/orig/8o/8o9vw1.jpg","https://th.wallhaven.cc/orig/x8/x8yy3o.jpg"],"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto","path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-03-18 09:21:37"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="Adream blog" type="application/atom+xml">
+</head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+  <div class="loader">
+    <div class="inner one"></div>
+    <div class="inner two"></div>
+    <div class="inner three"></div>
+  </div>
+  <div style="margin-top: 120px; font-weight: bold; font-size: 20px">
+    努力加载中......
+  </div>
+</div>
+
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#far fa-sun"></use>
+</svg></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#far fa-moon"></use>
+</svg></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/favicon.svg">
+    
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/projects/" target="">
+                    项目
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    友链
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner video cover -->
+    <video autoplay="autoplay" loop muted playsinline webkit-playinginline class="trm-banner-cover">
+        <source src="//cdn.moji.com/websrc/video/autumn20190924.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        Your browser does not support HTML5 video.
+    </video>
+    <!-- banner video cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            空间滤波
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2021
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/sun.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Adream
+    </h5>
+    
+        <div class="trm-label">
+            I`m
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/chne-lun-hao" title="Github" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-github"></use>
+</svg>
+        </a>
+    
+        <a href="https://gitee.com/lunhao2023" title="Gitee" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-gitee"></use>
+</svg>
+        </a>
+    
+        <a href="/atom.xml" title="RSS" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-rss"></use>
+</svg>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                居住地:
+            </div>
+            <div class="trm-label trm-label-light">
+                广州
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                城市:
+            </div>
+            <div class="trm-label trm-label-light">
+                广州
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                年龄:
+            </div>
+            <div class="trm-label trm-label-light">
+                21
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:2085127827chen@gmail.com" class="trm-btn">
+            联系我
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-email"></use>
+</svg>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-rili"></use>
+</svg><br>
+            06/12
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-shijian"></use>
+</svg><br>
+            23:20
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-yonghu"></use>
+</svg><br>
+            Adream
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="空间滤波"><a href="#空间滤波" class="headerlink" title="空间滤波"></a>空间滤波</h1><span id="more"></span>
+
+<ul>
+<li>空间滤波是在图像平面本身上逐像素的移动空间模板，同时空间模板与其覆盖的图像像素灰度值按预定义的关系进行运算。模板也称空间滤波器、核、掩膜或窗口。</li>
+<li>空间滤波器一般用于去除图像噪声或增强图像细节，突出感兴趣信息，抑制无效信息，改善人类的视觉效果，或是图像更适合于机器感知或分析。</li>
+<li>空间滤波主要分为平滑处理和锐化处理两大类。</li>
+<li>平滑处理主要用于处理图像中一些不重要的细节，并减小噪声。</li>
+<li>锐化处理主要为了突出图像中的细节，增强图像边缘。</li>
+<li>为了达到满意的图像增强效果，通常使用多种互补的滤波技术。</li>
+</ul>
+<h2 id="1-空间滤波基础"><a href="#1-空间滤波基础" class="headerlink" title="1 空间滤波基础"></a>1 空间滤波基础</h2><ul>
+<li>空间域指的是图像平面本身，是相对于变换域而言的。</li>
+<li>空间域的图像处理是图像本身不进行频域变换，以图像中的像素为基础对图像进行处理。</li>
+<li>空间域的图像处理是在像素的领域进行操作，如空间域平滑处理是通过像素的领域平滑图像，空间域锐化处理是通过像素的领域锐化图像。</li>
+<li>频域的图像处理首先将图像变换到变换域，然后在频域进行处理，处理之后将其变换到空间域。</li>
+<li>频域处理主要包括 <code>低通滤波</code>和 <code>高通滤波</code>。</li>
+<li>低通滤波可以使低频信号正常通过，而高于所设定的临界值的高频信号被阻隔或者减弱，可用于去除图像的噪声，相当于空间域的平滑处理。</li>
+<li>高通滤波可以使高频信号正常通过，而低于所设定的临界值的低频信号被阻隔或者减弱，可增强图像边缘轮廓等高频信号，相当于空间域的锐化处理。</li>
+<li>在频域处理中，滤波是指过滤一些频率分量，即通过一些频率分量，同时拒绝一些频率分量的通过。</li>
+<li>频域滤波器主要包括低通滤波器和高通滤波器。</li>
+<li>滤波也可用于空间域即空间域滤波，在空间域上直接对图像进行处理，实现类似频域的平滑或锐化处理。</li>
+</ul>
+<h3 id="1-1-空间滤波的机理"><a href="#1-1-空间滤波的机理" class="headerlink" title="1.1 空间滤波的机理"></a>1.1 空间滤波的机理</h3><ul>
+<li>空间滤波的机理就是在待处理的图像上逐像素的移动模板，在每个像素点，滤波器的响应通过事先定义的计算。</li>
+<li>若滤波器在图像像素上执行的是线性操作，则称为线性滤波器，否则称为非线性滤波器。</li>
+<li>均值滤波器求解的是模板内像素灰度值的平均值，是典型的线性滤波器。</li>
+<li>统计排序滤波器是通过比较给定邻域内的灰度值大小实现的。原始数据与滤波结果是一种逻辑关系，如最大值滤波器，最小值滤波器，中值滤波器都是典型的非线性滤波器。</li>
+<li>3*3 模板的线性空间滤波器的机理<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture1.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<ul>
+<li>矩阵进行线性空间滤波处理的代码如下。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, color, io</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">corre12d</span>(<span class="params">img, window</span>):</span><br><span class="line">    m = window.shape[<span class="number">0</span>]</span><br><span class="line">    n = window.shape[<span class="number">1</span>]</span><br><span class="line">    <span class="comment"># 边界通过0灰度值填充扩展</span></span><br><span class="line">    img_border = np.zeros((img.shape[<span class="number">0</span>] + m - <span class="number">1</span>, img.shape[<span class="number">1</span>] + n - <span class="number">1</span>))</span><br><span class="line">    img_border[(m - <span class="number">1</span>) // <span class="number">2</span>:(img.shape[<span class="number">0</span>] + (m - <span class="number">1</span>) // <span class="number">2</span>), (n - <span class="number">1</span>) // <span class="number">2</span>:(img.shape[<span class="number">1</span>] + (n - <span class="number">1</span>) // <span class="number">2</span>)] = img</span><br><span class="line">    img_result = np.zeros(img.shape)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(img_result.shape[<span class="number">0</span>]):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(img_result.shape[<span class="number">1</span>]):</span><br><span class="line">            temp = img_border[i:i + m, j:j + n]</span><br><span class="line">            img_result[i, j] = np.<span class="built_in">sum</span>(np.multiply(temp, window))</span><br><span class="line">    <span class="keyword">return</span> img_border, img_result</span><br><span class="line"></span><br><span class="line"><span class="comment"># window表示滤波模板，img表示原始矩阵</span></span><br><span class="line">window = np.array([[<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">2</span>]])</span><br><span class="line">img = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">                [<span class="number">3</span>, <span class="number">0</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">                [<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>]])</span><br><span class="line"></span><br><span class="line"><span class="comment"># img_border表示边界填充后的矩阵，img_result表示空间滤波结果</span></span><br><span class="line">img_border, img_result = corre12d(img, window)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>矩阵的线性空间滤波过程<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture2.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h3 id="1-2-空间滤波器模板"><a href="#1-2-空间滤波器模板" class="headerlink" title="1.2 空间滤波器模板"></a>1.2 空间滤波器模板</h3><ul>
+<li><code>m*n</code>的线性滤波器模板有 <code>m*n</code>个模板系数，这些系数决定了线性空间滤波器的功能。假设要实现 3x3 的平滑空间滤波器，较简单的方法是使得滤波器的系数均为 1&#x2F;9。</li>
+<li>模板系数为 1&#x2F;9 的 3x3 线性空间滤波器模板如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[1/9, 1/9, 1/9]</span><br><span class="line">[1/9, 1/9, 1/9]</span><br><span class="line">[1/9, 1/9, 1/9]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>模板系数为 1&#x2F;9 的 5x5 线性空间滤波器模板如下：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[1/25, 1/9, 1/25, 1/9, 1/25]</span><br><span class="line">[1/9, 1/9, 1/9, 1/9, 1/9]</span><br><span class="line">[1/25, 1/9, 1/25, 1/9, 1/25]</span><br><span class="line">[1/9, 1/9, 1/9, 1/9, 1/9]</span><br><span class="line">[1/25, 1/9, 1/25, 1/9, 1/25]</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-平滑处理"><a href="#2-平滑处理" class="headerlink" title="2 平滑处理"></a>2 平滑处理</h2><ul>
+<li>平滑处理常用于模糊处理和降低噪声。</li>
+<li>平滑滤波器使用给定邻域内像素的平均灰度值或逻辑运算值代替原始图像中像素的灰度值，这种处理降低了图像灰度的尖锐变化。</li>
+<li>图像边缘也是由图像灰度尖锐变化带来的特性，因此平滑空间滤波器有边缘模糊化的负面效应。</li>
+</ul>
+<h3 id="2-1-平滑线性空间滤波器"><a href="#2-1-平滑线性空间滤波器" class="headerlink" title="2.1 平滑线性空间滤波器"></a>2.1 平滑线性空间滤波器</h3><ul>
+<li>平滑线性空间滤波器的输出是给定邻域内的像素灰度值的简单平均值或加权平均值。</li>
+<li>平滑线性空间滤波器有时也称均值滤波器，均值滤波器的一个重要应用就是降低图像中的噪声，还有去除图像的不相关细节，使不相关细节与背景糅合在一起，从而使感兴趣目标更加容易检测，此时模板的大小与不相关细节的尺寸有关。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> signal</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, io</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义二维灰度图像的空间滤波函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">correl2d</span>(<span class="params">img, window</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    使用滤波器实现图像的空间相关</span></span><br><span class="line"><span class="string">    mode=&#x27;same&#x27; 表示输出尺寸等于输入尺寸</span></span><br><span class="line"><span class="string">    boundary=‘fill’ 表示滤波前，用常量值填充原始图像的边缘，默认常量值为0</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param img:</span></span><br><span class="line"><span class="string">    :param window:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    s = signal.correlate2d(img, window, mode=<span class="string">&#x27;same&#x27;</span>, boundary=<span class="string">&#x27;fill&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> s.astype(np.uint8)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">img = data.camera()</span><br><span class="line"><span class="comment"># 3*3 盒状滤波模板</span></span><br><span class="line">window1 = np.ones((<span class="number">3</span>, <span class="number">3</span>)) / (<span class="number">3</span> ** <span class="number">2</span>)</span><br><span class="line"><span class="comment"># 5*5 盒状滤波模板</span></span><br><span class="line">window2 = np.ones((<span class="number">5</span>, <span class="number">5</span>)) / (<span class="number">5</span> ** <span class="number">2</span>)</span><br><span class="line"><span class="comment"># 9*9 盒状滤波模板</span></span><br><span class="line">window3 = np.ones((<span class="number">9</span>, <span class="number">9</span>)) / (<span class="number">9</span> ** <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成滤波结果</span></span><br><span class="line">img1 = correl2d(img, window1)</span><br><span class="line">img2 = correl2d(img, window2)</span><br><span class="line">img3 = correl2d(img, window3)</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;3*3&#x27;</span>)</span><br><span class="line">plt.imshow(img1, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;5*5&#x27;</span>)</span><br><span class="line">plt.imshow(img2, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;9*9&#x27;</span>)</span><br><span class="line">plt.imshow(img3, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>盒状滤波结果比原始图像的湖面水波更加平滑，并且远处风景更加模糊，同时摄影师也被模糊了<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture3.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>高斯平滑滤波是一种应用较广泛的平滑空间滤波方法之一</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> signal</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, io</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义二维灰度图像的空间滤波函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">correl2d</span>(<span class="params">img, window</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    使用滤波器实现图像的空间相关</span></span><br><span class="line"><span class="string">    mode=&#x27;same&#x27; 表示输出尺寸等于输入尺寸</span></span><br><span class="line"><span class="string">    boundary=‘fill’ 表示滤波前，用常量值填充原始图像的边缘，默认常量值为0</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param img:</span></span><br><span class="line"><span class="string">    :param window:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    s = signal.correlate2d(img, window, mode=<span class="string">&#x27;same&#x27;</span>, boundary=<span class="string">&#x27;fill&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> s.astype(np.uint8)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义二维高斯函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gauss</span>(<span class="params">i, j, sigma</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> / (<span class="number">2</span> * math.pi * sigma ** <span class="number">2</span>) * math.exp(-(i ** <span class="number">2</span> + j ** <span class="number">2</span>) / (<span class="number">2</span> * sigma ** <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义radius*radius的高斯平滑模板</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gauss_window</span>(<span class="params">radius, sigma</span>):</span><br><span class="line">    window = np.zeros((radius * <span class="number">2</span> + <span class="number">1</span>, radius * <span class="number">2</span> + <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(-radius, radius + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(-radius, radius + <span class="number">1</span>):</span><br><span class="line">            window[i + radius][j + radius] = gauss(i, j, sigma)</span><br><span class="line">    <span class="keyword">return</span> window / np.<span class="built_in">sum</span>(window)</span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">img = data.camera()</span><br><span class="line"><span class="comment"># 3*3 高斯平滑滤波模板</span></span><br><span class="line">window1 = gauss_window(<span class="number">3</span>, <span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5*5 高斯平滑滤波模板</span></span><br><span class="line">window2 = gauss_window(<span class="number">5</span>, <span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 9*9 高斯平滑滤波模板</span></span><br><span class="line">window3 = gauss_window(<span class="number">9</span>, <span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成滤波结果</span></span><br><span class="line">img1 = correl2d(img, window1)</span><br><span class="line">img2 = correl2d(img, window2)</span><br><span class="line">img3 = correl2d(img, window3)</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;3*3&#x27;</span>)</span><br><span class="line">plt.imshow(img1, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;5*5&#x27;</span>)</span><br><span class="line">plt.imshow(img2, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;9*9&#x27;</span>)</span><br><span class="line">plt.imshow(img3, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用相同尺寸的模板，高斯滤波后图像被平滑的程度较低。</li>
+<li>高斯滤波的输出是邻域像素的加权，同时距离中心越近的像素权重越大。</li>
+<li>与盒状滤波相比，高斯滤波的平滑效果更柔和，图像中感兴趣目标的细节保留更好。<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture4.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h3 id="2-2-统计排序滤波器"><a href="#2-2-统计排序滤波器" class="headerlink" title="2.2 统计排序滤波器"></a>2.2 统计排序滤波器</h3><ul>
+<li>统计排序滤波器是典型的非线性平滑滤波器。首先对模板覆盖的灰度值进行排序，选择有代表性的灰度值，作为统计排序滤波器的响应。</li>
+<li>典型的统计排序滤波器包括最大值滤波器、中值滤波器、最小值滤波器。</li>
+<li>最大值滤波器用像素邻域内的最大值代替该像素的灰度值，主要用于寻找亮点。</li>
+<li>中值滤波器用像素邻域内的中值代替该像素的灰度值，主要用于降噪。</li>
+<li>最小值滤波器用像素邻域内的最小值代替该像素的灰度值，主要用于寻找最暗点。</li>
+<li>对于一定类型的随机噪声，中值滤波器的降噪效果较好，比相同尺寸的均值滤波器模糊程度明显要低。</li>
+<li>中值滤波器对处理脉冲噪声非常有效，因为中值滤波器取中值作为滤波结果，可以很好的去除滤波器覆盖的邻域中的一些黑点和白点。</li>
+<li>中值滤波器使图像中突出的亮点或暗点更像周围的值，以消除孤立的亮点或暗点，从而实现对图像的平滑。</li>
+<li>为观察中值滤波的降噪效果，首先对宇航员的图像加入脉冲噪声，然后使用 3*3 中值滤波器对图像进行中值滤波。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> ndimage</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> util, data</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = data.astronaut()[:, :, <span class="number">0</span>]</span><br><span class="line"><span class="comment"># 对图像加入脉冲噪声</span></span><br><span class="line">noise_img = util.random_noise(img, mode=<span class="string">&#x27;s&amp;p&#x27;</span>, seed=<span class="literal">None</span>, clip=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 中值滤波</span></span><br><span class="line">n = <span class="number">3</span></span><br><span class="line">new_img = ndimage.median_filter(noise_img, (n, n))</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)  <span class="comment"># 显示原始图像</span></span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(noise_img, cmap=<span class="string">&#x27;gray&#x27;</span>)  <span class="comment"># 显示加噪图像</span></span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(new_img, cmap=<span class="string">&#x27;gray&#x27;</span>)  <span class="comment"># 显示去噪图像</span></span><br><span class="line"></span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>显示原始图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture5.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>显示加噪图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture6.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>显示去噪图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture7.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>对 RGB 图像的空间滤波，相当于分别对 3 个通道的图像进行空间滤波。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> ndimage</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> util, data</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">img = data.astronaut()</span><br><span class="line"></span><br><span class="line">noise_img = np.zeros(img.shape)</span><br><span class="line">new_img = np.zeros(img.shape)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">    gray_img = img[:, :, i]</span><br><span class="line">    <span class="comment"># 对图像加入脉冲噪声</span></span><br><span class="line">    noise_img[:, :, i] = util.random_noise(gray_img, mode=<span class="string">&#x27;s&amp;p&#x27;</span>, seed=<span class="literal">None</span>, clip=<span class="literal">True</span>)</span><br><span class="line">    <span class="comment"># 中值滤波</span></span><br><span class="line">    n = <span class="number">3</span></span><br><span class="line">    new_img[:, :, i] = ndimage.median_filter(noise_img[:, :, i], (n, n))</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)  <span class="comment"># 显示原始图像</span></span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(noise_img, cmap=<span class="string">&#x27;gray&#x27;</span>)  <span class="comment"># 显示加噪图像</span></span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(new_img, cmap=<span class="string">&#x27;gray&#x27;</span>)  <span class="comment"># 显示去噪图像</span></span><br><span class="line"></span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>原始图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture8.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>加噪图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture9.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>去噪图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture10.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>最大值滤波对于发现图像最亮点非常有效，可有效降低胡椒噪声</li>
+<li>最小值滤波对于发现图像最暗点非常有效，可有效降低盐粒噪声</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> ndimage</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> util, data</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">img = data.astronaut()[:, :, <span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 对图像加入胡椒噪声</span></span><br><span class="line">pepper_img = util.random_noise(img, mode=<span class="string">&#x27;pepper&#x27;</span>, seed=<span class="literal">None</span>, clip=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 对图像加入盐粒噪声</span></span><br><span class="line">salt_img = util.random_noise(img, mode=<span class="string">&#x27;salt&#x27;</span>, seed=<span class="literal">None</span>, clip=<span class="literal">True</span>)</span><br><span class="line">n = <span class="number">3</span></span><br><span class="line"><span class="comment"># 最大值滤波</span></span><br><span class="line">max_img = ndimage.maximum_filter(pepper_img, (n, n))</span><br><span class="line"><span class="comment"># 最小值滤波</span></span><br><span class="line">min_img = ndimage.minimum_filter(salt_img, (n, n))</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)  <span class="comment"># 显示原始图像</span></span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(pepper_img, cmap=<span class="string">&#x27;gray&#x27;</span>)  <span class="comment"># 显示加胡椒噪声图像</span></span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(salt_img, cmap=<span class="string">&#x27;gray&#x27;</span>)  <span class="comment"># 显示加盐粒噪声图像</span></span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(max_img, cmap=<span class="string">&#x27;gray&#x27;</span>)  <span class="comment"># 显示最大值滤波图像</span></span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(min_img, cmap=<span class="string">&#x27;gray&#x27;</span>)  <span class="comment"># 显示最小值滤波图像</span></span><br><span class="line"></span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>显示加胡椒噪声图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture11.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>显示加盐粒噪声图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture12.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>显示最大值滤波图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture13.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>显示最小值滤波图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture14.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h2 id="3-锐化处理"><a href="#3-锐化处理" class="headerlink" title="3 锐化处理"></a>3 锐化处理</h2><ul>
+<li>锐化处理的目的就是增强图像中目标的细节、边缘、轮廓和其他灰度突变，削弱了灰度变化缓慢的区域。</li>
+<li>由于微分是对函数的局部变化率的一种描述，因此图像锐化算法的实现可基于空间微分。</li>
+<li>图像平滑处理有边缘和细节模糊的负面效应。</li>
+<li>图像平滑和图像锐化在逻辑上是相反的操作，可以使用原始图像减去平滑处理后的图像实现锐化处理，称为反锐化掩蔽。</li>
+</ul>
+<h3 id="3-1-一阶微分算子"><a href="#3-1-一阶微分算子" class="headerlink" title="3.1 一阶微分算子"></a>3.1 一阶微分算子</h3><ul>
+<li>对于任何一阶微分的定义都必须满足以下两点：① 在灰度不变的区域，微分值为 0；② 在灰度变化的区域微分值非 0.由于处理的是离散的情况，微分用差分近似。</li>
+<li>根据罗伯特的观点，边缘探测器应具有以下特性：产生的边缘应清晰；背景尽可能减少噪声；边缘强度尽可能接近人类的感知。求罗伯特边缘图像和梯度图像的代码如下。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, filters</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = data.camera()</span><br><span class="line"><span class="comment"># 罗伯特交叉梯度算子</span></span><br><span class="line">img_robert_pos = filters.roberts_pos_diag(img)</span><br><span class="line">img_robert_neg = filters.roberts_neg_diag(img)</span><br><span class="line">img_robert = filters.roberts(img)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示原始图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示罗伯特正对角线边缘图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示罗伯特负对角线边缘图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示罗伯特梯度图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>原始图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture15.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>罗伯特正对角线边缘图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture16.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>罗伯特负对角线边缘图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture17.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>罗伯特梯度图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture18.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>求索贝尔边缘图像和梯度图像的代码如下。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, filters</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = data.camera()</span><br><span class="line"><span class="comment"># Sobel算子</span></span><br><span class="line">img_sobel_h = filters.sobel_h(img)</span><br><span class="line">img_sobel_v = filters.sobel_v(img)</span><br><span class="line">img_sobel = filters.sobel(img)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示原始图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示水平Sobel边缘图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img_sobel_h, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示竖直Sobel边缘图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img_sobel_v, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示Sobel梯度图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img_sobel, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>水平 Sobel 边缘图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture19.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>竖直 Sobel 边缘图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture20.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>Sobel 梯度图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture21.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h3 id="3-2-二阶微分算子"><a href="#3-2-二阶微分算子" class="headerlink" title="3.2 二阶微分算子"></a>3.2 二阶微分算子</h3><ul>
+<li>任意二阶微分的定义都必须满足以下两点：在灰度不变的区域微分值为 0；在灰度台阶或者斜坡的起点处微分值非 0；沿着斜坡的微分值为 0。</li>
+<li>对原始图像使用拉普拉斯算子进行空间滤波可得到拉普拉斯图像，将拉普拉斯图像以一定的比例叠加到该原始图像，该比例系数的符号与拉普拉斯模板中心系数的符号一致，可对原始图像进行拉普拉斯锐化增强，代码如下。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, filters</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">img = data.camera()</span><br><span class="line"><span class="comment"># laplace</span></span><br><span class="line">img_laplace = filters.laplace(img, ksize=<span class="number">3</span>, mask=<span class="literal">None</span>)</span><br><span class="line">img_enhance = img + img_laplace</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示原始图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示拉普拉斯图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img_laplace, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示锐化增强图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img_enhance, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>原始图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture22.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>拉普拉斯图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture23.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>锐化增强图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture24.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>一阶微分更加突出图像的边缘，二阶微分对灰度变化强烈的地方更敏感，更加突出图像的纹理结构。</li>
+</ul>
+<h3 id="3-3-反锐化掩蔽"><a href="#3-3-反锐化掩蔽" class="headerlink" title="3.3 反锐化掩蔽"></a>3.3 反锐化掩蔽</h3><ul>
+<li>图像平滑处理有边缘和细节模糊的负面效应，因此可用原始图像减去平滑处理后的图像实现锐化处理，称为反锐化掩蔽。</li>
+<li>反锐化掩蔽分为 3 个步骤：首先通过平滑滤波得到模糊图像，然后从原始图像中减去差值图像，最后将差值图像叠加到原始图像中。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, filters</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> signal</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">correlate2d</span>(<span class="params">img, window</span>):</span><br><span class="line">    s = signal.correlate2d(img, window, mode=<span class="string">&#x27;same&#x27;</span>, boundary=<span class="string">&#x27;fill&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">img = data.camera()</span><br><span class="line"><span class="comment"># 3*3 盒状滤波模板</span></span><br><span class="line">window = np.ones((<span class="number">3</span>, <span class="number">3</span>)) / (<span class="number">3</span> ** <span class="number">2</span>)</span><br><span class="line">img_blur = correlate2d(img, window)</span><br><span class="line">img_edge = img - img_blur</span><br><span class="line">img_enhance = img + img_edge</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示原始图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示模糊图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img_blur, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示差值图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img_edge, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示锐化增强图像</span></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(img_enhance, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>模糊图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture25.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>差值图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture26.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>锐化增强图像<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture27.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h2 id="4-混合空间增强"><a href="#4-混合空间增强" class="headerlink" title="4 混合空间增强"></a>4 混合空间增强</h2><ul>
+<li>混合空间增强就是利用平滑滤波器、锐化滤波器、灰度拉伸等对图像进行处理，得到更为理想的显示效果。</li>
+<li>由于人体全身骨骼扫描图像的灰度动态范围很窄，并且有很大的噪声内容，因此使用单一的滤波器对其进行增强效果一般。</li>
+<li>首先使用拉普拉斯锐化方法突出图像中的小细节，然后使用索贝尔梯度处理方法突出图像的边缘，并使用平滑的梯度图像用于掩蔽拉普拉斯锐化增强图像，最后使用灰度幂律变换增强图像的灰度动态范围。</li>
+<li>人体全身骨骼扫描图像的混合空间增强流程。<br><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture28.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>具体流程描述如下：第一步，对原始图像进行拉普拉斯锐化，得到拉普拉斯锐化图像；第二步，将原始图像与拉普拉斯锐化图像相加，得到拉普拉斯锐化图像增强；第三步，对原始图像进行索贝尔算子梯度处理，得到索贝尔图像；第四步，使用 5*5 均值滤波器对索贝尔图像进行平滑，得到平滑的索贝尔图像；第五步，将拉普拉斯锐化增强图像与平滑索贝尔图像相乘，得到掩蔽图像；第六步，将原始图像与隐蔽图像相加，得到锐化增强图像；第七步，对锐化增强图像进行灰度幂律变换，得到最终结果。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, filters, io</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 图像空间滤波函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">correlate2d</span>(<span class="params">img, window</span>):</span><br><span class="line">    m = window.shape[<span class="number">0</span>]</span><br><span class="line">    n = window.shape[<span class="number">1</span>]</span><br><span class="line">    <span class="comment"># 边界通过0灰度值填充扩展</span></span><br><span class="line">    img1 = np.zeros((img.shape[<span class="number">0</span>] + m - <span class="number">1</span>, img.shape[<span class="number">1</span>] + n - <span class="number">1</span>))</span><br><span class="line">    img1[(m - <span class="number">1</span>) // <span class="number">2</span>:(img.shape[<span class="number">0</span>] + (m - <span class="number">1</span>) // <span class="number">2</span>), (n - <span class="number">1</span>) // <span class="number">2</span>:(img.shape[<span class="number">1</span>] + (n - <span class="number">1</span>) // <span class="number">2</span>)] = img</span><br><span class="line">    img2 = np.zeros(img.shape)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(img2.shape[<span class="number">0</span>]):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(img2.shape[<span class="number">1</span>]):</span><br><span class="line">            temp = img1[i:i + m, j:j + n]</span><br><span class="line">            img2[i, j] = np.<span class="built_in">sum</span>(np.multiply(temp, window))</span><br><span class="line">    <span class="keyword">return</span> img2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">img = io.imread(<span class="string">&#x27;boneScan.jpg&#x27;</span>, as_gray=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># img_laplace为原始图像经过拉普拉斯变换后的结果</span></span><br><span class="line">window = np.array([[-<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>], [-<span class="number">1</span>, <span class="number">8</span>, -<span class="number">1</span>], [-<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>]])</span><br><span class="line">img_laplace = correlate2d(img, window)</span><br><span class="line">img_laplace = <span class="number">255</span> * (img_laplace - img_laplace.<span class="built_in">min</span>()) / (img_laplace.<span class="built_in">max</span>() - img_laplace.<span class="built_in">min</span>())</span><br><span class="line"><span class="comment"># 将img与img_laplace相加得到锐化增强图像</span></span><br><span class="line">img_laplace_enhance = img + img_laplace</span><br><span class="line"><span class="comment"># img_sobel为原始图像img经sobel处理的结果</span></span><br><span class="line">img_sobel = filters.sobel(img)</span><br><span class="line"><span class="comment"># 使用5*5均值滤波器平滑后的Sobel图像</span></span><br><span class="line">window_mean = np.ones((<span class="number">5</span>, <span class="number">5</span>)) / (<span class="number">5</span> ** <span class="number">2</span>)</span><br><span class="line">img_sobel_mean = correlate2d(img_sobel, window_mean)</span><br><span class="line"><span class="comment"># 将img_laplace_enhance 与 img_sobel_mean相乘得到锐化结果</span></span><br><span class="line">img_mask = img_laplace_enhance * img_sobel_mean</span><br><span class="line"><span class="comment"># 将原图像img与锐化图像img_mask相加得到锐化增强图像</span></span><br><span class="line">img_sharp_enhance = img + img_mask</span><br><span class="line"><span class="comment"># 对img_sharp_enhance进行灰度幂律变换得到最终结果</span></span><br><span class="line">img_enhance = img_sharp_enhance ** <span class="number">0.5</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示图像</span></span><br><span class="line">imgList = [img, img_laplace, img_laplace_enhance, img_sobel, img_sobel_mean, img_mask, img_sharp_enhance, img_enhance]</span><br><span class="line"><span class="keyword">for</span> grayImg <span class="keyword">in</span> imgList:</span><br><span class="line">    plt.figure()</span><br><span class="line">    plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">    plt.imshow(grayImg, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/post/Digitalimageprocessing-Spatialfiltering/picture29.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>本文作者：</strong>
+        Adream
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>本文链接：</strong>
+        <a id="original-link" href="https://www.adream.icu/2021/06/12/Digitalimageprocessing-Spatialfiltering/" title="空间滤波">https://www.adream.icu/2021/06/12/Digitalimageprocessing-Spatialfiltering/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>版权声明：</strong>
+        本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> 许可协议。
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2021/06/12/Digitalimageprocessing-Frequencydomainfiltering/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/post/Digitalimageprocessing-Frequencydomainfiltering/picture1.png">
+                </span>
+                <h6 class="trm-op-title">频率滤波</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>21/06/12</li>
+                <li>23:20</li>
+                <li>学习记录类</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2021/06/12/DigitalImageProcessing-FeatureExtraction/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/post/DigitalImageProcessing-FeatureExtraction/picture1.png">
+                </span>
+                <h6 class="trm-op-title">图像特征提取</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>21/06/12</li>
+                <li>23:20</li>
+                <li>学习记录类</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2021- 2024</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Adream</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v7.1.1
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                主题 - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.1.10
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        目录导航
+				<span id="post-toc-top">
+					置顶
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title="空间滤波"><a rel="nofollow" class="trm-toc-link" href="#空间滤波"><span class="trm-toc-text">空间滤波</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title="1 空间滤波基础"><a rel="nofollow" class="trm-toc-link" href="#1-空间滤波基础"><span class="trm-toc-text">1 空间滤波基础</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1.1 空间滤波的机理"><a rel="nofollow" class="trm-toc-link" href="#1-1-空间滤波的机理"><span class="trm-toc-text">1.1 空间滤波的机理</span></a></li><li class="trm-toc-item trm-toc-level-3" title="1.2 空间滤波器模板"><a rel="nofollow" class="trm-toc-link" href="#1-2-空间滤波器模板"><span class="trm-toc-text">1.2 空间滤波器模板</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="2 平滑处理"><a rel="nofollow" class="trm-toc-link" href="#2-平滑处理"><span class="trm-toc-text">2 平滑处理</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="2.1 平滑线性空间滤波器"><a rel="nofollow" class="trm-toc-link" href="#2-1-平滑线性空间滤波器"><span class="trm-toc-text">2.1 平滑线性空间滤波器</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2.2 统计排序滤波器"><a rel="nofollow" class="trm-toc-link" href="#2-2-统计排序滤波器"><span class="trm-toc-text">2.2 统计排序滤波器</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="3 锐化处理"><a rel="nofollow" class="trm-toc-link" href="#3-锐化处理"><span class="trm-toc-text">3 锐化处理</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="3.1 一阶微分算子"><a rel="nofollow" class="trm-toc-link" href="#3-1-一阶微分算子"><span class="trm-toc-text">3.1 一阶微分算子</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3.2 二阶微分算子"><a rel="nofollow" class="trm-toc-link" href="#3-2-二阶微分算子"><span class="trm-toc-text">3.2 二阶微分算子</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3.3 反锐化掩蔽"><a rel="nofollow" class="trm-toc-link" href="#3-3-反锐化掩蔽"><span class="trm-toc-text">3.3 反锐化掩蔽</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="4 混合空间增强"><a rel="nofollow" class="trm-toc-link" href="#4-混合空间增强"><span class="trm-toc-text">4 混合空间增强</span></a></li></ol></li></ol>
+      </div>
+    </div>
+
+            <div class="trm-fixed-container"><div class="trm-fixed-btn post-toc-btn" data-title="目录"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-liebiao"></use>
+</svg></div><div class="trm-fixed-btn" id="trm-search-btn" data-title="查询"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-chaxun"></use>
+</svg></div><div class="trm-fixed-btn" data-title="切换主题模式" onclick="asyncFun.switchThemeMode(document.documentElement.classList.contains('dark')?'style-light':'style-dark')"><i class="fas fa-sun"></i></div><div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-yuedu"></use>
+</svg></div><div class="trm-fixed-btn hidden-md" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-arrows-h"></use>
+</svg></div><div class="trm-fixed-btn" id="trm-back-top" data-title="回到顶部"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-backtop"></use>
+</svg></div></div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-chaxun"></use>
+</svg>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-guanbi"></use>
+</svg>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://npm.elemecdn.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.1.10"></script>
+    
+
+    
+        
+<script src="https://npm.elemecdn.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.1.10"></script>
+    
+
+    <!-- 数学公式 -->
+    
+        
+<script src="https://npm.elemecdn.com/katex@latest/dist/katex.min.js" data-swup-reload-script></script>
+
+        
+            
+<script src="https://npm.elemecdn.com/katex@latest/dist/contrib/copy-tex.min.js" data-swup-reload-script></script>
+
+        
+        
+<script src="https://npm.elemecdn.com/katex@latest/dist/contrib/auto-render.min.js" data-swup-reload-script></script>
+
+        <script data-swup-reload-script>
+              window.renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true },
+                ],
+                ...{},
+            })
+        </script>
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.1.10"></script>
+
+</body>
+
+</html>

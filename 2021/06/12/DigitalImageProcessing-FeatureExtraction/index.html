@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="图像特征提取">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像特征提取">
+<meta property="og:url" content="https://www.adream.icu/2021/06/12/DigitalImageProcessing-FeatureExtraction/index.html">
+<meta property="og:site_name" content="Adream blog">
+<meta property="og:description" content="图像特征提取">
+<meta property="og:locale">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="article:published_time" content="2021-06-12T15:20:59.000Z">
+<meta property="article:modified_time" content="2024-03-17T15:29:43.279Z">
+<meta property="article:author" content="Adream">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="opencv">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.adream.icu/img/404.jpg">
+
+    <meta name="keywords" content="图像处理,python">
+
+
+<title >图像特征提取</title>
+
+<!-- Favicon -->
+
+    <link href='/favicon.png?v=2.1.10' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/favicon.png?v=2.1.10' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=2.1.10' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/katex@latest/dist/katex.min.css">
+
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+    
+<script src="//at.alicdn.com/t/c/font_3637590_i4hyyea14ur.js"></script>
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"www.adream.icu","author":"Adream","root":"/","typed_text":["AI Developer"],"theme_version":"2.1.10","theme":{"switch":false,"default":"auto"},"favicon":{"logo":"favicon.svg","icon16":"favicon.png","icon32":"favicon.png","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":true,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"icon-yunhang","email":"icon-email","next":"icon-arrow-right","calendar":"icon-rili","clock":"icon-shijian","user":"icon-yonghu","back_top":"icon-backtop","close":"icon-guanbi","search":"icon-chaxun","reward":"icon-qiandai","user_tag":"icon-yonghu1","toc_tag":"icon-liebiao","read":"icon-yuedu","arrows":"icon-arrows-h","double_arrows":"icon-angle-double-down","copy":"icon-copy"},"icontype":"symbol","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"toc":{"post_title":false},"live_time":{"start_time":"2021/04/10 17:00:00","prefix":"博客已萌萌哒运行 undefined 天"},"covers":["/img/block.jpg","https://th.wallhaven.cc/orig/wq/wqvkl7.jpg","https://th.wallhaven.cc/orig/rd/rdq3v1.jpg","https://th.wallhaven.cc/orig/rd/rd183j.jpg","https://th.wallhaven.cc/orig/q2/q287wd.jpg","https://th.wallhaven.cc/orig/g7/g79ov3.jpg","https://th.wallhaven.cc/orig/q2/q2mkzr.jpg","https://th.wallhaven.cc/orig/v9/v9j3yp.jpg","https://th.wallhaven.cc/orig/y8/y8yvzx.jpg","https://th.wallhaven.cc/orig/1k/1kdw2w.jpg","https://th.wallhaven.cc/orig/57/57jqk1.jpg","https://th.wallhaven.cc/orig/57/5762p1.jpg","https://th.wallhaven.cc/orig/j3/j3zo1y.jpg","https://th.wallhaven.cc/orig/m9/m9gkky.jpg","https://th.wallhaven.cc/orig/e7/e7kv9k.jpg","https://th.wallhaven.cc/orig/ym/ym9ldk.jpg","https://th.wallhaven.cc/orig/pk/pk5259.jpg","https://th.wallhaven.cc/orig/8o/8opxpk.jpg","https://th.wallhaven.cc/orig/k7/k7yog7.jpg","https://th.wallhaven.cc/orig/v9/v93zv3.jpg","https://th.wallhaven.cc/orig/wq/wqj65q.jpg","https://th.wallhaven.cc/orig/p9/p9kg1m.jpg","https://th.wallhaven.cc/orig/8o/8o9vw1.jpg","https://th.wallhaven.cc/orig/x8/x8yy3o.jpg"],"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto","path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-03-17 23:29:43"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="Adream blog" type="application/atom+xml">
+</head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+  <div class="loader">
+    <div class="inner one"></div>
+    <div class="inner two"></div>
+    <div class="inner three"></div>
+  </div>
+  <div style="margin-top: 120px; font-weight: bold; font-size: 20px">
+    努力加载中......
+  </div>
+</div>
+
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#far fa-sun"></use>
+</svg></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#far fa-moon"></use>
+</svg></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/favicon.svg">
+    
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/projects/" target="">
+                    项目
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    友链
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner video cover -->
+    <video autoplay="autoplay" loop muted playsinline webkit-playinginline class="trm-banner-cover">
+        <source src="//cdn.moji.com/websrc/video/autumn20190924.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        Your browser does not support HTML5 video.
+    </video>
+    <!-- banner video cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            图像特征提取
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2021
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/sun.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Adream
+    </h5>
+    
+        <div class="trm-label">
+            I`m
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/chne-lun-hao" title="Github" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-github"></use>
+</svg>
+        </a>
+    
+        <a href="https://gitee.com/lunhao2023" title="Gitee" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-gitee"></use>
+</svg>
+        </a>
+    
+        <a href="/atom.xml" title="RSS" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-rss"></use>
+</svg>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                居住地:
+            </div>
+            <div class="trm-label trm-label-light">
+                广州
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                城市:
+            </div>
+            <div class="trm-label trm-label-light">
+                广州
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                年龄:
+            </div>
+            <div class="trm-label trm-label-light">
+                21
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:2085127827chen@gmail.com" class="trm-btn">
+            联系我
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-email"></use>
+</svg>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-rili"></use>
+</svg><br>
+            06/12
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-shijian"></use>
+</svg><br>
+            23:20
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-yonghu"></use>
+</svg><br>
+            Adream
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="图像特征提取"><a href="#图像特征提取" class="headerlink" title="图像特征提取"></a>图像特征提取</h1><span id="more"></span>
+
+<ul>
+<li>图像特征是指可以对图像的内容或特点，进行表征的一系列数学的集合，主要包括图像的自然特征（如亮度、色彩、纹理等）和图像人为特征（如图像频谱、图像直方图等）。</li>
+<li>图像特征提取可以视为广义上的图像变换，即将图像从原始属性空间转化到特征属性空间。</li>
+<li>图像特征提取过程是指对图像包含的信息进行处理和分析，并将其中不易受随机因素干扰的信息，作为图像的特征提取出来，进而实现将图像的原始特征，表示为一组具有明显的物理意义或统计意义的特征。</li>
+<li>图像特征提取之后，通常还会伴随图像特征的选择。图像特征选择过程是去除冗余信息的过程，其具有提高识别精度、减少运算量、提高运算速度等作用。</li>
+<li>良好的图像特征通常具有以下 3 个特征。<br><strong>① 代表性或可区分性</strong>图像特征应能够对该类别的图像进行高效表达。不同类别的对象之间的特征差异越大越好，以满足相应任务的要求。如在区分乒乓球和足球时，纹理特征就是一个不错的特征，因为足球一般有六边形纹理结构，而乒乓球没有。在进行图像分割时，图像中的边缘突变就是一个很好的特征，因为可以明确表示图像的内容发生了改变。<br><strong>② 稳定性</strong>同一类别图像的特征应该具有类似的特征值，以保证类别内图像的相似度大于类别间图像的相似度。如在区分成熟苹果和不成熟苹果时，颜色是一个比较好的特征，因为不成熟的苹果通常呈青色，而成熟的苹果通常呈黄色或者红色，尺寸大小这个特征在区分苹果成熟与否时，不是一个稳定的特征。<br><strong>③ 独立性</strong>图像特征应该彼此独立，尽量减少彼此的关联性，因为图像特征之间的关联性较强，会影响图像内容的较好表达。如苹果的直径和重量就属于关联性较强的两个特征，因为他们都可以反映苹果的大小，因此同时使用大小和重量这两个特征就会显得冗余。</li>
+<li>图像特征提取可以分为底层特征提取和高层语义特征提取。高层语义特征提取通常关注语义层次的特征，如识别任务中的人类识别，图像分类等。底层特征提取通常关注图像的颜色、纹理、形状等一般特征。底层特征提取很少关注图像的语义信息，通过底层特征提取获得的信息一般比较普遍。</li>
+<li>高层语义特征提取通常需要关联语义，如人脸识别中很多语义特征与人脸的部件相关，这能够反映图像中是否存在某类对象。高层语义特征提取以底层特征提取为基础，辅以模式识别等方法，建立语义关联，进而形成语义特征。深度学习的出现为语义特征提取提供了新的思路，实现了底层特征提取和高层语义关联之间的衔接，极大地提升了图像语义分析的效果。</li>
+<li>图像特征提取根据其相对尺度，可分为全局特征提取和局部特征提取。全局特征提取关注图像的整体表征。常见的全局特征包括颜色特征、纹理特征、形状特征、空间位置关系特征等。局部特征提取关注图像的某个局部区域的特殊性质。一幅图像中往往包含若干兴趣区域，从这些区域中可以提取出数量不等的若干个局部特征。和全局特征提取过程相比，局部特征提取过程首先需确定要描述的兴趣区域，然后再对兴趣区域进行特征描述。</li>
+</ul>
+<h2 id="1-图像颜色特征提取"><a href="#1-图像颜色特征提取" class="headerlink" title="1 图像颜色特征提取"></a>1 图像颜色特征提取</h2><ul>
+<li>颜色特征是比较简单但是应用广泛的一种视觉特征。颜色特征往往和图像中包含的对象或场景相关。</li>
+<li>与其他图像特征相比，颜色特征对图像的尺寸、方向、视角变化的依赖性较小，即相对于图像的尺寸、方向、视角变化具有较好的健壮性。颜色特征是一种全局特征，能够描述图像或图像区域对应的景物的表面性质。</li>
+<li>目前主要使用的颜色特征主要包括颜色直方图、颜色矩、颜色集、颜色聚合向量以及颜色相关图。</li>
+</ul>
+<h3 id="1-1-颜色直方图"><a href="#1-1-颜色直方图" class="headerlink" title="1.1 颜色直方图"></a>1.1 颜色直方图</h3><ul>
+<li>颜色直方图用于描述图像中像素颜色的数值分布情况，可以反映图像颜色的统计分布和图像基本色调。颜色直方图仅可表征图像中某一颜色值出现的频数，无法描述图像像素分布的空间位置信息。</li>
+<li>任意一幅图像都能唯一给出一幅与它对应的颜色直方图，但是不同的图像可能有相同的颜色直方图，因此直方图与图像存在一对多的关系。如将图像划分为若干个子区域，所有子区域的颜色直方图之和等于全图的颜色直方图。</li>
+<li>一般情况下，由于图像上的背景和前景物体的颜色分布明显不同，颜色直方图上会出现双峰，但背景和前景物体的颜色较为接近的图像，颜色直方图不具有这一特性。</li>
+</ul>
+<h4 id="一般颜色直方图"><a href="#一般颜色直方图" class="headerlink" title="一般颜色直方图"></a>一般颜色直方图</h4><ul>
+<li>颜色直方图是基本的颜色特征，它反映的是图像中像素颜色值的组成分布，即出现了哪些颜色，以及各种颜色出现的概率。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, exposure</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">img = data.coffee()</span><br><span class="line"><span class="comment"># 计算直方图</span></span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line">plt.imshow(img)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;R通道直方图&#x27;</span>)</span><br><span class="line">plt.hist(img[:, :, <span class="number">0</span>].ravel(), bins=<span class="number">256</span>, color=<span class="string">&#x27;red&#x27;</span>, alpha=<span class="number">0.6</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;G通道直方图&#x27;</span>)</span><br><span class="line">plt.hist(img[:, :, <span class="number">1</span>].ravel(), bins=<span class="number">256</span>, color=<span class="string">&#x27;green&#x27;</span>, alpha=<span class="number">0.6</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;B通道直方图&#x27;</span>)</span><br><span class="line">plt.hist(img[:, :, <span class="number">2</span>].ravel(), bins=<span class="number">256</span>, color=<span class="string">&#x27;blue&#x27;</span>, alpha=<span class="number">0.6</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>彩色图像的一般颜色直方图<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture1.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>一般颜色直方图对图像的旋转、小幅平移、小幅缩放等变换不敏感，对图像质量的变化（如增加噪声也不敏感），所以一般颜色直方图法适用于对难以进行语义分割的图像和无需考虑空间位置的图像进行描述。</li>
+<li>计算机的固有量化机制导致一般颜色直方图法会忽略颜色间的相似性。</li>
+</ul>
+<h4 id="全局累加直方图"><a href="#全局累加直方图" class="headerlink" title="全局累加直方图"></a>全局累加直方图</h4><ul>
+<li>当图像中的颜色值不能取遍所有可能的颜色值时，一般颜色直方图中就会出现一些零值。这些零值的出现会影响相似性的度量，进而使计算出的相似度不能准确反映图像之间的颜色分布差异。</li>
+<li>为了弥补一般颜色直方图的缺陷，再一般颜色直方图的基础上，通过对直方图颜色进行累加，消除零值影响，形成全局累加直方图。</li>
+</ul>
+<h4 id="主色调直方图"><a href="#主色调直方图" class="headerlink" title="主色调直方图"></a>主色调直方图</h4><ul>
+<li>在一幅图像中，不同颜色值出现的概率不尽相同，且通常情况下少数几种颜色就能涵盖整幅图像的主色调。</li>
+<li>基于该思想，主色调直方图会计算出图像中每种颜色出现的频率，选择出现频率最高的几种颜色并将其作为主色调。使用主色调直方图，不会降低颜色直方图匹配的效果，反而会抑制图像非主要成分的噪声，降低噪声对图像匹配的影响。</li>
+</ul>
+<p><strong>颜色直方图的优点和缺点如下。</strong></p>
+<ul>
+<li>优点：计算简单，对图像的平移和旋转变换不敏感，能简单描述图像中颜色的全局分布情况。</li>
+<li>缺点：无法捕捉（即丢失）颜色组成之间的空间位置关系。</li>
+</ul>
+<h3 id="1-2-颜色矩"><a href="#1-2-颜色矩" class="headerlink" title="1.2 颜色矩"></a>1.2 颜色矩</h3><ul>
+<li>矩是非常重要的统计量，用于表征数据分布的特点。在统计中，一阶矩表示数据的均值，二阶矩表示数据分布的方差，三阶矩表示数据分布的偏移度。</li>
+<li>图像的颜色矩用于对图像内颜色分布进行表征，是重要的一种全局图像特征表示。数字图像中颜色分布的统计信息主要集中在低阶矩中。</li>
+<li>图像的颜色矩特征提取时主要瞄准图像颜色矩中的一阶矩、二阶矩、三阶矩，对图像而言，这三种统计特征已经足以表达数字图像的颜色分布。</li>
+<li>相对于颜色直方图特征提取，颜色矩特征提取的优点是无须对颜色特征进提前量化。</li>
+<li>一阶矩可以表征该颜色通道的平均响应强度，二阶矩可以表示该颜色通道的响应方差，三阶矩可以表征该颜色通道数据分布的偏移度。针对彩色图像，图像的颜色矩一共有 9 个分量，每个颜色通道均有 3 个低阶矩。</li>
+<li>颜色矩仅使用少数几个矩容易导致过多错误检出，因而其通常和其他的几个特征配合使用。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, exposure</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> stats</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line"></span><br><span class="line">image = data.coffee()</span><br><span class="line"><span class="comment"># 求RGB图像的颜色矩特征，共9维特征</span></span><br><span class="line"><span class="comment"># 定义3*3数组，分别对RGB图像的三个通道求均值、方差、偏移量</span></span><br><span class="line">features = np.zeros(shape=(<span class="number">3</span>, <span class="number">3</span>))</span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(image.shape[<span class="number">2</span>]):</span><br><span class="line">    mu = np.mean(image[:, :, k])  <span class="comment"># 求均值</span></span><br><span class="line">    delta = np.std(image[:, :, k])  <span class="comment"># 求方差</span></span><br><span class="line">    skew = np.mean(stats.skew(image[:, :, k]))  <span class="comment"># 求偏移量</span></span><br><span class="line">    features[<span class="number">0</span>, k] = mu</span><br><span class="line">    features[<span class="number">1</span>, k] = delta</span><br><span class="line">    features[<span class="number">2</span>, k] = skew</span><br><span class="line"><span class="built_in">print</span>(features)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-颜色集"><a href="#1-3-颜色集" class="headerlink" title="1.3 颜色集"></a>1.3 颜色集</h3><ul>
+<li>颜色集又可以称为颜色索引集，是对颜色直方图的一种近似。</li>
+<li>颜色集方法的步骤是：第一，将图像从 RGB 图像空间转换到 HSV 颜色空间等视觉均衡的颜色空间，并将颜色空间量化为若干个边长均等的小立方体。第二，使用基于颜色的自动分割技术，将图像划分为若干个子区域。第三，使用颜色量化空间中的某个颜色分类索引每个子区域，以将图像表示为一个二进制的颜色索引集。<br>① 像素矢量表示<br>② 颜色空间转换<br>③ 颜色集索引<br>④ 颜色集表示</li>
+</ul>
+<h3 id="1-4-颜色聚合向量"><a href="#1-4-颜色聚合向量" class="headerlink" title="1.4 颜色聚合向量"></a>1.4 颜色聚合向量</h3><ul>
+<li>颜色聚合向量是在颜色直方图上做进一步运算，其核心思想就是将属于颜色直方图的每个颜色量化区间的像素分为两部分，如果该颜色量化区间中的某些像素，占据连续区域的面积大于指定阈值，则将该区域内的像素作为聚合像素，否则作为非聚合像素。</li>
+<li>颜色聚合向量除了包含颜色频率信息外，也包含颜色的部分空间分布信息，因此其可以获得比颜色直方图过更好的效果。颜色聚合向量算法的具体步骤如下。<br><strong>① 量化</strong><br>颜色聚合向量算法的第一步与求普通的颜色直方图类似，即对图像进行量化处理。一般采用均匀量化方法，量化的目标是使图像中只保留有限个颜色空间。<br><strong>② 连通区域划分</strong><br>针对重新量化后的像素矩阵，根据像素间的连通性把图像划分为若干个连通区域。<br><strong>③ 判断聚合性</strong><br>统计每个连通区域中的像素数目，根据设定的阈值判断该区域中的像素的聚合性<br><strong>④ 聚合向量形成</strong></li>
+</ul>
+<h3 id="1-5-颜色相关图"><a href="#1-5-颜色相关图" class="headerlink" title="1.5 颜色相关图"></a>1.5 颜色相关图</h3><ul>
+<li>颜色相关图不仅可以显示像素在图像中的占比，也可以反映不同颜色对间的空间位置的相关性。</li>
+<li>颜色相关图利用颜色对间的相对距离分布来描述空间位置信息。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, exposure</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> stats</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">isValid</span>(<span class="params">X, Y, point</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    判断某个像素是否超出图像空间范围</span></span><br><span class="line"><span class="string">    :param X:</span></span><br><span class="line"><span class="string">    :param Y:</span></span><br><span class="line"><span class="string">    :param point:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> point[<span class="number">0</span>] &lt; <span class="number">0</span> <span class="keyword">or</span> point[<span class="number">0</span>] &gt;= X:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">if</span> point[<span class="number">1</span>] &lt; <span class="number">0</span> <span class="keyword">or</span> point[<span class="number">1</span>] &gt;= Y:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">getNeighbors</span>(<span class="params">X, Y, x, y, dist</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Find pixel neighbors according to various distances</span></span><br><span class="line"><span class="string">    :param X:</span></span><br><span class="line"><span class="string">    :param Y:</span></span><br><span class="line"><span class="string">    :param x:</span></span><br><span class="line"><span class="string">    :param y:</span></span><br><span class="line"><span class="string">    :param dist:</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    cn1 = (x + dist, y + dist)</span><br><span class="line">    cn2 = (x + dist, y)</span><br><span class="line">    cn3 = (x + dist, y - dist)</span><br><span class="line">    cn4 = (x, y - dist)</span><br><span class="line">    cn5 = (x - dist, y - dist)</span><br><span class="line">    cn6 = (x - dist, y)</span><br><span class="line">    cn7 = (x - dist, y + dist)</span><br><span class="line">    cn8 = (x, y + dist)</span><br><span class="line">    points = (cn1, cn2, cn3, cn4, cn5, cn6, cn7, cn8)</span><br><span class="line">    Cn = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> points:</span><br><span class="line">        <span class="keyword">if</span> (isValid(X, Y, i)):</span><br><span class="line">            Cn.append(i)</span><br><span class="line">    <span class="keyword">return</span> Cn</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">corrlogram</span>(<span class="params">image, dist</span>):</span><br><span class="line">    XX, YY, tt = image.shape</span><br><span class="line">    cgram = np.zeros((<span class="number">256</span>, <span class="number">256</span>), dtype=np.<span class="built_in">int</span>)</span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(XX):</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(YY):</span><br><span class="line">            <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(tt):</span><br><span class="line">                color_i = image[x, y, t]</span><br><span class="line">                neighbors_i = getNeighbors(XX, YY, x, y, dist)</span><br><span class="line">                <span class="keyword">for</span> j <span class="keyword">in</span> neighbors_i:</span><br><span class="line">                    j0 = j[<span class="number">0</span>]</span><br><span class="line">                    j1 = j[<span class="number">1</span>]</span><br><span class="line">                    color_j = image[j0, j1, t]</span><br><span class="line">                    cgram[color_i, color_j] = cgram[color_i, color_j] + <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> cgram</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">img = data.coffee()</span><br><span class="line">dist = <span class="number">4</span></span><br><span class="line">cgram = corrlogram(img, dist)</span><br><span class="line">plt.imshow(cgram)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture2.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="2-图像纹理特征提取"><a href="#2-图像纹理特征提取" class="headerlink" title="2 图像纹理特征提取"></a>2 图像纹理特征提取</h2><ul>
+<li>纹理是一种反映图像中同质现象的视觉特征，它体现了物体表面的具有重复性或周期性变化的表面结构组织排列属性。纹理有三大特点：重复性、周期性、同质性。<strong>① 重复性</strong>图像可以看作是某种局部元素在全局区域的不断重复出现。<strong>② 周期性</strong>图像中元素并非随机出现，而是按照一定的周期性重复出现。<strong>③ 同质性</strong>重复出现的元素在结构和尺寸上大致相同。</li>
+<li>纹理是某种局部序列不断重复、非随机排列、在结构和尺寸上大致相同的统一体。<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture3.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>不同于灰度、颜色等图像特征，纹理特征通过像素及其周边空间域像素的灰度分布进行描述，也就是局部纹理信息。局部纹理的反复排布呈现出的重复性，就是所谓的全局纹理信息。</li>
+<li>纹理信息在表现全局特征性质的同时，也体现了图像或图像所在区域对应景物的表面特性。纹理特征只是对物体表面特性进行描述，并不能反映物体的本质属性，即图像高层语义信息。</li>
+<li>纹理特征提取过程是通过一定的图像处理技术抽取出纹理特征，从而获得纹理的定量或定性描述的过程。纹理特征提取的基本过程如下。<strong>① 纹理基元建模</strong>从像素出发，找出纹理基元（即纹理图像中辨识能力比较强的特征），并根据纹理基元的排列信息，建立起纹理基元模型。<strong>② 整体纹理模型构建</strong>利用纹理基元模型对纹理图像进行特征提取，以支持对图像的进一步分割、分类以及辨识，形成图像整体纹理模型。</li>
+<li>常见的纹理特征提取方法可以分为如下 4 类。<br><strong>① 统计分析法</strong><br>统计分析法又称基于统计纹理特征的检测方法，该方法假设纹理图像在空间灰度分布上，存在某种重复性，通过对纹理图像的灰度空间分布进行计算，从而得到纹理特征，主要包括灰度直方图法、灰度共生矩阵法、灰度行程长度法、灰度差分统计、交叉对角矩阵、自相关函数法等。该类方法在木纹、沙地、草地之类的图像分析上很有效。其主要优势是：方法简单，易于实现，典型的代表方法是灰度共生矩阵法，被认为是比较有效的纹理分析方法。<br><strong>② 结构分析法</strong><br>结构分析法认为纹理基元之间存在某种结构规则关系，该类方法首先对图像中的纹理基元进行分离，然后基于纹理基元的特征和空间排列规则对纹理进行表征，主要包括偏心度、面积、方向等特征，其主要目标是通过图像结构特征和排列规则的描述，得到纹理特征的描述，此类算法主要适用于已知纹理基元的情况，对砖墙、纤维等纹理基元和排列规则都比较明显的图像有效。<br><strong>③ 模型分析法</strong><br>模型分析法基于像素及其邻域像素之间的关系建立模型，根据不同模型提取不同特征量，进行参数估计。典型的模型分析法包括自然回归法、马尔可夫条件随机场法以及分形法等。<br><strong>④ 频谱分析法</strong><br>频谱分析法又称为信号处理法和滤波方法。该方法将纹理图像从空间域变换到频域，然后通过计算峰值处的面积、峰值与原点的距离平方、峰值处的相位、两个峰值间的相角差等，获得在空间域不易获得的纹理特征，如周期、功率谱信息等，典型的频谱分析法有二维傅里叶（变换）滤波方法，Gabor（变换）滤波变换和小波方法等。</li>
+</ul>
+<h3 id="2-1-统计纹理分析方法"><a href="#2-1-统计纹理分析方法" class="headerlink" title="2.1 统计纹理分析方法"></a>2.1 统计纹理分析方法</h3><ul>
+<li>统计纹理分析方法是较常用的纹理特征描述分析方法，通过统计图像的空间频率、边界频率以及空间灰度依赖关系等对纹理进行描述。</li>
+<li>细致的纹理有较高的频率，例如，布匹的纹理是非常细致的纹理，其纹理基元较小，出现频率较高。粗糙的纹理结构具有较低的空间频率，如大理石纹理一般较粗糙，具有较大的纹理基元，出现频率较低。</li>
+<li>纹理图像的空间频率可以作为纹理描述的一种方式。边界频率是另外一种基于统计的纹理图像描述方法，边界频率越高，表明纹理越精细。空间灰度依赖关系方法通过描述纹理结构之间的空间依赖关系描述纹理。</li>
+<li>常用的统计纹理分析方法有自相关函数、边界频率、灰度共生矩阵等。统计纹理分析方法并不刻意精确描述纹理的结构。从统计学的角度看，纹理图像是一些复杂的模式，通常通过获得的统计特征集描述这些模式。</li>
+<li>灰度共生矩阵法也称联合概率矩阵法。该方法基于图像中的灰度结构重复出现的概率，对图像纹理特征进行描述。该方法的本质是使用条件概率表征纹理特征，通过对空间上，具有某种位置关系的一对像素成对出现的概率进行统计，得到灰度共生矩阵，然后从灰度共生矩阵中提取有意义的统计特征对纹理进行描述。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> skimage.feature <span class="keyword">import</span> greycomatrix, greycoprops</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">PATCH_SIZE = <span class="number">21</span></span><br><span class="line">image = data.camera()</span><br><span class="line"><span class="comment"># 选择图像中的草地区域</span></span><br><span class="line">grass_locations = [(<span class="number">474</span>, <span class="number">291</span>), (<span class="number">440</span>, <span class="number">433</span>), (<span class="number">466</span>, <span class="number">18</span>), (<span class="number">462</span>, <span class="number">236</span>)]</span><br><span class="line">grass_patches = []</span><br><span class="line"><span class="keyword">for</span> loc <span class="keyword">in</span> grass_locations:</span><br><span class="line">    grass_patches.append(image[loc[<span class="number">0</span>]:loc[<span class="number">0</span>] + PATCH_SIZE, loc[<span class="number">1</span>]:loc[<span class="number">1</span>] + PATCH_SIZE])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 选择图像中的天空区域</span></span><br><span class="line">sky_locations = [(<span class="number">54</span>, <span class="number">48</span>), (<span class="number">21</span>, <span class="number">233</span>), (<span class="number">90</span>, <span class="number">380</span>), (<span class="number">195</span>, <span class="number">330</span>)]</span><br><span class="line">sky_patches = []</span><br><span class="line"><span class="keyword">for</span> loc <span class="keyword">in</span> sky_locations:</span><br><span class="line">    sky_patches.append(image[loc[<span class="number">0</span>]:loc[<span class="number">0</span>] + PATCH_SIZE, loc[<span class="number">1</span>]:loc[<span class="number">1</span>] + PATCH_SIZE])</span><br><span class="line"><span class="comment"># 计算每个块中灰度共生矩阵属性</span></span><br><span class="line">xs = []</span><br><span class="line">ys = []</span><br><span class="line"><span class="keyword">for</span> patch <span class="keyword">in</span> (grass_patches + sky_patches):</span><br><span class="line">    glcm = greycomatrix(patch, [<span class="number">5</span>], [<span class="number">0</span>], <span class="number">256</span>, symmetric=<span class="literal">True</span>, normed=<span class="literal">True</span>)</span><br><span class="line">    xs.append(greycoprops(glcm, <span class="string">&#x27;dissimilarity&#x27;</span>)[<span class="number">0</span>, <span class="number">0</span>])</span><br><span class="line">    ys.append(greycoprops(glcm, <span class="string">&#x27;correlation&#x27;</span>)[<span class="number">0</span>, <span class="number">0</span>])</span><br><span class="line"><span class="comment"># 创建绘图</span></span><br><span class="line">fig = plt.figure(figsize=(<span class="number">8</span>, <span class="number">8</span>))</span><br><span class="line"><span class="comment"># 展现原始图像，以及图像块的位置</span></span><br><span class="line">ax = fig.add_subplot(<span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">ax.imshow(image, cmap=plt.cm.gray, interpolation=<span class="string">&#x27;nearest&#x27;</span>, vmin=<span class="number">0</span>, vmax=<span class="number">255</span>)</span><br><span class="line"><span class="keyword">for</span> (y, x) <span class="keyword">in</span> grass_locations:</span><br><span class="line">    ax.plot(x + PATCH_SIZE / <span class="number">2</span>, y + PATCH_SIZE / <span class="number">2</span>, <span class="string">&#x27;gs&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> (y, x) <span class="keyword">in</span> sky_locations:</span><br><span class="line">    ax.plot(x + PATCH_SIZE / <span class="number">2</span>, y + PATCH_SIZE, <span class="string">&#x27;bs&#x27;</span>)</span><br><span class="line">ax.set_xlabel(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line">ax.set_xticks([])</span><br><span class="line">ax.set_yticks([])</span><br><span class="line">ax.axis(<span class="string">&#x27;image&#x27;</span>)</span><br><span class="line"><span class="comment"># 对于每个块，plot(dissimilarity,correlation)</span></span><br><span class="line">ax = fig.add_subplot(<span class="number">3</span>, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">ax.plot(xs[:<span class="built_in">len</span>(grass_patches)], ys[:<span class="built_in">len</span>(grass_patches)], <span class="string">&#x27;go&#x27;</span>, label=<span class="string">&#x27;Grass&#x27;</span>)</span><br><span class="line">ax.plot(xs[:<span class="built_in">len</span>(sky_patches)], ys[:<span class="built_in">len</span>(sky_patches)], <span class="string">&#x27;bo&#x27;</span>, label=<span class="string">&#x27;Sky&#x27;</span>)</span><br><span class="line">ax.set_xlabel(<span class="string">&#x27;灰度共生矩阵相似性&#x27;</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">&#x27;灰度共生矩阵相关度&#x27;</span>)</span><br><span class="line">ax.legend()</span><br><span class="line"><span class="comment"># 展示图像</span></span><br><span class="line"><span class="keyword">for</span> i, patch <span class="keyword">in</span> <span class="built_in">enumerate</span>(grass_patches):</span><br><span class="line">    ax = fig.add_subplot(<span class="number">3</span>, <span class="built_in">len</span>(grass_patches), <span class="built_in">len</span>(grass_patches) * <span class="number">1</span> + i + <span class="number">1</span>)</span><br><span class="line">    ax.imshow(patch, cmap=plt.cm.gray, interpolation=<span class="string">&#x27;nearest&#x27;</span>, vmin=<span class="number">0</span>, vmax=<span class="number">255</span>)</span><br><span class="line">    ax.set_xlabel(<span class="string">&#x27;Grass %d&#x27;</span> % (i + <span class="number">1</span>))</span><br><span class="line"><span class="keyword">for</span> i, patch <span class="keyword">in</span> <span class="built_in">enumerate</span>(sky_patches):</span><br><span class="line">    ax = fig.add_subplot(<span class="number">3</span>, <span class="built_in">len</span>(sky_patches), <span class="built_in">len</span>(sky_patches) * <span class="number">2</span> + i + <span class="number">1</span>)</span><br><span class="line">    ax.imshow(patch, cmap=plt.cm.gray, interpolation=<span class="string">&#x27;nearest&#x27;</span>, vmin=<span class="number">0</span>, vmax=<span class="number">255</span>)</span><br><span class="line">    ax.set_xlabel(<span class="string">&#x27;Sky %d&#x27;</span> % (i + <span class="number">1</span>))</span><br><span class="line"><span class="comment"># 展示图像块并显示</span></span><br><span class="line">fig.suptitle(<span class="string">&#x27;Grey level co-occurrence matrix features&#x27;</span>, fontsize=<span class="number">14</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>基于灰度共生矩阵的纹理描述方法<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture4.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h3 id="2-2-Laws-纹理能量测量法"><a href="#2-2-Laws-纹理能量测量法" class="headerlink" title="2.2 Laws 纹理能量测量法"></a>2.2 Laws 纹理能量测量法</h3><ul>
+<li>Laws 纹理能量测量法是一种典型的一阶纹理分析方法，在纹理分析领域有一定影响。</li>
+<li>Laws 纹理能力测量的基本思想是创建两个窗口：一个是微窗口，可为 3×3、5×5 或 7×7，常取 5×5 测量以像元为中心的小区域的灰度的不规则性，以形成属性，称为微窗口滤波；另一个是宏窗口，为 15×15 或 32×32，用来在更大的区域上求属性的一阶统计量（常为均值和标准偏差），称为能量变换。</li>
+<li>整个纹理分析过程为：<code>f(x,y)</code>→ 微窗口滤波 →<code>F(x,y)</code>→ 能量转换 →<code>E(x,y)</code>→ 分类</li>
+</ul>
+<h3 id="2-3-Gabor-变换"><a href="#2-3-Gabor-变换" class="headerlink" title="2.3 Gabor 变换"></a>2.3 Gabor 变换</h3><ul>
+<li>大量心理和生理学研究发现，在人类的低级视觉中，输入信号被一系列具有不同频率和方位的线性空间滤波器分解成一组频率和方位通道，Gabor 分解可以很好的描述这一信号分解过程。</li>
+<li>Gabor 变换具有两个重要的特性。一是其良好的空间域与频域局部化性质。二是无论从空间域的起伏特性上，方位选择特性上，空间域与频域选择上，还是从正交相位的关系上，二维 Gabor 基函数具有与大多数哺乳动物的视觉表皮简单细胞的二维感知域模型相似的性质。</li>
+<li>可以借鉴人类处理信号的特性，用包含多个 Gabor 滤波器的滤波器组，对图像进行不同中心频率和方位的滤波处理，从而提取不同频率成分和不同方位的特征，作为目标的非参数化特征，研究其不同分辨率目标的特征与图像分辨率的关系。</li>
+<li>Gabor 滤波器滤波过程<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture5.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h3 id="2-4-局部二值模式"><a href="#2-4-局部二值模式" class="headerlink" title="2.4 局部二值模式"></a>2.4 局部二值模式</h3><ul>
+<li>局部二值模式（Local Binary Pattern，LBP）的基本思想是将中心像素点的灰度值作为阈值，将其邻域内的像素点灰度值与阈值进行比较，从而得到二进制编码用以表述局部纹理特征。</li>
+<li>LBP 表示方法不易受图像整体灰度线性变化的影响，当图像的灰度值发生线性均匀变化时，其 LBP 特征编码是不变的。</li>
+<li>LBP 特征计算简单，表征能力强，在纹理特征描述上具有较好的效果。</li>
+<li>基本 LBP 算子：3&#x2F;*3 的矩形块，有一个中心像素和 8 个邻域像素，分别对应 9 个灰度值。</li>
+<li>特征值：以中心像素的灰度值为阈值，将其邻域的 8 个灰度值与阈值比较，大于中心灰度值的像素用 1 表示，反之用 0 表示。然后顺时针方向读出 8 个二进制值。<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture6.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>经阈值化后的二值矩阵，可以看出一个二值纹理模式，用来刻画邻域内，像素点的灰度相对中心点的变化。</li>
+<li>因为人类视觉系统对纹理的感知与平均灰度（亮度无关），而局部二值模式方法注重像素灰度的变化，符合人类视觉对纹理感知的特点。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> skimage.feature</span><br><span class="line"><span class="keyword">import</span> skimage.segmentation</span><br><span class="line"><span class="keyword">import</span> skimage.data</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">img = skimage.data.coffee()</span><br><span class="line"><span class="keyword">for</span> colour_channel <span class="keyword">in</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>):</span><br><span class="line">    img[:, :, colour_channel] = skimage.feature.local_binary_pattern(img[:, :, colour_channel], <span class="number">8</span>, <span class="number">1.0</span>, method=<span class="string">&#x27;var&#x27;</span>)</span><br><span class="line">plt.imshow(img)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture7.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h2 id="3-图像形状特征提取"><a href="#3-图像形状特征提取" class="headerlink" title="3 图像形状特征提取"></a>3 图像形状特征提取</h2><ul>
+<li>形状和区域特征是图像中的另一类重要特征。不同于颜色、纹理等底层特征，对形状特征的描述必须以对图像中的物体或区域对象的分割为前提。</li>
+<li>形状特征的表示方法可以分为两类：一是基于轮廓特征，典型方法是傅里叶描述符方法。二是基于区域特征，典型方法是形状无关矩法。轮廓特征中只用到物体的边界，而区域特征需要考虑整个形状区域。</li>
+</ul>
+<h3 id="3-1-简单形状特征"><a href="#3-1-简单形状特征" class="headerlink" title="3.1 简单形状特征"></a>3.1 简单形状特征</h3><ul>
+<li>矩形度。反应物体对外接矩形的充满度，用物体的面积与其最小外接矩形的面积之比描述。<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture8.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>球状性。球状性既可以描述二维目标，也可描述三维目标。<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture9.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>圆形性。目标圆形性是指用目标区域 R 的所有边界点定义的特征量。</li>
+</ul>
+<h3 id="3-2-傅里叶描述符"><a href="#3-2-傅里叶描述符" class="headerlink" title="3.2 傅里叶描述符"></a>3.2 傅里叶描述符</h3><ul>
+<li>傅里叶描述符是用于单封闭曲线形状特征描述的常用工具。傅里叶描述符将待描述目标曲线看组一维数值序列，使用傅里叶变换对该序列进行转换，得到描述该曲线的一系列傅里叶系数。</li>
+<li>傅里叶描述符具有计算简单、描述清晰等优点。相较于其他复杂的描述方法，傅里叶描述符更加直观，易于理解。</li>
+<li>傅里叶描述方法一般分为两步：首先，定义轮廓线的表示，把坐标的序列点看作复数，即 <code>s(k)</code>=<code>x(k)</code>+<code>jy(k)</code>，x 轴作为实轴，y 轴作为虚轴，边界的性质不变。这种表示方法的优点是将一个二维边缘描述问题，简化为一个一维序列描述问题。其次，对一维序列 s(k)进行傅里叶变换，并求得其傅里叶系数。</li>
+</ul>
+<h3 id="3-3-形状无关矩"><a href="#3-3-形状无关矩" class="headerlink" title="3.3 形状无关矩"></a>3.3 形状无关矩</h3><ul>
+<li>由于图像区域的某些矩对于平移、旋转、尺度等几何变换具有一些不变的特性，使得矩的表示方法在物体的分类与识别方面具有重要的意义。</li>
+</ul>
+<h2 id="4-图像边缘特征提取"><a href="#4-图像边缘特征提取" class="headerlink" title="4 图像边缘特征提取"></a>4 图像边缘特征提取</h2><ul>
+<li>图像边缘具有方向和幅度两个主要成分。沿边缘方向移动，像素的灰度值变化速率较为平缓，而沿垂直于边缘的方向移动，像素的灰度值变化率较为剧烈。这种剧烈的变化或者呈阶跃状（Step Edge），或呈屋顶状（Proof Edge），分为称为阶跃状边缘和屋顶状边缘。根据边缘的性质，一般用一阶或二阶导数对其进行描述和检测。<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture10.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>图像中的边缘可以通过对他们求导数确定，而导数可利用微分算子计算。对于数字图像处理而言，通常利用差分近似微分。</li>
+<li>图像边缘检测的基本步骤如下。<strong>① 滤波</strong>边缘检测主要基于导数计算，但易受噪声影响，滤波操作的主要目的是降低噪声的干扰，但滤波在降低噪声的同时，也会损失边缘强度。<strong>② 增强</strong>增强算法将局部邻域中灰度值有显著变化的点突出显示，一般可通过计算梯度幅值完成。<strong>③ 检测</strong>有些图像中梯度幅值较大的点并不是边缘点，需要对其进行进一步筛选，最简单的检测方法是设定梯度幅值阈值。<strong>④ 定位</strong>定位即精确确定边缘的位置。</li>
+<li>传统边缘检测的流程。</li>
+</ul>
+<p><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture11.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h3 id="4-1-梯度边缘检测"><a href="#4-1-梯度边缘检测" class="headerlink" title="4.1 梯度边缘检测"></a>4.1 梯度边缘检测</h3><ul>
+<li>梯度的方向（由梯度矢量的幅角表示）是函数 f(x,y)增加最快的方向，定义为 <code>ϕ(x,y)</code>=<code>arctan(Gy/Gx)</code>，从梯度原理出发，已经发展了很多边缘检测算子。</li>
+</ul>
+<h3 id="4-2-一阶边缘检测算子"><a href="#4-2-一阶边缘检测算子" class="headerlink" title="4.2 一阶边缘检测算子"></a>4.2 一阶边缘检测算子</h3><h4 id="罗伯特算子"><a href="#罗伯特算子" class="headerlink" title="罗伯特算子"></a>罗伯特算子</h4><ul>
+<li>罗伯特边缘检测算子，用对角线上相邻像素之差代替梯度寻找边缘。</li>
+<li>罗伯特边缘检测的步骤：<br>（1）用两个模板分别对图像进行运算得到 <code>Rxf</code>和 <code>Ryf</code>，并计算 <code>|G(i,j)|</code>=<code>|Gx|</code>+<code>|Gy|</code>；<br>（2）判断该相加结果是否大于某个阈值。如果满足条件，则将其作为结果图像中对应模板(i,j)位置的像素值；如果不满足条件，则结合结果图像中对应模板 <code>(i,j)</code>位置的像素赋 0 值。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> skimage.data <span class="keyword">import</span> camera</span><br><span class="line"><span class="keyword">from</span> skimage.filters <span class="keyword">import</span> roberts</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">image = camera()</span><br><span class="line">edge_roberts = roberts(image),</span><br><span class="line">fig, ax = plt.subplots(ncols=<span class="number">2</span>, sharex=<span class="literal">True</span>, sharey=<span class="literal">True</span>, figsize=(<span class="number">8</span>, <span class="number">4</span>))</span><br><span class="line">ax[<span class="number">0</span>].imshow(image, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">ax[<span class="number">0</span>].set_title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ax[<span class="number">1</span>].imshow(edge_roberts, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">ax[<span class="number">1</span>].set_title(<span class="string">&#x27;Roberts 边缘检测&#x27;</span>)</span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> ax:</span><br><span class="line">    a.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture12.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h4 id="索贝尔算子"><a href="#索贝尔算子" class="headerlink" title="索贝尔算子"></a>索贝尔算子</h4><ul>
+<li>索贝尔边缘检测的步骤：<br>（1）用两个模板分别对图像进行计算，得出 <code>|G(i,j)|</code>=<code>Gx</code>+<code>Gy</code>；<br>（2）判别该相加结果是否大于或等于某个阈值，如果满足条件，则将其作为结果图像中对应模板 <code>(i,j)</code>位置的像素值；如果不满足条件，则给结果图像中对应模板 <code>(i,j)</code>位置的像素赋 0 值。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> skimage.data <span class="keyword">import</span> camera</span><br><span class="line"><span class="keyword">from</span> skimage.filters <span class="keyword">import</span> sobel, sobel_v, sobel_h</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">image = camera()</span><br><span class="line">edge_sobel = sobel(image)</span><br><span class="line">edge_sobel_v = sobel_v(image)</span><br><span class="line">edge_sobel_h = sobel_h(image)</span><br><span class="line">fig, ax = plt.subplots(ncols=<span class="number">2</span>, nrows=<span class="number">2</span>, sharex=<span class="literal">True</span>, sharey=<span class="literal">True</span>, figsize=(<span class="number">8</span>, <span class="number">4</span>))</span><br><span class="line"></span><br><span class="line">ax[<span class="number">0</span>, <span class="number">0</span>].imshow(image, cmap=plt.cm.gray)</span><br><span class="line">ax[<span class="number">0</span>, <span class="number">0</span>].set_title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ax[<span class="number">0</span>, <span class="number">1</span>].imshow(edge_sobel, cmap=plt.cm.gray)</span><br><span class="line">ax[<span class="number">0</span>, <span class="number">1</span>].set_title(<span class="string">&#x27;Sobel 边缘检测&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ax[<span class="number">1</span>, <span class="number">0</span>].imshow(edge_sobel_v, cmap=plt.cm.gray)</span><br><span class="line">ax[<span class="number">1</span>, <span class="number">0</span>].set_title(<span class="string">&#x27;Sobel 垂直边缘检测&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ax[<span class="number">1</span>, <span class="number">1</span>].imshow(edge_sobel_h, cmap=plt.cm.gray)</span><br><span class="line">ax[<span class="number">1</span>, <span class="number">1</span>].set_title(<span class="string">&#x27;Sobel 水平边缘检测&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> ax:</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> a:</span><br><span class="line">        j.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture13.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>索贝尔边缘检测算子在较好的获得边缘性效果的同时，对噪声具有一定的平滑作用，减少了噪声的敏感性。但索贝尔边缘检测的边缘比较粗，会检测出一些伪边缘，边缘检测精度较低。</li>
+</ul>
+<h4 id="Prewitt-算子"><a href="#Prewitt-算子" class="headerlink" title="Prewitt 算子"></a>Prewitt 算子</h4><ul>
+<li>Prewitt 算子在方向和方向的梯度幅值上的形式，与索贝尔算子的形式完全相同，只是系数均为 1，对应的 3*3 模板为<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture14.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>Prewitt 算子的计算比索贝尔算子更简单，但在噪声抑制方面，索贝尔算子比 Prewitt 算子略胜一筹。</li>
+<li>梯度算子对噪声有一定的敏感性，所以适用于图像边缘灰度值比较尖锐，且图像中噪声比较小的情况</li>
+</ul>
+<h3 id="4-3-二阶边缘检测算子"><a href="#4-3-二阶边缘检测算子" class="headerlink" title="4.3 二阶边缘检测算子"></a>4.3 二阶边缘检测算子</h3><ul>
+<li>在利用一阶导数的边缘检测算子进行边缘检测时，有时会出现因检测到的边缘点过多，而导致边缘线过粗的情况。</li>
+<li>通过去除一阶导数中的非局部最大值，就可以检测出更细的边缘，而一阶导数的局部最大值对应二阶导数的零交叉点。所以，通过找图像的二阶导数的零交叉点，就能找到精确的边缘点。</li>
+</ul>
+<h4 id="拉普拉斯（Laplace）算子"><a href="#拉普拉斯（Laplace）算子" class="headerlink" title="拉普拉斯（Laplace）算子"></a>拉普拉斯（Laplace）算子</h4><ul>
+<li>对阶跃状边缘，其二阶导数在边缘点出现过零交叉，即边缘点两旁的二阶导数取异号，据此可通过二阶导数检测边缘点。</li>
+<li>Laplace 算子的边缘检测</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> skimage.data <span class="keyword">import</span> camera, coffee</span><br><span class="line"><span class="keyword">from</span> skimage.filters <span class="keyword">import</span> laplace</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">image_camera = camera()</span><br><span class="line">edge_laplace_camera = laplace(image_camera)</span><br><span class="line">image_coffee = coffee()</span><br><span class="line">edge_laplace_coffee = laplace(image_coffee)</span><br><span class="line">fig, ax = plt.subplots(ncols=<span class="number">2</span>, nrows=<span class="number">2</span>, sharex=<span class="literal">True</span>, sharey=<span class="literal">True</span>, figsize=(<span class="number">8</span>, <span class="number">6</span>))</span><br><span class="line"></span><br><span class="line">ax[<span class="number">0</span>, <span class="number">0</span>].imshow(image_camera, cmap=plt.cm.gray)</span><br><span class="line">ax[<span class="number">0</span>, <span class="number">0</span>].set_title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ax[<span class="number">0</span>, <span class="number">1</span>].imshow(edge_laplace_camera, cmap=plt.cm.gray)</span><br><span class="line">ax[<span class="number">0</span>, <span class="number">1</span>].set_title(<span class="string">&#x27;Laplace 边缘检测&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ax[<span class="number">1</span>, <span class="number">0</span>].imshow(image_coffee, cmap=plt.cm.gray)</span><br><span class="line">ax[<span class="number">1</span>, <span class="number">0</span>].set_title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ax[<span class="number">1</span>, <span class="number">1</span>].imshow(edge_laplace_coffee, cmap=plt.cm.gray)</span><br><span class="line">ax[<span class="number">1</span>, <span class="number">1</span>].set_title(<span class="string">&#x27;Laplace 边缘检测&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> ax:</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> a:</span><br><span class="line">        j.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>边缘检测算子模板的基本特征是中心位置的系数为正，其余位置的系数为负，且模板的系数之和为 0.</li>
+<li>它的使用方法是用图中的两个点阵之一作为卷积核，与原图像进行卷积运算即可。</li>
+<li>Lapace 检测模板的特点是各向同性，对孤立点及线端的检测效果好，Laplace 算子的缺点是会出现边缘方向信息丢失，对噪声敏感，整体检测效果不如梯度算子，且与索贝尔算子相比，对图像进行处理时，Laplace 算子能使噪声成分得到加强，对噪声更敏感。<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture15.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h4 id="LoG-边缘检测算子"><a href="#LoG-边缘检测算子" class="headerlink" title="LoG 边缘检测算子"></a>LoG 边缘检测算子</h4><ul>
+<li>实际应用中，由于噪声的影响，对噪声敏感的边缘检测点检测算法（如拉普拉斯算子法）可能会把噪声当边缘检测点检测出来，而真正的边缘点会被噪声淹没而未检测出。</li>
+<li>LoG 算子基于 Laplace 算子和 Gauss 算子，也称拉普拉斯-高斯边缘检测算子。</li>
+<li>由于平滑会导致边缘的延展，因此在边缘检测时，仅考虑那些具有局部最大值的点为边缘点。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> skimage.data <span class="keyword">import</span> camera, coffee</span><br><span class="line"><span class="keyword">from</span> skimage.filters <span class="keyword">import</span> laplace, gaussian</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">image = camera()</span><br><span class="line">edge_laplace = laplace(image)</span><br><span class="line">gaussian_image = gaussian(image)</span><br><span class="line">edge_LoG = laplace(gaussian_image)</span><br><span class="line"></span><br><span class="line">fig, ax = plt.subplots(ncols=<span class="number">2</span>, nrows=<span class="number">2</span>, sharex=<span class="literal">True</span>, sharey=<span class="literal">True</span>, figsize=(<span class="number">8</span>, <span class="number">6</span>))</span><br><span class="line"></span><br><span class="line">ax[<span class="number">0</span>, <span class="number">0</span>].imshow(image, cmap=plt.cm.gray)</span><br><span class="line">ax[<span class="number">0</span>, <span class="number">0</span>].set_title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ax[<span class="number">0</span>, <span class="number">1</span>].imshow(edge_laplace, cmap=plt.cm.gray)</span><br><span class="line">ax[<span class="number">0</span>, <span class="number">1</span>].set_title(<span class="string">&#x27;Laplace 边缘检测&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ax[<span class="number">1</span>, <span class="number">0</span>].imshow(gaussian_image, cmap=plt.cm.gray)</span><br><span class="line">ax[<span class="number">1</span>, <span class="number">0</span>].set_title(<span class="string">&#x27;高斯平滑后的图像&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ax[<span class="number">1</span>, <span class="number">1</span>].imshow(edge_LoG, cmap=plt.cm.gray)</span><br><span class="line">ax[<span class="number">1</span>, <span class="number">1</span>].set_title(<span class="string">&#x27;LoG 边缘检测&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> ax:</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> a:</span><br><span class="line">        j.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>基于 LoG 的边缘检测效果<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture16.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h2 id="5-图像点特征提取"><a href="#5-图像点特征提取" class="headerlink" title="5 图像点特征提取"></a>5 图像点特征提取</h2><ul>
+<li>如果图像中一个非常小的区域的灰度值，与其邻域值相比有明显的差异，则称这个非常小的区域为图像点（一般意义上的孤立像素点）<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture17.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>目前对图像点特征提取的技术有多种，其中研究最多、应用最广的是角点检测算法。</li>
+<li>从直观可视的角度出发，两条直线相交的顶点可看作是角点；物体的几个平面的相交处也可以看作角点。从图像特征的角度出发，图像中周围灰度变化较剧烈的点可看作是角点；图像边界上曲率足够高的点也可以看作是角点。</li>
+<li>常见的角点类型。<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture18.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>角点的检测方法有很多种，其检测原理也多种多样，但这些方法概括起来大体可分为 3 类：一是基于模板的角点检测算法；二是基于边缘的角点检测算法；三是基于图像灰度变化的角点检测算法。其中，基于图像灰度变化的角点检测算法应用最广泛。</li>
+<li>SUSAN 角点检测算法选用圆形模板，将位于圆形窗口模板中心等待检测的像素点称为核心点。核心点的邻域被划分为两个区域：亮度值相似于核心点亮度的区域即核值相似区和亮度值不相似于核心点亮度的区域。</li>
+<li>SUSAN 算法通过核值相似区的大小判别图像角点，并实现图像中角点特征的检测和提取。<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture19.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>SUSAN 算子实现代码</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> skimage.data <span class="keyword">import</span> camera</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">susan_mask</span>():</span><br><span class="line">    mask = np.ones((<span class="number">7</span>, <span class="number">7</span>))</span><br><span class="line">    mask[<span class="number">0</span>, <span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">    mask[<span class="number">0</span>, <span class="number">1</span>] = <span class="number">0</span></span><br><span class="line">    mask[<span class="number">0</span>, <span class="number">5</span>] = <span class="number">0</span></span><br><span class="line">    mask[<span class="number">0</span>, <span class="number">6</span>] = <span class="number">0</span></span><br><span class="line">    mask[<span class="number">1</span>, <span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">    mask[<span class="number">1</span>, <span class="number">6</span>] = <span class="number">0</span></span><br><span class="line">    mask[<span class="number">5</span>, <span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">    mask[<span class="number">5</span>, <span class="number">6</span>] = <span class="number">0</span></span><br><span class="line">    mask[<span class="number">6</span>, <span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">    mask[<span class="number">6</span>, <span class="number">1</span>] = <span class="number">0</span></span><br><span class="line">    mask[<span class="number">6</span>, <span class="number">5</span>] = <span class="number">0</span></span><br><span class="line">    mask[<span class="number">6</span>, <span class="number">6</span>] = <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> mask</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">susan_corner_detection</span>(<span class="params">img</span>):</span><br><span class="line">    img = img.astype(np.float64)</span><br><span class="line">    g = <span class="number">37</span> / <span class="number">2</span></span><br><span class="line">    circularMask = susan_mask()</span><br><span class="line">    output = np.zeros(img.shape)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>, img.shape[<span class="number">0</span>] - <span class="number">3</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>, img.shape[<span class="number">1</span>] - <span class="number">3</span>):</span><br><span class="line">            ir = np.array(img[i - <span class="number">3</span>:i + <span class="number">4</span>, j - <span class="number">3</span>:j + <span class="number">4</span>])</span><br><span class="line">            ir = ir[circularMask == <span class="number">1</span>]</span><br><span class="line">            ir0 = img[i, j]</span><br><span class="line">            a = np.<span class="built_in">sum</span>(np.exp(-((ir - ir0) / <span class="number">10</span>) ** <span class="number">6</span>))</span><br><span class="line">            <span class="keyword">if</span> a &lt;= g:</span><br><span class="line">                a = g - a</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                a = <span class="number">0</span></span><br><span class="line">            output[i, j] = a</span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">image = camera()</span><br><span class="line">out = susan_corner_detection(image)</span><br><span class="line">plt.imshow(out, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>基于 SUSAN 算子的角点检测响应图像<br><img src="/../img/post/DigitalImageProcessing-FeatureExtraction/picture20.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>本文作者：</strong>
+        Adream
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>本文链接：</strong>
+        <a id="original-link" href="https://www.adream.icu/2021/06/12/DigitalImageProcessing-FeatureExtraction/" title="图像特征提取">https://www.adream.icu/2021/06/12/DigitalImageProcessing-FeatureExtraction/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>版权声明：</strong>
+        本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> 许可协议。
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2021/06/12/Digitalimageprocessing-Spatialfiltering/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/post/Digitalimageprocessing-Spatialfiltering/picture1.png">
+                </span>
+                <h6 class="trm-op-title">空间滤波</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>21/06/12</li>
+                <li>23:20</li>
+                <li>学习记录类</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2021/06/12/DigitalImageProcessing-ImageCompression/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/post/DigitalImageProcessing-ImageCompression/picture1.png">
+                </span>
+                <h6 class="trm-op-title">图像压缩</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>21/06/12</li>
+                <li>23:20</li>
+                <li>学习记录类</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2021- 2024</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Adream</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v7.1.1
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                主题 - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.1.10
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        目录导航
+				<span id="post-toc-top">
+					置顶
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title="图像特征提取"><a rel="nofollow" class="trm-toc-link" href="#图像特征提取"><span class="trm-toc-text">图像特征提取</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title="1 图像颜色特征提取"><a rel="nofollow" class="trm-toc-link" href="#1-图像颜色特征提取"><span class="trm-toc-text">1 图像颜色特征提取</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1.1 颜色直方图"><a rel="nofollow" class="trm-toc-link" href="#1-1-颜色直方图"><span class="trm-toc-text">1.1 颜色直方图</span></a></li><li class="trm-toc-item trm-toc-level-3" title="1.2 颜色矩"><a rel="nofollow" class="trm-toc-link" href="#1-2-颜色矩"><span class="trm-toc-text">1.2 颜色矩</span></a></li><li class="trm-toc-item trm-toc-level-3" title="1.3 颜色集"><a rel="nofollow" class="trm-toc-link" href="#1-3-颜色集"><span class="trm-toc-text">1.3 颜色集</span></a></li><li class="trm-toc-item trm-toc-level-3" title="1.4 颜色聚合向量"><a rel="nofollow" class="trm-toc-link" href="#1-4-颜色聚合向量"><span class="trm-toc-text">1.4 颜色聚合向量</span></a></li><li class="trm-toc-item trm-toc-level-3" title="1.5 颜色相关图"><a rel="nofollow" class="trm-toc-link" href="#1-5-颜色相关图"><span class="trm-toc-text">1.5 颜色相关图</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="2 图像纹理特征提取"><a rel="nofollow" class="trm-toc-link" href="#2-图像纹理特征提取"><span class="trm-toc-text">2 图像纹理特征提取</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="2.1 统计纹理分析方法"><a rel="nofollow" class="trm-toc-link" href="#2-1-统计纹理分析方法"><span class="trm-toc-text">2.1 统计纹理分析方法</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2.2 Laws 纹理能量测量法"><a rel="nofollow" class="trm-toc-link" href="#2-2-Laws-纹理能量测量法"><span class="trm-toc-text">2.2 Laws 纹理能量测量法</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2.3 Gabor 变换"><a rel="nofollow" class="trm-toc-link" href="#2-3-Gabor-变换"><span class="trm-toc-text">2.3 Gabor 变换</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2.4 局部二值模式"><a rel="nofollow" class="trm-toc-link" href="#2-4-局部二值模式"><span class="trm-toc-text">2.4 局部二值模式</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="3 图像形状特征提取"><a rel="nofollow" class="trm-toc-link" href="#3-图像形状特征提取"><span class="trm-toc-text">3 图像形状特征提取</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="3.1 简单形状特征"><a rel="nofollow" class="trm-toc-link" href="#3-1-简单形状特征"><span class="trm-toc-text">3.1 简单形状特征</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3.2 傅里叶描述符"><a rel="nofollow" class="trm-toc-link" href="#3-2-傅里叶描述符"><span class="trm-toc-text">3.2 傅里叶描述符</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3.3 形状无关矩"><a rel="nofollow" class="trm-toc-link" href="#3-3-形状无关矩"><span class="trm-toc-text">3.3 形状无关矩</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="4 图像边缘特征提取"><a rel="nofollow" class="trm-toc-link" href="#4-图像边缘特征提取"><span class="trm-toc-text">4 图像边缘特征提取</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="4.1 梯度边缘检测"><a rel="nofollow" class="trm-toc-link" href="#4-1-梯度边缘检测"><span class="trm-toc-text">4.1 梯度边缘检测</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4.2 一阶边缘检测算子"><a rel="nofollow" class="trm-toc-link" href="#4-2-一阶边缘检测算子"><span class="trm-toc-text">4.2 一阶边缘检测算子</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4.3 二阶边缘检测算子"><a rel="nofollow" class="trm-toc-link" href="#4-3-二阶边缘检测算子"><span class="trm-toc-text">4.3 二阶边缘检测算子</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="5 图像点特征提取"><a rel="nofollow" class="trm-toc-link" href="#5-图像点特征提取"><span class="trm-toc-text">5 图像点特征提取</span></a></li></ol></li></ol>
+      </div>
+    </div>
+
+            <div class="trm-fixed-container"><div class="trm-fixed-btn post-toc-btn" data-title="目录"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-liebiao"></use>
+</svg></div><div class="trm-fixed-btn" id="trm-search-btn" data-title="查询"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-chaxun"></use>
+</svg></div><div class="trm-fixed-btn" data-title="切换主题模式" onclick="asyncFun.switchThemeMode(document.documentElement.classList.contains('dark')?'style-light':'style-dark')"><i class="fas fa-sun"></i></div><div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-yuedu"></use>
+</svg></div><div class="trm-fixed-btn hidden-md" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-arrows-h"></use>
+</svg></div><div class="trm-fixed-btn" id="trm-back-top" data-title="回到顶部"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-backtop"></use>
+</svg></div></div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-chaxun"></use>
+</svg>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-guanbi"></use>
+</svg>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://npm.elemecdn.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.1.10"></script>
+    
+
+    
+        
+<script src="https://npm.elemecdn.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.1.10"></script>
+    
+
+    <!-- 数学公式 -->
+    
+        
+<script src="https://npm.elemecdn.com/katex@latest/dist/katex.min.js" data-swup-reload-script></script>
+
+        
+            
+<script src="https://npm.elemecdn.com/katex@latest/dist/contrib/copy-tex.min.js" data-swup-reload-script></script>
+
+        
+        
+<script src="https://npm.elemecdn.com/katex@latest/dist/contrib/auto-render.min.js" data-swup-reload-script></script>
+
+        <script data-swup-reload-script>
+              window.renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true },
+                ],
+                ...{},
+            })
+        </script>
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.1.10"></script>
+
+</body>
+
+</html>

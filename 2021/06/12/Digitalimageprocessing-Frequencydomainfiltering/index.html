@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="频域滤波">
+<meta property="og:type" content="article">
+<meta property="og:title" content="频率滤波">
+<meta property="og:url" content="https://www.adream.icu/2021/06/12/Digitalimageprocessing-Frequencydomainfiltering/index.html">
+<meta property="og:site_name" content="Adream blog">
+<meta property="og:description" content="频域滤波">
+<meta property="og:locale">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="og:image" content="https://www.adream.icu/img/404.jpg">
+<meta property="article:published_time" content="2021-06-12T15:20:59.000Z">
+<meta property="article:modified_time" content="2024-03-17T09:35:57.049Z">
+<meta property="article:author" content="Adream">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="opencv">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.adream.icu/img/404.jpg">
+
+    <meta name="keywords" content="图像处理,python">
+
+
+<title >频率滤波</title>
+
+<!-- Favicon -->
+
+    <link href='/favicon.png?v=2.1.10' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/favicon.png?v=2.1.10' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=2.1.10' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+<link rel="stylesheet" href="https://npm.elemecdn.com/katex@latest/dist/katex.min.css">
+
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+    
+<script src="//at.alicdn.com/t/c/font_3637590_i4hyyea14ur.js"></script>
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"www.adream.icu","author":"Adream","root":"/","typed_text":["AI Developer"],"theme_version":"2.1.10","theme":{"switch":false,"default":"auto"},"favicon":{"logo":"favicon.svg","icon16":"favicon.png","icon32":"favicon.png","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":true,"plugin":{"flickr_justified_gallery":"https://npm.elemecdn.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"icon-yunhang","email":"icon-email","next":"icon-arrow-right","calendar":"icon-rili","clock":"icon-shijian","user":"icon-yonghu","back_top":"icon-backtop","close":"icon-guanbi","search":"icon-chaxun","reward":"icon-qiandai","user_tag":"icon-yonghu1","toc_tag":"icon-liebiao","read":"icon-yuedu","arrows":"icon-arrows-h","double_arrows":"icon-angle-double-down","copy":"icon-copy"},"icontype":"symbol","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"toc":{"post_title":false},"live_time":{"start_time":"2021/04/10 17:00:00","prefix":"博客已萌萌哒运行 undefined 天"},"covers":["/img/block.jpg","https://th.wallhaven.cc/orig/wq/wqvkl7.jpg","https://th.wallhaven.cc/orig/rd/rdq3v1.jpg","https://th.wallhaven.cc/orig/rd/rd183j.jpg","https://th.wallhaven.cc/orig/q2/q287wd.jpg","https://th.wallhaven.cc/orig/g7/g79ov3.jpg","https://th.wallhaven.cc/orig/q2/q2mkzr.jpg","https://th.wallhaven.cc/orig/v9/v9j3yp.jpg","https://th.wallhaven.cc/orig/y8/y8yvzx.jpg","https://th.wallhaven.cc/orig/1k/1kdw2w.jpg","https://th.wallhaven.cc/orig/57/57jqk1.jpg","https://th.wallhaven.cc/orig/57/5762p1.jpg","https://th.wallhaven.cc/orig/j3/j3zo1y.jpg","https://th.wallhaven.cc/orig/m9/m9gkky.jpg","https://th.wallhaven.cc/orig/e7/e7kv9k.jpg","https://th.wallhaven.cc/orig/ym/ym9ldk.jpg","https://th.wallhaven.cc/orig/pk/pk5259.jpg","https://th.wallhaven.cc/orig/8o/8opxpk.jpg","https://th.wallhaven.cc/orig/k7/k7yog7.jpg","https://th.wallhaven.cc/orig/v9/v93zv3.jpg","https://th.wallhaven.cc/orig/wq/wqj65q.jpg","https://th.wallhaven.cc/orig/p9/p9kg1m.jpg","https://th.wallhaven.cc/orig/8o/8o9vw1.jpg","https://th.wallhaven.cc/orig/x8/x8yy3o.jpg"],"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto","path":"search.xml"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-03-17 17:35:57"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="Adream blog" type="application/atom+xml">
+</head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+  <div class="loader">
+    <div class="inner one"></div>
+    <div class="inner two"></div>
+    <div class="inner three"></div>
+  </div>
+  <div style="margin-top: 120px; font-weight: bold; font-size: 20px">
+    努力加载中......
+  </div>
+</div>
+
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#far fa-sun"></use>
+</svg></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#far fa-moon"></use>
+</svg></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/favicon.svg">
+    
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/projects/" target="">
+                    项目
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    友链
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/about/" target="">
+                    关于
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner video cover -->
+    <video autoplay="autoplay" loop muted playsinline webkit-playinginline class="trm-banner-cover">
+        <source src="//cdn.moji.com/websrc/video/autumn20190924.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        Your browser does not support HTML5 video.
+    </video>
+    <!-- banner video cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            频率滤波
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2021
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/sun.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Adream
+    </h5>
+    
+        <div class="trm-label">
+            I`m
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/chne-lun-hao" title="Github" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-github"></use>
+</svg>
+        </a>
+    
+        <a href="https://gitee.com/lunhao2023" title="Gitee" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-gitee"></use>
+</svg>
+        </a>
+    
+        <a href="/atom.xml" title="RSS" rel="nofollow" target="_blank">
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-rss"></use>
+</svg>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                居住地:
+            </div>
+            <div class="trm-label trm-label-light">
+                广州
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                城市:
+            </div>
+            <div class="trm-label trm-label-light">
+                广州
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                年龄:
+            </div>
+            <div class="trm-label trm-label-light">
+                21
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:2085127827chen@gmail.com" class="trm-btn">
+            联系我
+            <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-email"></use>
+</svg>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-rili"></use>
+</svg><br>
+            06/12
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-shijian"></use>
+</svg><br>
+            23:20
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <svg class="symbol-icon trm-icon" aria-hidden="true">
+    <use xlink:href="#icon-yonghu"></use>
+</svg><br>
+            Adream
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="频域滤波"><a href="#频域滤波" class="headerlink" title="频域滤波"></a>频域滤波</h1><span id="more"></span>
+
+<ul>
+<li>法国数学家傅里叶在 <code>《热分析理论》</code>中指出：任何周期函数都可以分解为不同频率的正弦或余弦级数的形式，即傅里叶级数。该方法从本质上完成了空间信息到频域信息的变换，通过变换将空间域信号处理问题转换成频域信号处理问题。</li>
+<li>傅里叶变换可以将任何周期函数，分解为不同频率的信号成分。</li>
+<li>频域变换为信号处理提供了不同的思路，有时在空间域无法处理的问题，通过频域变换却非常容易。</li>
+<li>为了更加有效的对数字图像进行处理，常常需要将原始图像，以某种方式变换到另一个空间，并利用图像在变换空间中特有的性质，对图像信息进行加工，然后再转换回图像空间，就可以得到所需的效果。</li>
+<li>图像变换是双向的，一般将从图像空间转换到其他空间的操作称为正变换，由其他空间转换到图像空间称为逆变换。<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture1.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>傅里叶变换将图像看作二维信号，其水平方向和垂直方向作为二维空间的坐标轴，将图像本身所在的域称为空间域。</li>
+<li>图像灰度值随空间坐标变换的节奏可以通过频率度量，称为空间频率或者频域。</li>
+<li>针对数字图像的傅里叶变换是将原始图像通过傅里叶变换转换到频域，然后再频域中对图像进行处理的方法。</li>
+<li>基于傅里叶变换的数字图像频域处理过程：首先通过正向傅里叶变换将原始图像从空间域转换到频域，然后使用频域滤波器将某些频率过滤，保留某些特定频率，最后使用傅里叶逆变换将滤波后的频域图像重新转换到空间域，得到处理后的图像。<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture2.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>相对于空间域图像处理，频域图像处理有以下优点。<br>① 频域图像处理可以通过频域成分的特殊性质，完成一些空间域图像处理难以完成的任务。<br>② 频域图像处理更有利于图像处理的解释，可以对滤波过程中产生的某些效果做出比较直观的解释。<br>③ 频域滤波器可以作为空间滤波器设计的指导，通过傅里叶逆变换可以将频域滤波器转换为空间域变换的操作。通过频域滤波做前期设计，然后在实施阶段，用空间域滤波实现。</li>
+</ul>
+<h2 id="1-傅里叶变换"><a href="#1-傅里叶变换" class="headerlink" title="1 傅里叶变换"></a>1 傅里叶变换</h2><ul>
+<li>傅里叶变换是一种常见的正交数学变换，可以将一维信号或函数分解为具有不同频率、不同幅度的正弦信号或余弦信号的组合</li>
+<li>傅里叶变换的核心贡献在于：如何求出每种正弦波或余弦波的比例或频率，给定每种正弦波或余弦波的频率可以恢复原始信号。</li>
+<li>一种简单的傅里叶变换<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture3.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h3 id="1-1-一维傅里叶变换"><a href="#1-1-一维傅里叶变换" class="headerlink" title="1.1 一维傅里叶变换"></a>1.1 一维傅里叶变换</h3><ul>
+<li>傅里叶变换中，一般要求要求函数 <code>f(x)</code>满足狄力克雷条件（在周期内存在有限个间断点）、有限极值条件、绝对可积条件<br>$( ∫ − ∞ ∞ ∣ f ( x ) ∣ d x &lt; + ∞ \int^{\infty}_{-\infty}|f(x)|dx&lt;+\infty ∫−∞∞∣f(x)∣dx&lt;+∞)$<br>只有满足这 3 个条件，函数的傅里叶变换才是存在的。</li>
+<li>一个函数的傅里叶变换可以表示为<br>$F ( u ) &#x3D; ∫ − ∞ ∞ f ( x ) e − j 2 π u x d x F(u)&#x3D;\int_{-\infty}^{\infty}f(x)e^{-j2\pi ux}dx F(u)=∫−∞∞f(x)e−j2πuxdx$<br>其对应的傅里叶逆变换表示为<br>$f ( u ) &#x3D; ∫ − ∞ ∞ F ( u ) e j 2 π u x d u f(u)&#x3D;\int_{-\infty}^{\infty}F(u)e^{j2\pi ux}du f(u)=∫−∞∞F(u)ej2πuxdu$<br>其中 j &#x3D; − 1 , u j&#x3D;\sqrt{-1},u j=−1 ,u 为频率分量</li>
+<li>傅里叶变换中基函数的物理意义非常明确，每个基函数都是一个单频率谐波，对应的系数（又称频谱）表明了原函数在此基函数上投影的大小，或者也可以看作是原函数中此种频率谐波成分的比重。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>(<span class="params">ori_func, sampling_period=<span class="number">5</span></span>):</span><br><span class="line">    n = <span class="built_in">len</span>(ori_func)</span><br><span class="line">    interval = sampling_period / n</span><br><span class="line">    <span class="comment"># 绘制原始函数</span></span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line">    plt.plot(np.arange(<span class="number">0</span>, sampling_period, interval), ori_func, <span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&#x27;时间&#x27;</span>), plt.ylabel(<span class="string">&#x27;振幅&#x27;</span>)</span><br><span class="line">    plt.title(<span class="string">&#x27;原始信号&#x27;</span>)</span><br><span class="line">    <span class="comment"># 绘制变换后的函数</span></span><br><span class="line">    plt.subplot(<span class="number">2</span>, <span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    frequency = np.arange(n / <span class="number">2</span>) / (n * interval)</span><br><span class="line">    nfft = <span class="built_in">abs</span>(ft[<span class="built_in">range</span>(<span class="built_in">int</span>(n / <span class="number">2</span>))] / n)</span><br><span class="line">    plt.plot(frequency, nfft, <span class="string">&#x27;red&#x27;</span>)</span><br><span class="line">    plt.xlabel(<span class="string">&#x27;频率（Hz）&#x27;</span>), plt.ylabel(<span class="string">&#x27;频谱&#x27;</span>)</span><br><span class="line">    plt.title(<span class="string">&#x27;傅里叶变换&#x27;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成频率为1，角速度为2*pi的正弦波</span></span><br><span class="line">time = np.arange(<span class="number">0</span>, <span class="number">5</span>, <span class="number">.005</span>)</span><br><span class="line">x = np.sin(<span class="number">2</span> * np.pi * <span class="number">1</span> * time)</span><br><span class="line">y = np.fft.fft(x)</span><br><span class="line">show(x, y)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>单一正弦波傅里叶变换结果<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture4.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h3 id="1-2-二维傅里叶变换"><a href="#1-2-二维傅里叶变换" class="headerlink" title="1.2 二维傅里叶变换"></a>1.2 二维傅里叶变换</h3><ul>
+<li>二维傅里叶变换本质上是将一维傅里叶变换情形向二维进行简单扩展。<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture5.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>对应二维傅里叶变换的逆变换可以表示为：<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture6.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">img = data.camera()</span><br><span class="line"><span class="comment">#img = data.checkerboard()</span></span><br><span class="line"><span class="comment"># 快速傅里叶变换得到频率分布</span></span><br><span class="line">f = np.fft.fft2(img)</span><br><span class="line"><span class="comment"># 默认结果中心点的位置是左上角，转移到中间位置</span></span><br><span class="line">fshift = np.fft.fftshift(f)</span><br><span class="line"><span class="comment"># fft结果是复数，求绝对值结果才是振幅</span></span><br><span class="line">fimg = np.log(np.<span class="built_in">abs</span>(fshift))</span><br><span class="line"><span class="comment"># 展示结果</span></span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>), plt.imshow(img, <span class="string">&#x27;gray&#x27;</span>), plt.title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>), plt.imshow(fimg, <span class="string">&#x27;gray&#x27;</span>), plt.title(<span class="string">&#x27;傅里叶频谱&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture7.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>棋盘图像对应的傅里叶变换<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture8.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>图像经傅里叶变换后，直流分量与图像均值成正比，高频分量则表明了图像中目标边缘的强度及方向。</li>
+</ul>
+<h2 id="2-傅里叶变换的性质"><a href="#2-傅里叶变换的性质" class="headerlink" title="2 傅里叶变换的性质"></a>2 傅里叶变换的性质</h2><h3 id="2-1-傅里叶变换的基本性质"><a href="#2-1-傅里叶变换的基本性质" class="headerlink" title="2.1 傅里叶变换的基本性质"></a>2.1 傅里叶变换的基本性质</h3><p>① 线性特性。傅里叶变换的线性特性可以表示为：若 <code>f1(t)↔F1(Ω)</code>，<code>f2(t)↔F2(Ω)</code>，则　<code>af1(t)+bf2(t)↔aF1(Ω)+bF2(Ω)</code>。其中 <code>a</code>、<code>b</code>为任意常数，利用傅里叶变换的线性特性，可以将待求信号分解为若干基本信号之和。② 时延特性。时延（移位）特性说明波形在时间轴上时延，并不会改变信号幅度，仅使信号增加 <code>-Ωt0</code>线性相位。</p>
+<ul>
+<li>时延移位对傅里叶频谱的影响。<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture9.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<p>③ 频移特性。频移（调制）特性表明信号在时域中与复因子相乘，则在频域中将使整个频谱搬移 <code>Ω0</code>。④ 尺度变换。尺度特性说明，信号在时域中压缩，在频域中扩展；反之，信号在时域中扩展，在频域中就一定压缩，即信号的脉宽与频宽成反比。一般来说，时宽有限的信号，其频宽无限，反之亦然。</p>
+<ul>
+<li>针对门限函数的尺度变换及其傅里叶变换结果。<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture10.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>⑤ 时域微分特性。<br>⑥ 频域微分特性。<br>⑦ 对称性。<br>⑧ 时域卷积定理。<br>⑨ 频域卷积定理。</li>
+</ul>
+<h3 id="2-2-二维傅里叶变换的性质"><a href="#2-2-二维傅里叶变换的性质" class="headerlink" title="2.2 二维傅里叶变换的性质"></a>2.2 二维傅里叶变换的性质</h3><p>相较于一维傅里叶变换，二维傅里叶变换还具有可分离性，平移特性，旋转特性等。<br>① 可分离性。<br>二维离散傅里叶变换（DFT），可视为由沿着 x、y 方向的两个一维傅里叶变换所构成。这一性质可有效降低二维傅里叶变换的计算复杂性。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, color</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">img_rgb = data.coffee()</span><br><span class="line">img = color.rgb2gray(img_rgb)</span><br><span class="line"><span class="comment"># 在X方向实现傅里叶变换</span></span><br><span class="line">m, n = img.shape</span><br><span class="line">fx = img</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    fx[:, x] = np.fft.fft(img[:, x])</span><br><span class="line"><span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">    fx[y, :] = np.fft.fft(img[y, :])</span><br><span class="line"><span class="comment"># 默认结果中心点位于左上角，转移到中间位置</span></span><br><span class="line">fshift = np.fft.fftshift(fx)</span><br><span class="line"><span class="comment"># fft结果是复数，求绝对值结果才是振幅</span></span><br><span class="line">fimg = np.log(np.<span class="built_in">abs</span>(fshift))</span><br><span class="line"><span class="comment"># 展示结果</span></span><br><span class="line">plt.subplot(<span class="number">121</span>), plt.imshow(img_rgb, <span class="string">&#x27;gray&#x27;</span>), plt.title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line">plt.subplot(<span class="number">122</span>), plt.imshow(fimg, <span class="string">&#x27;gray&#x27;</span>), plt.title(<span class="string">&#x27;两次一维傅里叶变换的图像&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture11.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'><br>② 平移特性。<br><code>f(x,y)</code>在空间平移了，相当于把傅里叶变换与一个指数相乘。<code>f(x,y)</code>在空间与一个指数项相乘，相当于平移其傅里叶变换。<br>③ 旋转特性。<br>对 <code>f(x,y)</code>旋转一定角度，相当于将其傅里叶变换 <code>F(u,v)</code>旋转一定角度。</p>
+<h2 id="3-快速傅里叶变换"><a href="#3-快速傅里叶变换" class="headerlink" title="3 快速傅里叶变换"></a>3 快速傅里叶变换</h2><ul>
+<li>离散傅里叶变换已成为数字信号处理的重要工具，然而其计算量大，运算时间长，使用不够广泛。</li>
+<li>快速算法大大提高了其运算速度，在某些应用场合已经可以做实时处理，并且应用在控制系统中。</li>
+<li>快速傅里叶变换不是一种新的变换，是离散傅里叶变换的一种算法，是在分析离散傅里叶变换多余运算的基础上，消除这些重复工作的思想指导下得到的。</li>
+</ul>
+<h3 id="3-1-快速傅里叶变换的原理"><a href="#3-1-快速傅里叶变换的原理" class="headerlink" title="3.1 快速傅里叶变换的原理"></a>3.1 快速傅里叶变换的原理</h3><ul>
+<li>离散傅里叶变换的计算时间主要由乘法决定，分解后所需的乘法次数大大减少。</li>
+<li>利用周期性和分解运算，从而减少乘法运算次数是实现快速运算的关键。</li>
+</ul>
+<h3 id="3-2-快速傅里叶变换的实现"><a href="#3-2-快速傅里叶变换的实现" class="headerlink" title="3.2 快速傅里叶变换的实现"></a>3.2 快速傅里叶变换的实现</h3><ul>
+<li>快速傅里叶变换的基本思想：快速傅里叶变换（FFT）基于逐次倍乘法（Successive Doubling Method）</li>
+<li>这个方法的主要思想是利用傅里叶变换（基底）的性质，将 2M 个数据的傅里叶变换转化为 2 组 M 个数据的傅里叶变换。这样，原来 <code>4*M*M</code>的运算量就降低到 <code>2*M*M</code>的运算量了。</li>
+<li>这样就可以将原来比较复杂的傅里叶运算，分解为两个计算较简单的傅里叶运算。且还可以继续分解，如此循环推到下去，直到最后剩下若干组两个点对。</li>
+</ul>
+<h2 id="4-图像的频域滤波"><a href="#4-图像的频域滤波" class="headerlink" title="4 图像的频域滤波"></a>4 图像的频域滤波</h2><ul>
+<li>图像变换是对图像信息进行变换，使能量保持但重新分配，以利于加工处理，滤除噪声等不必要的信息，加强、提取感兴趣的部分或特征。</li>
+<li>傅里叶变换在图像分析、滤波、增强、压缩等处理中有非常重要的应用。</li>
+<li>假定原图像 <code>f(x,y)</code>经傅里叶变换为 <code>F(u,v)</code>，频域增强就是选择合适的滤波器函数 <code>H(u,v)</code>对 <code>F(u,v)</code>的频谱成分进行调整，然后经傅里叶逆变换得到增强的图像 <code>g(x,y)</code><br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture12.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>可以选择合适的频域传递函数 <code>H(u,v)</code>突出 f(x,y)某方面的特征，从而得到需要的图像 <code>g(x,y)</code>.例如，利用传递函数突出高频分量，以增强图像的边缘信息，即高通滤波。如果突出低频分量，就可以使图像显得比较平滑，即低通滤波。</li>
+<li>频域滤波的基本步骤如下。（1）对原始原图像 <code>f(x,y)</code>进行傅里叶变换得到 <code>F(u,v)</code>（2）将 <code>F(u,v)</code>与传递函数 <code>H(u,v)</code>进行卷积运算得到 <code>G(u,v)</code>（3）将 <code>G(u,v)</code>进行傅里叶逆变换得到增强图像 <code>g(x,y)</code></li>
+<li>频域滤波的核心在于如何确定传递函数。<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture13.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h3 id="4-1-低通滤波"><a href="#4-1-低通滤波" class="headerlink" title="4.1 低通滤波"></a>4.1 低通滤波</h3><ul>
+<li>图像从空间域变换到频域后，其低频分量对应图像中灰度值变化比较缓慢的区域，高频分量表征物体的边缘和随机噪声等信息。</li>
+<li>低频滤波是指保留低频分量，而通过滤波器函数 H(u,v)减弱或抑制高频分量，在频域进行滤波。</li>
+<li>低通滤波与空间域中的平滑滤波器一样，可以消除图像中的随机噪声，减弱边缘效应，起到平滑图像的作用。</li>
+</ul>
+<h4 id="第一种-理想低通滤波器"><a href="#第一种-理想低通滤波器" class="headerlink" title="第一种 理想低通滤波器"></a>第一种 理想低通滤波器</h4><ul>
+<li>二维理想低通滤波器的传递函数如下。<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture14.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>理想低通滤波器及其图像<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture15.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, color</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">D = <span class="number">10</span></span><br><span class="line">new_img = data.coffee()</span><br><span class="line">new_img = color.rgb2gray(new_img)</span><br><span class="line"><span class="comment"># 傅里叶变换</span></span><br><span class="line">f1 = np.fft.fft2(new_img)</span><br><span class="line"><span class="comment"># 使用np.fft.fftshift()函数实现平移，让直流分量输出图像的重心</span></span><br><span class="line">f1_shift = np.fft.fftshift(f1)</span><br><span class="line"><span class="comment"># 实现理想低通滤波器</span></span><br><span class="line">rows, cols = new_img.shape</span><br><span class="line">crow, ccol = <span class="built_in">int</span>(rows / <span class="number">2</span>), <span class="built_in">int</span>(cols / <span class="number">2</span>)  <span class="comment"># 计算频谱中心</span></span><br><span class="line">mask = np.zeros((rows, cols), dtype=<span class="string">&#x27;uint8&#x27;</span>)  <span class="comment"># 生成rows行，从cols列的矩阵，数据格式为uint8</span></span><br><span class="line"><span class="comment"># 将距离频谱中心距离小于D的低通信息部分设置为1，属于低通滤波</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(rows):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(cols):</span><br><span class="line">        <span class="keyword">if</span> np.sqrt(i * i + j * j) &lt;= D:</span><br><span class="line">            mask[crow - D:crow + D, ccol - D:ccol + D] = <span class="number">1</span></span><br><span class="line">f1_shift = f1_shift * mask</span><br><span class="line"><span class="comment"># 傅里叶逆变换</span></span><br><span class="line">f_ishift = np.fft.ifftshift(f1_shift)</span><br><span class="line">img_back = np.fft.ifft2(f_ishift)</span><br><span class="line">img_back = np.<span class="built_in">abs</span>(img_back)</span><br><span class="line">img_back = (img_back - np.amin(img_back)) / (np.amax(img_back) - np.amin(img_back))</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.subplot(<span class="number">121</span>)</span><br><span class="line">plt.imshow(new_img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">122</span>)</span><br><span class="line">plt.imshow(img_back, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;滤波后的图像&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>二维图像的理想低通滤波<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture16.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h4 id="第二种-Butterworth-低通滤波器"><a href="#第二种-Butterworth-低通滤波器" class="headerlink" title="第二种 Butterworth 低通滤波器"></a>第二种 Butterworth 低通滤波器</h4><ul>
+<li>Butterworth 低通滤波器的传递函数为</li>
+<li><img src="https://img-blog.csdnimg.cn/20210205134544186.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'>。</li>
+<li><code>D0</code>为截止频率，<code>n</code>为函数的阶。一般取使 <code>H(u,v)</code>最大值下降到最大值的一半时的 <code>D(u,v)</code>为截止频率 <code>D0</code>。</li>
+<li>Butterworth 低通滤波器的截面<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture18.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>与理想低通滤波器相比，高低频之间过度较为平滑，用此滤波器后的输出图像振铃现象不明显。</li>
+<li>n&#x3D;1 时，过度最平滑，即尾部包含大量的高频成分，所以一阶 Butterworth 低通滤波器没有振铃现象；但随着 n 的增加，振铃现象会越来越明显。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, color</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">img = data.coffee()</span><br><span class="line">img = color.rgb2gray(img)</span><br><span class="line">f = np.fft.fft2(img)</span><br><span class="line">fshift = np.fft.fftshift(f)</span><br><span class="line"><span class="comment"># 取绝对值后将复数变化为实数</span></span><br><span class="line"><span class="comment"># 取对数的目的是将数据变换到0~255</span></span><br><span class="line">s1 = np.log(np.<span class="built_in">abs</span>(fshift))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">ButterworthPassFilter</span>(<span class="params">image, d, n</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Butterworth低通滤波器</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    f = np.fft.fft2(image)</span><br><span class="line">    fshift = np.fft.fftshift(f)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">make_transform_matrix</span>(<span class="params">d</span>):</span><br><span class="line">        transform_matrix = np.zeros(image.shape)</span><br><span class="line">        center_point = <span class="built_in">tuple</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x: (x - <span class="number">1</span>) / <span class="number">2</span>, s1.shape))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(transform_matrix.shape[<span class="number">0</span>]):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(transform_matrix.shape[<span class="number">1</span>]):</span><br><span class="line">                <span class="keyword">def</span> <span class="title function_">cal_distance</span>(<span class="params">pa, pb</span>):</span><br><span class="line">                    <span class="keyword">from</span> math <span class="keyword">import</span> sqrt</span><br><span class="line">                    dis = sqrt((pa[<span class="number">0</span>] - pb[<span class="number">0</span>]) ** <span class="number">2</span> + (pa[<span class="number">1</span>] - pb[<span class="number">1</span>]) ** <span class="number">2</span>)</span><br><span class="line">                    <span class="keyword">return</span> dis</span><br><span class="line"></span><br><span class="line">                dis = cal_distance(center_point, (i, j))</span><br><span class="line">                transform_matrix[i, j] = <span class="number">1</span> / (<span class="number">1</span> + (dis / d) ** (<span class="number">2</span> * n))</span><br><span class="line">        <span class="keyword">return</span> transform_matrix</span><br><span class="line"></span><br><span class="line">    d_matrix = make_transform_matrix(d)</span><br><span class="line">    new_img = np.<span class="built_in">abs</span>(np.fft.ifft2(np.fft.ifftshift(fshift * d_matrix)))</span><br><span class="line">    <span class="keyword">return</span> new_img</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Original&#x27;</span>)</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Butter D=100 n=1&#x27;</span>)</span><br><span class="line">butter_100_1 = ButterworthPassFilter(img, <span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line">plt.imshow(butter_100_1, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Butter D=30 n=1&#x27;</span>)</span><br><span class="line">butter_30_1 = ButterworthPassFilter(img, <span class="number">30</span>, <span class="number">1</span>)</span><br><span class="line">plt.imshow(butter_30_1, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Butter D=30 n=5&#x27;</span>)</span><br><span class="line">butter_30_5 = ButterworthPassFilter(img, <span class="number">30</span>, <span class="number">5</span>)</span><br><span class="line">plt.imshow(butter_30_5, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture19.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h3 id="4-2-高通滤波"><a href="#4-2-高通滤波" class="headerlink" title="4.2 高通滤波"></a>4.2 高通滤波</h3><ul>
+<li>图像的边缘、细节主要在高频，图像模糊的原因是高频成分较弱。</li>
+<li>为了消除模糊，突出边缘，可以采取高通滤波的方法，使低频分量得到抑制，从而达到增强高频分量，使图像的边缘或线条变得清晰，实现图像的锐化。</li>
+</ul>
+<h4 id="第一种-理想高通滤波"><a href="#第一种-理想高通滤波" class="headerlink" title="第一种 理想高通滤波"></a>第一种 理想高通滤波</h4><ul>
+<li>理想高通滤波器的形状与低通滤波器的形状正好相反。<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture20.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+<li>理想高通滤波器及其图像<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture21.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, color</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">D = <span class="number">10</span></span><br><span class="line">new_img = data.coffee()</span><br><span class="line">new_img = color.rgb2gray(new_img)</span><br><span class="line"><span class="comment"># numpy 中的傅里叶变换</span></span><br><span class="line">f1 = np.fft.fft2(new_img)</span><br><span class="line">f1_shift = np.fft.fftshift(f1)</span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">实现理想高通滤波器 start</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">rows, cols = new_img.shape</span><br><span class="line"><span class="comment"># 计算频谱中心</span></span><br><span class="line">crow, ccol = <span class="built_in">int</span>(rows / <span class="number">2</span>), <span class="built_in">int</span>(cols / <span class="number">2</span>)</span><br><span class="line"><span class="comment"># 生成rows，cols列的矩阵，数据格式为uint8</span></span><br><span class="line">mask = np.zeros((rows, cols), dtype=<span class="string">&#x27;uint8&#x27;</span>)</span><br><span class="line"><span class="comment"># 将距离频谱中心距离小于D的低通信息部分设置为1，属于低通滤波</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(rows):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(cols):</span><br><span class="line">        <span class="keyword">if</span> np.sqrt(i * i + j * j) &lt;= D:</span><br><span class="line">            mask[crow - D:crow + D, ccol - D:ccol + D] = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">mask = <span class="number">1</span> - mask</span><br><span class="line">f1_shift = f1_shift * mask</span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">实现理想高通滤波器 end</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 傅里叶逆变换</span></span><br><span class="line">f_ishift = np.fft.ifftshift(f1_shift)</span><br><span class="line">img_back = np.fft.ifft2(f_ishift)</span><br><span class="line">img_back = np.<span class="built_in">abs</span>(img_back)</span><br><span class="line">img_back = (img_back - np.amin(img_back)) / (np.amax(img_back) - np.amin(img_back))</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.subplot(<span class="number">121</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(new_img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;原始图像&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">122</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.imshow(img_back, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;过滤后的图像&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>二维图像的理想高通滤波<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture22.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<h4 id="第二种-Butterworth-高通滤波"><a href="#第二种-Butterworth-高通滤波" class="headerlink" title="第二种 Butterworth 高通滤波"></a>第二种 Butterworth 高通滤波</h4><ul>
+<li>Butterworth 高通滤波器的形状与 Butterworth 低通滤波器的形状相反，因为高低频率间平滑过渡，因此振铃现象不明显。<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture23.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, color</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">img = data.coffee()</span><br><span class="line">img = color.rgb2gray(img)</span><br><span class="line">f = np.fft.fft2(img)</span><br><span class="line">fshift = np.fft.fftshift(f)</span><br><span class="line"><span class="comment"># 取绝对值后将复数变化为实数</span></span><br><span class="line"><span class="comment"># 取对数的目的是将数据变换到0~255</span></span><br><span class="line">s1 = np.log(np.<span class="built_in">abs</span>(fshift))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">ButterworthPassFilter</span>(<span class="params">image, d, n</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Butterworth 高通滤波器</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    f = np.fft.fft2(image)</span><br><span class="line">    fshift = np.fft.fftshift(f)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">make_transform_matrix</span>(<span class="params">d</span>):</span><br><span class="line">        transform_matrix = np.zeros(image.shape)</span><br><span class="line">        center_point = <span class="built_in">tuple</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x: (x - <span class="number">1</span>) / <span class="number">2</span>, s1.shape))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(transform_matrix.shape[<span class="number">0</span>]):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(transform_matrix.shape[<span class="number">1</span>]):</span><br><span class="line">                <span class="keyword">def</span> <span class="title function_">cal_distance</span>(<span class="params">pa, pb</span>):</span><br><span class="line">                    <span class="keyword">from</span> math <span class="keyword">import</span> sqrt</span><br><span class="line">                    dis = sqrt((pa[<span class="number">0</span>] - pb[<span class="number">0</span>]) ** <span class="number">2</span> + (pa[<span class="number">1</span>] - pb[<span class="number">1</span>]) ** <span class="number">2</span>)</span><br><span class="line">                    <span class="keyword">return</span> dis</span><br><span class="line"></span><br><span class="line">                dis = cal_distance(center_point, (i, j))</span><br><span class="line">                transform_matrix[i, j] = <span class="number">1</span> / (<span class="number">1</span> + (dis / d) ** (<span class="number">2</span> * n))</span><br><span class="line">        <span class="keyword">return</span> transform_matrix</span><br><span class="line"></span><br><span class="line">    d_matrix = make_transform_matrix(d)</span><br><span class="line">    d_matrix = <span class="number">1</span> - d_matrix</span><br><span class="line">    new_img = np.<span class="built_in">abs</span>(np.fft.ifft2(np.fft.ifftshift(fshift * d_matrix)))</span><br><span class="line">    <span class="keyword">return</span> new_img</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Original&#x27;</span>)</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Butter D=100 n=1&#x27;</span>)</span><br><span class="line">butter_100_1 = ButterworthPassFilter(img, <span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line">plt.imshow(butter_100_1, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Butter D=30 n=1&#x27;</span>)</span><br><span class="line">butter_30_1 = ButterworthPassFilter(img, <span class="number">30</span>, <span class="number">1</span>)</span><br><span class="line">plt.imshow(butter_30_1, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Butter D=30 n=5&#x27;</span>)</span><br><span class="line">butter_30_5 = ButterworthPassFilter(img, <span class="number">30</span>, <span class="number">5</span>)</span><br><span class="line">plt.imshow(butter_30_5, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture24.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h4 id="第三种-高频增强滤波器"><a href="#第三种-高频增强滤波器" class="headerlink" title="第三种 高频增强滤波器"></a>第三种 高频增强滤波器</h4><ul>
+<li>高频滤波将低频分量滤掉，导致增强图像中的边缘得到加强，但平坦区域灰度很暗，接近黑色。</li>
+<li>高频增强滤波器对频域里的高通滤波器的转移函数加一个常数，将一些低频分量加回去，保持光滑区域的灰度，又改善边缘区域的对比度。</li>
+<li>高频增强转移函数为 <code>He(u,v)</code>=<code>k*H(u,v)</code>+<code>c</code></li>
+<li>这样就可以做到在原始图像的基础上叠加一些高频成分，既保留了原图的灰度层次，又锐化了边缘</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> data, color</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中文显示工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set_ch</span>():</span><br><span class="line">    <span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;FangSong&#x27;</span>]</span><br><span class="line">    mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">set_ch()</span><br><span class="line">img = data.coffee()</span><br><span class="line">img = color.rgb2gray(img)</span><br><span class="line">f = np.fft.fft2(img)</span><br><span class="line">fshift = np.fft.fftshift(f)</span><br><span class="line"><span class="comment"># 取绝对值后将复数变化为实数</span></span><br><span class="line"><span class="comment"># 取对数的目的是将数据变换到0~255</span></span><br><span class="line">s1 = np.log(np.<span class="built_in">abs</span>(fshift))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">ButterworthPassFilter</span>(<span class="params">image, d, n</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Butterworth 高通滤波器</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    f = np.fft.fft2(image)</span><br><span class="line">    fshift = np.fft.fftshift(f)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">make_transform_matrix</span>(<span class="params">d</span>):</span><br><span class="line">        transform_matrix = np.zeros(image.shape)</span><br><span class="line">        center_point = <span class="built_in">tuple</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x: (x - <span class="number">1</span>) / <span class="number">2</span>, s1.shape))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(transform_matrix.shape[<span class="number">0</span>]):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(transform_matrix.shape[<span class="number">1</span>]):</span><br><span class="line">                <span class="keyword">def</span> <span class="title function_">cal_distance</span>(<span class="params">pa, pb</span>):</span><br><span class="line">                    <span class="keyword">from</span> math <span class="keyword">import</span> sqrt</span><br><span class="line">                    dis = sqrt((pa[<span class="number">0</span>] - pb[<span class="number">0</span>]) ** <span class="number">2</span> + (pa[<span class="number">1</span>] - pb[<span class="number">1</span>]) ** <span class="number">2</span>)</span><br><span class="line">                    <span class="keyword">return</span> dis</span><br><span class="line"></span><br><span class="line">                dis = cal_distance(center_point, (i, j))</span><br><span class="line">                transform_matrix[i, j] = <span class="number">1</span> / (<span class="number">1</span> + (dis / d) ** (<span class="number">2</span> * n))</span><br><span class="line">        <span class="keyword">return</span> transform_matrix</span><br><span class="line"></span><br><span class="line">    d_matrix = make_transform_matrix(d)</span><br><span class="line">    d_matrix = d_matrix+<span class="number">0.5</span></span><br><span class="line">    new_img = np.<span class="built_in">abs</span>(np.fft.ifft2(np.fft.ifftshift(fshift * d_matrix)))</span><br><span class="line">    <span class="keyword">return</span> new_img</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Original&#x27;</span>)</span><br><span class="line">plt.imshow(img, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Butter D=100 n=1&#x27;</span>)</span><br><span class="line">butter_100_1 = ButterworthPassFilter(img, <span class="number">100</span>, <span class="number">1</span>)</span><br><span class="line">plt.imshow(butter_100_1, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Butter D=30 n=1&#x27;</span>)</span><br><span class="line">butter_30_1 = ButterworthPassFilter(img, <span class="number">30</span>, <span class="number">1</span>)</span><br><span class="line">plt.imshow(butter_30_1, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Butter D=30 n=5&#x27;</span>)</span><br><span class="line">butter_30_5 = ButterworthPassFilter(img, <span class="number">30</span>, <span class="number">5</span>)</span><br><span class="line">plt.imshow(butter_30_5, cmap=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>二维图像的高频增强滤波结果<br><img src="/../img/post/Digitalimageprocessing-Frequencydomainfiltering/picture25.png" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></li>
+</ul>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>本文作者：</strong>
+        Adream
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>本文链接：</strong>
+        <a id="original-link" href="https://www.adream.icu/2021/06/12/Digitalimageprocessing-Frequencydomainfiltering/" title="频率滤波">https://www.adream.icu/2021/06/12/Digitalimageprocessing-Frequencydomainfiltering/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>版权声明：</strong>
+        本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> 许可协议。
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2021/06/12/DecisionTree-Classification/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/post/DecisionTree-Classification/1-%E5%86%B3%E7%AD%96%E6%A0%91.png">
+                </span>
+                <h6 class="trm-op-title">决策树分类算法原理</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>21/06/12</li>
+                <li>23:20</li>
+                <li>学习记录类</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2021/06/12/Digitalimageprocessing-Spatialfiltering/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/post/Digitalimageprocessing-Spatialfiltering/picture1.png">
+                </span>
+                <h6 class="trm-op-title">空间滤波</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>21/06/12</li>
+                <li>23:20</li>
+                <li>学习记录类</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2021- 2024</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Adream</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v7.1.1
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                主题 - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.1.10
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        目录导航
+				<span id="post-toc-top">
+					置顶
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title="频域滤波"><a rel="nofollow" class="trm-toc-link" href="#频域滤波"><span class="trm-toc-text">频域滤波</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title="1 傅里叶变换"><a rel="nofollow" class="trm-toc-link" href="#1-傅里叶变换"><span class="trm-toc-text">1 傅里叶变换</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1.1 一维傅里叶变换"><a rel="nofollow" class="trm-toc-link" href="#1-1-一维傅里叶变换"><span class="trm-toc-text">1.1 一维傅里叶变换</span></a></li><li class="trm-toc-item trm-toc-level-3" title="1.2 二维傅里叶变换"><a rel="nofollow" class="trm-toc-link" href="#1-2-二维傅里叶变换"><span class="trm-toc-text">1.2 二维傅里叶变换</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="2 傅里叶变换的性质"><a rel="nofollow" class="trm-toc-link" href="#2-傅里叶变换的性质"><span class="trm-toc-text">2 傅里叶变换的性质</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="2.1 傅里叶变换的基本性质"><a rel="nofollow" class="trm-toc-link" href="#2-1-傅里叶变换的基本性质"><span class="trm-toc-text">2.1 傅里叶变换的基本性质</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2.2 二维傅里叶变换的性质"><a rel="nofollow" class="trm-toc-link" href="#2-2-二维傅里叶变换的性质"><span class="trm-toc-text">2.2 二维傅里叶变换的性质</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="3 快速傅里叶变换"><a rel="nofollow" class="trm-toc-link" href="#3-快速傅里叶变换"><span class="trm-toc-text">3 快速傅里叶变换</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="3.1 快速傅里叶变换的原理"><a rel="nofollow" class="trm-toc-link" href="#3-1-快速傅里叶变换的原理"><span class="trm-toc-text">3.1 快速傅里叶变换的原理</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3.2 快速傅里叶变换的实现"><a rel="nofollow" class="trm-toc-link" href="#3-2-快速傅里叶变换的实现"><span class="trm-toc-text">3.2 快速傅里叶变换的实现</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="4 图像的频域滤波"><a rel="nofollow" class="trm-toc-link" href="#4-图像的频域滤波"><span class="trm-toc-text">4 图像的频域滤波</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="4.1 低通滤波"><a rel="nofollow" class="trm-toc-link" href="#4-1-低通滤波"><span class="trm-toc-text">4.1 低通滤波</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4.2 高通滤波"><a rel="nofollow" class="trm-toc-link" href="#4-2-高通滤波"><span class="trm-toc-text">4.2 高通滤波</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </div>
+
+            <div class="trm-fixed-container"><div class="trm-fixed-btn post-toc-btn" data-title="目录"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-liebiao"></use>
+</svg></div><div class="trm-fixed-btn" id="trm-search-btn" data-title="查询"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-chaxun"></use>
+</svg></div><div class="trm-fixed-btn" data-title="切换主题模式" onclick="asyncFun.switchThemeMode(document.documentElement.classList.contains('dark')?'style-light':'style-dark')"><i class="fas fa-sun"></i></div><div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-yuedu"></use>
+</svg></div><div class="trm-fixed-btn hidden-md" data-title="单栏和双栏切换" onclick="asyncFun.switchSingleColumn()"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-arrows-h"></use>
+</svg></div><div class="trm-fixed-btn" id="trm-back-top" data-title="回到顶部"><svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-backtop"></use>
+</svg></div></div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-chaxun"></use>
+</svg>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="搜索文章...">
+                <div class="trm-search-btn-close">
+                    <svg class="symbol-icon " aria-hidden="true">
+    <use xlink:href="#icon-guanbi"></use>
+</svg>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    请输入关键词进行搜索
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://npm.elemecdn.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://npm.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.1.10"></script>
+    
+
+    
+        
+<script src="https://npm.elemecdn.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.1.10"></script>
+    
+
+    <!-- 数学公式 -->
+    
+        
+<script src="https://npm.elemecdn.com/katex@latest/dist/katex.min.js" data-swup-reload-script></script>
+
+        
+            
+<script src="https://npm.elemecdn.com/katex@latest/dist/contrib/copy-tex.min.js" data-swup-reload-script></script>
+
+        
+        
+<script src="https://npm.elemecdn.com/katex@latest/dist/contrib/auto-render.min.js" data-swup-reload-script></script>
+
+        <script data-swup-reload-script>
+              window.renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true },
+                ],
+                ...{},
+            })
+        </script>
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.1.10"></script>
+
+</body>
+
+</html>
